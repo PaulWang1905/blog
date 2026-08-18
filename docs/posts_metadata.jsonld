@@ -1,0 +1,43 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Puyu's Personal Blog - Blog Posts",
+  "description": "Collection of blog posts from Puyu's Personal Blog",
+  "numberOfItems": 1,
+  "itemListElement": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/hello-world.html",
+      "headline": "Hello World",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2026-08-18",
+      "dateModified": "2026-08-18",
+      "description": "The first post on Puyu's Personal Blog — how posts work in oxie.",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Blog",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "oxie",
+        "writing"
+      ],
+      "url": "https://blog.puyuwang.org/post/hello-world.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/hello-world.html"
+      }
+    }
+  ]
+}

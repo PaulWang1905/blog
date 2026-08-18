@@ -1,0 +1,48 @@
+{# Layout for a single post or page (docs/post/*.html, docs/page/*.html).
+   Context: meta_data, post_meta_data, title, author, summary, category,
+   date, last_modified, content, phrases, image, tags, link #}
+{% extends "base.html" %}
+
+{% block page_title %}{{ title }} — {{ meta_data.title }}{% endblock %}
+
+{% block meta %}
+{% if summary %}<meta name="description" content="{{ summary }}">{% endif %}
+{% if author %}<meta name="author" content="{{ author }}">{% endif %}
+<meta property="og:title" content="{{ title }}">
+{% if summary %}<meta property="og:description" content="{{ summary }}">{% endif %}
+<meta property="og:type" content="article">
+{% endblock %}
+
+{% block content %}
+<article>
+  <h1 class="text-3xl font-semibold leading-tight tracking-tight">{{ title }}</h1>
+
+  <p class="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
+    {% if date %}<time datetime="{{ date }}">{{ date.strftime('%d %B %Y') }}</time>{% endif %}
+    {% if author %}<span>· {{ author }}</span>{% endif %}
+    {% if category %}
+    <span>· <a href="/blog_{{ category }}.html" class="underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-500">{{ category }}</a></span>
+    {% endif %}
+  </p>
+
+  {% if summary %}
+  <p class="mt-4 border-l-2 border-neutral-200 pl-4 text-neutral-600 italic dark:border-neutral-700 dark:text-neutral-400">{{ summary }}</p>
+  {% endif %}
+
+  <div class="prose prose-neutral mt-8 max-w-none dark:prose-invert">
+    {{ content }}
+  </div>
+
+  {% if tags %}
+  <p class="mt-10 flex flex-wrap gap-2">
+    {% for tag in tags %}
+    <span class="rounded-full border border-neutral-200 px-3 py-0.5 text-xs text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">{{ tag }}</span>
+    {% endfor %}
+  </p>
+  {% endif %}
+
+  {% if last_modified and last_modified != date %}
+  <p class="mt-6 text-sm text-neutral-500 dark:text-neutral-400">Last updated {{ last_modified.strftime('%d %B %Y') }}</p>
+  {% endif %}
+</article>
+{% endblock %}

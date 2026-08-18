@@ -1,0 +1,58 @@
+{# Home page (docs/index.html).
+   Context: title, author, date, description, phrases, content, posts,
+   pages, updates #}
+{% extends "base.html" %}
+
+{% block meta %}
+{% if description %}<meta name="description" content="{{ description }}">{% endif %}
+{% if author %}<meta name="author" content="{{ author }}">{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="prose prose-neutral max-w-none dark:prose-invert">
+  {{ content }}
+</section>
+
+{% if updates %}
+<section class="mt-12">
+  <h2 class="text-xl font-semibold tracking-tight">Recent updates</h2>
+  <ul class="mt-4 space-y-2 text-sm">
+    {% for update in updates %}
+    <li class="flex gap-3">
+      <time datetime="{{ update.date }}" class="shrink-0 text-neutral-500 dark:text-neutral-400">{{ update.date.strftime('%d %b %Y') }}</time>
+      <span>{{ update.content }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% if posts %}
+<section class="mt-12">
+  <h2 class="text-xl font-semibold tracking-tight">Recent posts</h2>
+  <ul class="mt-4 divide-y divide-neutral-200 dark:divide-neutral-800">
+    {% for post in posts[:5] %}
+    <li class="py-4">
+      <a href="{{ post.link }}" class="font-medium underline-offset-2 hover:underline">{{ post.title }}</a>
+      {% if post.date %}<time datetime="{{ post.date }}" class="ml-2 text-xs text-neutral-500 dark:text-neutral-400">{{ post.date.strftime('%d %b %Y') }}</time>{% endif %}
+      {% if post.summary %}<p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{{ post.summary }}</p>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% if posts | length > 5 %}
+  <p class="mt-4 text-sm"><a href="/blog_index.html" class="underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-500">All {{ posts | length }} posts →</a></p>
+  {% endif %}
+</section>
+{% endif %}
+
+{% if pages %}
+<section class="mt-12">
+  <h2 class="text-xl font-semibold tracking-tight">Pages</h2>
+  <ul class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+    {% for page in pages %}
+    <li><a href="{{ page.link }}" class="underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-500">{{ page.title }}</a></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

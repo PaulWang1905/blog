@@ -1,0 +1,20 @@
+/* Tailwind CSS v4 entry point (CSS-first configuration).
+ *
+ * Compiled by `npm run build:css` into docs/styles.css.
+ * There is no tailwind.config.js in v4 — configure here instead.
+ */
+
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Where to look for class names. Paths are relative to this file (src/).
+ * Scanning the Jinja templates as well as the generated HTML means a class
+ * is never purged just because the CSS was rebuilt before the HTML. */
+@source "../src/**/*.html";
+@source "../docs/**/*.html";
+@source "../source/**/*.md";
+
+/* Site-wide tokens. Override to rebrand. */
+@theme {
+  --font-display: ui-serif, Georgia, "Times New Roman", serif;
+}

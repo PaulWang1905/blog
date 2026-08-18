@@ -1,0 +1,12 @@
+{
+  "name": "puyu-s-personal-blog",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i src/styles.css -o docs/styles.css --minify",
+    "watch:css": "tailwindcss -i src/styles.css -o docs/styles.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "@tailwindcss/typography": "^0.5.20"
+  }
+}

@@ -1,0 +1,35 @@
+{# One page per category (docs/blog_<category>.html).
+   Context: title, phrases, posts, category, tags.
+   Note: `meta_data` is NOT passed to this template. #}
+{% extends "base.html" %}
+
+{% block page_title %}{{ category }} — {{ title }}{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-semibold tracking-tight">{{ category }}</h1>
+<p class="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+  {{ posts | length }} post{% if posts | length != 1 %}s{% endif %}
+</p>
+
+<ul class="mt-8 divide-y divide-neutral-200 dark:divide-neutral-800">
+  {% for post in posts %}
+  <li class="py-4">
+    <a href="{{ post.link }}" class="font-medium underline-offset-2 hover:underline">{{ post.title }}</a>
+    {% if post.date %}<time datetime="{{ post.date }}" class="ml-2 text-xs text-neutral-500 dark:text-neutral-400">{{ post.date.strftime('%d %b %Y') }}</time>{% endif %}
+    {% if post.summary %}<p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{{ post.summary }}</p>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
+
+{% if tags %}
+<p class="mt-8 flex flex-wrap gap-2">
+  {% for tag in tags | unique %}
+  <span class="rounded-full border border-neutral-200 px-3 py-0.5 text-xs text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">{{ tag }}</span>
+  {% endfor %}
+</p>
+{% endif %}
+
+<p class="mt-10 text-sm">
+  <a href="/blog_index.html" class="underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-500">← All posts</a>
+</p>
+{% endblock %}
