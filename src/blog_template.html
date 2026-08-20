@@ -15,9 +15,13 @@
 <body>
 
 
-  <header>
-    {% include 'header.html' %}
-  </header>
+  {% set nav_active = 'blog' %}
+  {% include 'header.html' %}
+
+{# oxie builds `categories` by iterating a Python set, so its order changes
+   between builds. Sort it here: most recently updated first, and the built
+   file stops churning between runs. #}
+{% set ordered_categories = categories | sort(attribute='last_post.date', reverse=true) %}
 
 <!-- Blog Index Section -->
 <section class="py-10">
@@ -26,22 +30,28 @@
     <!-- Page heading -->
     <div class="mb-6">
       <h1 class="text-3xl font-bold tracking-tight">Explore Categories</h1>
-      <div class="flex items-center gap-3 mt-2">
+      <div class="flex items-center gap-3 mt-2 flex-wrap">
         <p class="text-base-content/50 text-sm">Discover articles organised by topics</p>
         <span class="text-base-content/20">·</span>
         <span class="text-xs text-base-content/45">{{ categories | length }} categories</span>
         <span class="text-base-content/20">·</span>
         <span class="text-xs text-base-content/45">{{ posts | length }} posts</span>
+        {% if posts %}
+        <span class="text-base-content/20">·</span>
+        <span class="text-xs text-base-content/45">latest {{ posts[0].date.strftime("%b %Y") }}</span>
+        {% endif %}
       </div>
     </div>
 
     <!-- Tab switcher -->
-    <div class="flex gap-1 mb-8 bg-base-200 rounded-xl p-1 w-fit">
+    <div class="flex gap-1 mb-8 bg-base-200 rounded-xl p-1 w-fit" role="tablist" aria-label="Browse posts">
       <button id="tab-categories" onclick="switchTab('categories')"
+        role="tab" aria-selected="true" aria-controls="panel-categories"
         class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-base-100 shadow-sm text-base-content">
         Categories
       </button>
       <button id="tab-allposts" onclick="switchTab('allposts')"
+        role="tab" aria-selected="false" aria-controls="panel-allposts"
         class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-base-content/50 hover:text-base-content">
         All Posts <span class="ml-1.5 text-xs font-normal text-base-content/40">{{ posts | length }}</span>
       </button>
@@ -49,8 +59,9 @@
 
 
     <!-- Tab: Categories — 2-col grid on desktop -->
-    <div id="panel-categories" class="grid grid-cols-1 md:grid-cols-2 gap-5">
-      {% for category in categories %}
+    <div id="panel-categories" role="tabpanel" aria-labelledby="tab-categories"
+         class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {% for category in ordered_categories %}
       <a href="/{{ category.link }}"
         class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
 
@@ -93,15 +104,31 @@
         </div>
 
       </a>
+      {% else %}
+      <p class="text-base-content/50 text-sm">
+        No categories yet — they come from the <code>Category:</code> line in each post's frontmatter.
+      </p>
       {% endfor %}
     </div>
 
     <!-- Tab: All Posts -->
-    <div id="panel-allposts" class="hidden">
+    <div id="panel-allposts" role="tabpanel" aria-labelledby="tab-allposts" class="hidden">
+
+      {% if posts %}
+      <!-- Filter -->
+      <div class="flex items-center gap-3 mb-5 flex-wrap">
+        <input id="post-filter" type="search" autocomplete="off"
+               placeholder="Filter by title, summary, category or tag…"
+               aria-label="Filter posts"
+               class="input input-sm w-full max-w-sm">
+        <span id="filter-count" class="text-xs text-base-content/45"></span>
+      </div>
+      {% endif %}
 
       <div class="space-y-3 mb-5">
         {% for post in posts %}
         <a href="{{ post.link }}"
+          data-search="{{ (post.title ~ ' ' ~ (post.summary or '') ~ ' ' ~ (post.category or '') ~ ' ' ~ (post.tags | join(' '))) | lower | e }}"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -130,18 +157,27 @@
           {% endif %}
 
         </a>
+        {% else %}
+        <p class="text-base-content/50 text-sm">
+          No posts yet. Add a Markdown file to <code>source/post/</code>.
+        </p>
         {% endfor %}
       </div>
 
+      <!-- Shown only when the filter matches nothing -->
+      <p id="no-results" class="hidden text-sm text-base-content/50 py-6">
+        Nothing matches that. <button onclick="clearFilter()" class="link link-primary">Clear the filter</button>
+      </p>
+
       <!-- Pagination -->
       <div id="pagination" class="flex items-center justify-center gap-2">
-        <button id="btn-prev" onclick="changePage(-1)" class="btn btn-sm btn-ghost border border-base-300">
+        <button id="btn-prev" onclick="changePage(-1)" aria-label="Previous page" class="btn btn-sm btn-ghost border border-base-300">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
         <div id="page-numbers" class="flex gap-1"></div>
-        <button id="btn-next" onclick="changePage(1)" class="btn btn-sm btn-ghost border border-base-300">
+        <button id="btn-next" onclick="changePage(1)" aria-label="Next page" class="btn btn-sm btn-ghost border border-base-300">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
           </svg>
@@ -155,37 +191,39 @@
 
 <script>
   const POSTS_PER_PAGE = 10;
+
+  const allItems = Array.from(document.querySelectorAll('.post-item'));
+  let matching = allItems.slice();   // items passing the current filter
   let currentPage = 0;
 
-  function getItems() {
-    return Array.from(document.querySelectorAll('.post-item'));
-  }
-
   function totalPages() {
-    return Math.max(1, Math.ceil(getItems().length / POSTS_PER_PAGE));
+    return Math.max(1, Math.ceil(matching.length / POSTS_PER_PAGE));
   }
 
   function renderPage(page) {
-    currentPage = page;
-    const items = getItems();
-    items.forEach((el, i) => {
-      el.classList.toggle('hidden', Math.floor(i / POSTS_PER_PAGE) !== page);
-    });
+    currentPage = Math.min(Math.max(page, 0), totalPages() - 1);
 
-    // Prev / Next
-    document.getElementById('btn-prev').disabled = page === 0;
-    document.getElementById('btn-next').disabled = page >= totalPages() - 1;
+    // Filtered-out items stay hidden; the rest show only on the current page
+    allItems.forEach(el => el.classList.add('hidden'));
+    matching
+      .slice(currentPage * POSTS_PER_PAGE, (currentPage + 1) * POSTS_PER_PAGE)
+      .forEach(el => el.classList.remove('hidden'));
 
-    // A single page of posts needs no pager at all
-    document.getElementById('pagination').classList.toggle('hidden', totalPages() < 2);
+    document.getElementById('no-results').classList.toggle('hidden', matching.length > 0);
 
-    // Numbered page buttons
+    // A single page of results needs no pager at all
+    const pager = document.getElementById('pagination');
+    pager.classList.toggle('hidden', totalPages() < 2);
+    document.getElementById('btn-prev').disabled = currentPage === 0;
+    document.getElementById('btn-next').disabled = currentPage >= totalPages() - 1;
+
     const container = document.getElementById('page-numbers');
     container.innerHTML = '';
     for (let i = 0; i < totalPages(); i++) {
       const btn = document.createElement('button');
       btn.textContent = i + 1;
-      btn.className = 'btn btn-sm border ' + (i === page
+      btn.setAttribute('aria-label', 'Page ' + (i + 1));
+      btn.className = 'btn btn-sm border ' + (i === currentPage
         ? 'btn-primary border-primary'
         : 'btn-ghost border-base-300');
       btn.onclick = () => renderPage(i);
@@ -195,11 +233,31 @@
 
   // The prev/next buttons call this; it was missing from the original.
   function changePage(delta) {
-    const next = currentPage + delta;
-    if (next >= 0 && next < totalPages()) renderPage(next);
+    renderPage(currentPage + delta);
   }
 
-  function switchTab(tab) {
+  function applyFilter(query) {
+    const needle = query.trim().toLowerCase();
+    matching = needle
+      ? allItems.filter(el => el.dataset.search.includes(needle))
+      : allItems.slice();
+
+    const label = document.getElementById('filter-count');
+    if (label) {
+      label.textContent = needle
+        ? matching.length + ' of ' + allItems.length + ' posts'
+        : '';
+    }
+    renderPage(0);
+  }
+
+  function clearFilter() {
+    const input = document.getElementById('post-filter');
+    if (input) { input.value = ''; input.focus(); }
+    applyFilter('');
+  }
+
+  function switchTab(tab, updateHash = true) {
     const isCategories = tab === 'categories';
     document.getElementById('panel-categories').classList.toggle('hidden', !isCategories);
     document.getElementById('panel-allposts').classList.toggle('hidden', isCategories);
@@ -210,10 +268,23 @@
       btn.classList.toggle('shadow-sm', active);
       btn.classList.toggle('text-base-content', active);
       btn.classList.toggle('text-base-content/50', !active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
     });
 
-    if (!isCategories) renderPage(0);
+    // Keep the open tab in the URL, so it survives a reload and can be linked
+    if (updateHash) {
+      history.replaceState(null, '', isCategories ? location.pathname : '#all');
+    }
+    if (!isCategories) renderPage(currentPage);
   }
+
+  const filterInput = document.getElementById('post-filter');
+  if (filterInput) {
+    filterInput.addEventListener('input', e => applyFilter(e.target.value));
+  }
+
+  // Open on the tab named by the URL (#all), otherwise on Categories
+  switchTab(location.hash === '#all' ? 'allposts' : 'categories', false);
 </script>
   <!-- <div class="divider"></div> -->
 

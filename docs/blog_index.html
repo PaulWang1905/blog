@@ -13,68 +13,118 @@
 <body>
 
 
-  <header>
-    
-<div class="navbar bg-base-100 shadow-lg sticky top-0 z-50 backdrop-blur-sm bg-base-100/90">
-  <div class="navbar-start">
+  
+  
 
-    <!-- Mobile menu button; the inline links below take over on large screens -->
+
+
+
+
+
+
+<header class="navbar sticky top-0 z-50 border-b border-base-300 bg-base-100/85 backdrop-blur-md px-2 sm:px-4">
+
+  <div class="navbar-start gap-1">
+
+    <!-- Mobile menu; the inline links below take over from `lg` up -->
     <div class="dropdown lg:hidden">
-      <label tabindex="0" class="btn btn-ghost btn-circle hover:bg-base-200">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <label tabindex="0" role="button" aria-label="Open menu"
+             class="btn btn-ghost btn-sm btn-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
         </svg>
       </label>
-      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 p-2 shadow-lg bg-base-100 rounded-box w-52 z-50">
+      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 w-52 z-50 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg">
         
-        <li><a class="hover:text-primary transition-colors duration-200" href="/blog_index.html">Blog</a></li>
-        <li><a class="hover:text-primary transition-colors duration-200" href="/page/about.html">About</a></li>
-        <li><a class="hover:text-primary transition-colors duration-200" href="https://puyuwang.org">Main site</a></li>
+        <li>
+          <a href="/blog_index.html"
+             class="active" aria-current="page">
+            Blog
+          </a>
+        </li>
+        
+        <li>
+          <a href="/page/about.html"
+             >
+            About
+          </a>
+        </li>
+        
+        <li>
+          <a href="https://puyuwang.org"
+             >
+            Main site <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+     class="inline-block h-3 w-3 opacity-45" fill="none" stroke="currentColor"
+     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+     ><path d="M6 3h7v7"/><path d="M13 3 4.5 11.5"/><path d="M11 13H3V5"/></svg>
+          </a>
+        </li>
+        
       </ul>
     </div>
 
-    <!-- Site title -->
-    <a class="btn btn-ghost normal-case text-xl hover:scale-105 transition-transform duration-200" href="/index.html">
+    <!-- Wordmark -->
+    <a href="/index.html" aria-label="Puyu's Blog — home"
+       class="btn btn-ghost px-2 normal-case text-xl hover:scale-105 transition-transform duration-200"
+       >
       <span class="box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2">
         Puyu's Blog
       </span>
     </a>
 
-    <div class="hidden lg:flex">
-      <a class="btn btn-ghost text-xl hover:scale-105 transition-transform duration-200" href="/blog_index.html">Blog</a>
-      <a class="btn btn-ghost text-xl hover:scale-105 transition-transform duration-200" href="/page/about.html">About</a>
-      <a class="btn btn-ghost text-xl hover:scale-105 transition-transform duration-200" href="https://puyuwang.org">Main site</a>
-    </div>
+    <!-- Desktop links -->
+    <nav class="hidden lg:flex items-center gap-1 ml-2">
+      
+      <a href="/blog_index.html"
+         class="btn btn-ghost btn-sm font-medium tracking-tight
+                text-primary bg-base-200"
+         aria-current="page">
+        Blog
+      </a>
+      
+      <a href="/page/about.html"
+         class="btn btn-ghost btn-sm font-medium tracking-tight
+                text-base-content/70 hover:text-primary"
+         >
+        About
+      </a>
+      
+      <a href="https://puyuwang.org"
+         class="btn btn-ghost btn-sm font-medium tracking-tight
+                text-base-content/70 hover:text-primary"
+         >
+        Main site <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"
+     class="inline-block h-3 w-3 opacity-45" fill="none" stroke="currentColor"
+     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+     ><path d="M6 3h7v7"/><path d="M13 3 4.5 11.5"/><path d="M11 13H3V5"/></svg>
+      </a>
+      
+    </nav>
 
   </div>
 
   <div class="navbar-end">
 
     <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller -->
-    <label class="swap swap-rotate hover:scale-110 transition-transform duration-200">
-      <input type="checkbox" class="theme-controller" value="dark" aria-label="Toggle dark mode" />
+    <label class="btn btn-ghost btn-sm btn-circle swap swap-rotate" aria-label="Toggle dark mode">
+      <input type="checkbox" class="theme-controller" value="dark" />
       <!-- Sun icon -->
-      <svg
-        class="swap-off h-10 w-10 fill-current"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24">
+      <svg class="swap-off h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path
           d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
       </svg>
-
       <!-- Moon icon -->
-      <svg
-        class="swap-on h-10 w-10 fill-current"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24">
+      <svg class="swap-on h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path
           d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
       </svg>
     </label>
 
   </div>
-</div>
-  </header>
+</header>
+
+
+
 
 <!-- Blog Index Section -->
 <section class="py-10">
@@ -83,74 +133,61 @@
     <!-- Page heading -->
     <div class="mb-6">
       <h1 class="text-3xl font-bold tracking-tight">Explore Categories</h1>
-      <div class="flex items-center gap-3 mt-2">
+      <div class="flex items-center gap-3 mt-2 flex-wrap">
         <p class="text-base-content/50 text-sm">Discover articles organised by topics</p>
         <span class="text-base-content/20">·</span>
         <span class="text-xs text-base-content/45">5 categories</span>
         <span class="text-base-content/20">·</span>
-        <span class="text-xs text-base-content/45">11 posts</span>
+        <span class="text-xs text-base-content/45">10 posts</span>
+        
+        <span class="text-base-content/20">·</span>
+        <span class="text-xs text-base-content/45">latest Jul 2026</span>
+        
       </div>
     </div>
 
     <!-- Tab switcher -->
-    <div class="flex gap-1 mb-8 bg-base-200 rounded-xl p-1 w-fit">
+    <div class="flex gap-1 mb-8 bg-base-200 rounded-xl p-1 w-fit" role="tablist" aria-label="Browse posts">
       <button id="tab-categories" onclick="switchTab('categories')"
+        role="tab" aria-selected="true" aria-controls="panel-categories"
         class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-base-100 shadow-sm text-base-content">
         Categories
       </button>
       <button id="tab-allposts" onclick="switchTab('allposts')"
+        role="tab" aria-selected="false" aria-controls="panel-allposts"
         class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-base-content/50 hover:text-base-content">
-        All Posts <span class="ml-1.5 text-xs font-normal text-base-content/40">11</span>
+        All Posts <span class="ml-1.5 text-xs font-normal text-base-content/40">10</span>
       </button>
     </div>
 
 
     <!-- Tab: Categories — 2-col grid on desktop -->
-    <div id="panel-categories" class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div id="panel-categories" role="tabpanel" aria-labelledby="tab-categories"
+         class="grid grid-cols-1 md:grid-cols-2 gap-5">
       
-      <a href="/blog_Blog.html"
+      <a href="/blog_Story.html"
         class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
 
         <div class="px-6 pt-6 pb-4 flex-1">
           <!-- Header: name + count -->
           <div class="flex items-start justify-between gap-3 mb-4">
-            <h3 class="text-xl font-bold text-base-content group-hover:text-primary transition-colors leading-tight">Blog</h3>
+            <h3 class="text-xl font-bold text-base-content group-hover:text-primary transition-colors leading-tight">Story</h3>
             <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-base-200 text-base-content/60 mt-0.5">
-              4 posts
+              1 post
             </span>
           </div>
 
           <!-- Latest post -->
           <div class="mb-4">
             <p class="text-xs font-bold uppercase tracking-widest text-base-content/35 mb-1.5">Latest post</p>
-            <p class="text-sm font-medium text-base-content leading-snug line-clamp-2">Hello World</p>
+            <p class="text-sm font-medium text-base-content leading-snug line-clamp-2">Silver Age</p>
           </div>
 
           <!-- Tags (the category's tag list repeats per post, so de-duplicate) -->
           <div class="flex items-center gap-1.5 flex-wrap">
             
               
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">oxie</span>
-              
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">writing</span>
-              
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Wireguard</span>
-              
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/35">···</span>
-              
-            
-              
-            
-              
-            
-              
-            
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Story</span>
               
             
           </div>
@@ -158,56 +195,7 @@
 
         <!-- Card footer -->
         <div class="px-6 py-3 bg-base-200/50 border-t border-base-200 flex items-center justify-between mt-auto">
-          <span class="text-xs text-base-content/45">Updated Aug 18, 2026</span>
-          <span class="text-xs font-semibold text-base-content/35 group-hover:text-primary transition-colors flex items-center gap-1">
-            Browse all
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </span>
-        </div>
-
-      </a>
-      
-      <a href="/blog_Notes.html"
-        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
-
-        <div class="px-6 pt-6 pb-4 flex-1">
-          <!-- Header: name + count -->
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <h3 class="text-xl font-bold text-base-content group-hover:text-primary transition-colors leading-tight">Notes</h3>
-            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-base-200 text-base-content/60 mt-0.5">
-              2 posts
-            </span>
-          </div>
-
-          <!-- Latest post -->
-          <div class="mb-4">
-            <p class="text-xs font-bold uppercase tracking-widest text-base-content/35 mb-1.5">Latest post</p>
-            <p class="text-sm font-medium text-base-content leading-snug line-clamp-2">Chinese Coinage</p>
-          </div>
-
-          <!-- Tags (the category's tag list repeats per post, so de-duplicate) -->
-          <div class="flex items-center gap-1.5 flex-wrap">
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Chinese</span>
-              
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Coinage</span>
-              
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Reading</span>
-              
-            
-          </div>
-        </div>
-
-        <!-- Card footer -->
-        <div class="px-6 py-3 bg-base-200/50 border-t border-base-200 flex items-center justify-between mt-auto">
-          <span class="text-xs text-base-content/45">Updated Jul 20, 2024</span>
+          <span class="text-xs text-base-content/45">Updated Jul 17, 2026</span>
           <span class="text-xs font-semibold text-base-content/35 group-hover:text-primary transition-colors flex items-center gap-1">
             Browse all
             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -257,47 +245,6 @@
         <!-- Card footer -->
         <div class="px-6 py-3 bg-base-200/50 border-t border-base-200 flex items-center justify-between mt-auto">
           <span class="text-xs text-base-content/45">Updated Apr 03, 2026</span>
-          <span class="text-xs font-semibold text-base-content/35 group-hover:text-primary transition-colors flex items-center gap-1">
-            Browse all
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </span>
-        </div>
-
-      </a>
-      
-      <a href="/blog_Story.html"
-        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
-
-        <div class="px-6 pt-6 pb-4 flex-1">
-          <!-- Header: name + count -->
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <h3 class="text-xl font-bold text-base-content group-hover:text-primary transition-colors leading-tight">Story</h3>
-            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-base-200 text-base-content/60 mt-0.5">
-              1 post
-            </span>
-          </div>
-
-          <!-- Latest post -->
-          <div class="mb-4">
-            <p class="text-xs font-bold uppercase tracking-widest text-base-content/35 mb-1.5">Latest post</p>
-            <p class="text-sm font-medium text-base-content leading-snug line-clamp-2">Silver Age</p>
-          </div>
-
-          <!-- Tags (the category's tag list repeats per post, so de-duplicate) -->
-          <div class="flex items-center gap-1.5 flex-wrap">
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Story</span>
-              
-            
-          </div>
-        </div>
-
-        <!-- Card footer -->
-        <div class="px-6 py-3 bg-base-200/50 border-t border-base-200 flex items-center justify-between mt-auto">
-          <span class="text-xs text-base-content/45">Updated Jul 17, 2026</span>
           <span class="text-xs font-semibold text-base-content/35 group-hover:text-primary transition-colors flex items-center gap-1">
             Browse all
             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -363,46 +310,132 @@
 
       </a>
       
+      <a href="/blog_Blog.html"
+        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
+
+        <div class="px-6 pt-6 pb-4 flex-1">
+          <!-- Header: name + count -->
+          <div class="flex items-start justify-between gap-3 mb-4">
+            <h3 class="text-xl font-bold text-base-content group-hover:text-primary transition-colors leading-tight">Blog</h3>
+            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-base-200 text-base-content/60 mt-0.5">
+              3 posts
+            </span>
+          </div>
+
+          <!-- Latest post -->
+          <div class="mb-4">
+            <p class="text-xs font-bold uppercase tracking-widest text-base-content/35 mb-1.5">Latest post</p>
+            <p class="text-sm font-medium text-base-content leading-snug line-clamp-2">Setup Wireguard</p>
+          </div>
+
+          <!-- Tags (the category's tag list repeats per post, so de-duplicate) -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Wireguard</span>
+              
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">VPN</span>
+              
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Linux</span>
+              
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/35">···</span>
+              
+            
+              
+            
+              
+            
+          </div>
+        </div>
+
+        <!-- Card footer -->
+        <div class="px-6 py-3 bg-base-200/50 border-t border-base-200 flex items-center justify-between mt-auto">
+          <span class="text-xs text-base-content/45">Updated Jul 26, 2024</span>
+          <span class="text-xs font-semibold text-base-content/35 group-hover:text-primary transition-colors flex items-center gap-1">
+            Browse all
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+
+      </a>
+      
+      <a href="/blog_Notes.html"
+        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
+
+        <div class="px-6 pt-6 pb-4 flex-1">
+          <!-- Header: name + count -->
+          <div class="flex items-start justify-between gap-3 mb-4">
+            <h3 class="text-xl font-bold text-base-content group-hover:text-primary transition-colors leading-tight">Notes</h3>
+            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-base-200 text-base-content/60 mt-0.5">
+              2 posts
+            </span>
+          </div>
+
+          <!-- Latest post -->
+          <div class="mb-4">
+            <p class="text-xs font-bold uppercase tracking-widest text-base-content/35 mb-1.5">Latest post</p>
+            <p class="text-sm font-medium text-base-content leading-snug line-clamp-2">Chinese Coinage</p>
+          </div>
+
+          <!-- Tags (the category's tag list repeats per post, so de-duplicate) -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Chinese</span>
+              
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Coinage</span>
+              
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">Reading</span>
+              
+            
+          </div>
+        </div>
+
+        <!-- Card footer -->
+        <div class="px-6 py-3 bg-base-200/50 border-t border-base-200 flex items-center justify-between mt-auto">
+          <span class="text-xs text-base-content/45">Updated Jul 20, 2024</span>
+          <span class="text-xs font-semibold text-base-content/35 group-hover:text-primary transition-colors flex items-center gap-1">
+            Browse all
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+
+      </a>
+      
     </div>
 
     <!-- Tab: All Posts -->
-    <div id="panel-allposts" class="hidden">
+    <div id="panel-allposts" role="tabpanel" aria-labelledby="tab-allposts" class="hidden">
+
+      
+      <!-- Filter -->
+      <div class="flex items-center gap-3 mb-5 flex-wrap">
+        <input id="post-filter" type="search" autocomplete="off"
+               placeholder="Filter by title, summary, category or tag…"
+               aria-label="Filter posts"
+               class="input input-sm w-full max-w-sm">
+        <span id="filter-count" class="text-xs text-base-content/45"></span>
+      </div>
+      
 
       <div class="space-y-3 mb-5">
         
-        <a href="/post/hello-world.html"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
-
-          <!-- Meta row -->
-          <div class="flex items-center gap-2 mb-2 flex-wrap">
-            <time class="text-xs text-base-content/45 tabular-nums">18 Aug 2026</time>
-            <span class="text-base-content/20">·</span>
-            <span class="text-xs font-medium text-base-content/55">Blog</span>
-            
-            <span class="text-base-content/20">·</span>
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/60">oxie</span>
-              
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/60">writing</span>
-              
-            
-            
-          </div>
-
-          <h3 class="text-sm font-semibold text-base-content group-hover:text-primary transition-colors leading-snug mb-1">
-            Hello World
-          </h3>
-
-          
-          <p class="text-xs text-base-content/55 leading-relaxed line-clamp-2">The first post on Puyu's Personal Blog — how posts work in oxie.</p>
-          
-
-        </a>
-        
         <a href="/post/silver_age.html"
+          data-search="silver age a short story about a deduplication officer in a world where reality can duplicate, exploring themes of memory, choice, and the nature of reality. story story"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -431,6 +464,7 @@
         </a>
         
         <a href="/post/math_test.html"
+          data-search="math rendering test a test post for latex math formula rendering. test math test latex"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -467,6 +501,7 @@
         </a>
         
         <a href="/post/20241125.html"
+          data-search="悼念贾舜尧 贾舜尧，一个才华横溢的年轻人，不幸离世。 中文 悼念 哲学"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -499,6 +534,7 @@
         </a>
         
         <a href="/post/20240726(1).html"
+          data-search="setup wireguard setting up wireguard for blog wireguard vpn"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -531,6 +567,7 @@
         </a>
         
         <a href="/post/20240726.html"
+          data-search="using ‘dd’ to benchmark ssd using dd might be the simplest way to benchmark an ssd on unix-like systems. it is also very dangerous (obviously). i only recommend this method in test environments. blog linux benchmark ssd"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -567,6 +604,7 @@
         </a>
         
         <a href="/post/20240724.html"
+          data-search="note for 24-07-24 note for 24-07-24 updates blog randomthoughts"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -595,6 +633,7 @@
         </a>
         
         <a href="/post/20240720_Chinese_Coinage.html"
+          data-search="chinese coinage a note on reading a book about chinese coinage notes chinese coinage"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -627,6 +666,7 @@
         </a>
         
         <a href="/post/reading202407.html"
+          data-search="reading a brief description of my document. notes reading"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -655,6 +695,7 @@
         </a>
         
         <a href="/post/LifeWriting.html"
+          data-search="lifewriting 课程小结 life writing课程小结 中文 lifewriting"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -683,6 +724,7 @@
         </a>
         
         <a href="/post/2017.html"
+          data-search="看勳伯格的和聲學 這些天我一直在看schoenberg的書 中文 music schoenberg"
           class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
@@ -716,15 +758,20 @@
         
       </div>
 
+      <!-- Shown only when the filter matches nothing -->
+      <p id="no-results" class="hidden text-sm text-base-content/50 py-6">
+        Nothing matches that. <button onclick="clearFilter()" class="link link-primary">Clear the filter</button>
+      </p>
+
       <!-- Pagination -->
       <div id="pagination" class="flex items-center justify-center gap-2">
-        <button id="btn-prev" onclick="changePage(-1)" class="btn btn-sm btn-ghost border border-base-300">
+        <button id="btn-prev" onclick="changePage(-1)" aria-label="Previous page" class="btn btn-sm btn-ghost border border-base-300">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
           </svg>
         </button>
         <div id="page-numbers" class="flex gap-1"></div>
-        <button id="btn-next" onclick="changePage(1)" class="btn btn-sm btn-ghost border border-base-300">
+        <button id="btn-next" onclick="changePage(1)" aria-label="Next page" class="btn btn-sm btn-ghost border border-base-300">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
           </svg>
@@ -738,37 +785,39 @@
 
 <script>
   const POSTS_PER_PAGE = 10;
+
+  const allItems = Array.from(document.querySelectorAll('.post-item'));
+  let matching = allItems.slice();   // items passing the current filter
   let currentPage = 0;
 
-  function getItems() {
-    return Array.from(document.querySelectorAll('.post-item'));
-  }
-
   function totalPages() {
-    return Math.max(1, Math.ceil(getItems().length / POSTS_PER_PAGE));
+    return Math.max(1, Math.ceil(matching.length / POSTS_PER_PAGE));
   }
 
   function renderPage(page) {
-    currentPage = page;
-    const items = getItems();
-    items.forEach((el, i) => {
-      el.classList.toggle('hidden', Math.floor(i / POSTS_PER_PAGE) !== page);
-    });
+    currentPage = Math.min(Math.max(page, 0), totalPages() - 1);
 
-    // Prev / Next
-    document.getElementById('btn-prev').disabled = page === 0;
-    document.getElementById('btn-next').disabled = page >= totalPages() - 1;
+    // Filtered-out items stay hidden; the rest show only on the current page
+    allItems.forEach(el => el.classList.add('hidden'));
+    matching
+      .slice(currentPage * POSTS_PER_PAGE, (currentPage + 1) * POSTS_PER_PAGE)
+      .forEach(el => el.classList.remove('hidden'));
 
-    // A single page of posts needs no pager at all
-    document.getElementById('pagination').classList.toggle('hidden', totalPages() < 2);
+    document.getElementById('no-results').classList.toggle('hidden', matching.length > 0);
 
-    // Numbered page buttons
+    // A single page of results needs no pager at all
+    const pager = document.getElementById('pagination');
+    pager.classList.toggle('hidden', totalPages() < 2);
+    document.getElementById('btn-prev').disabled = currentPage === 0;
+    document.getElementById('btn-next').disabled = currentPage >= totalPages() - 1;
+
     const container = document.getElementById('page-numbers');
     container.innerHTML = '';
     for (let i = 0; i < totalPages(); i++) {
       const btn = document.createElement('button');
       btn.textContent = i + 1;
-      btn.className = 'btn btn-sm border ' + (i === page
+      btn.setAttribute('aria-label', 'Page ' + (i + 1));
+      btn.className = 'btn btn-sm border ' + (i === currentPage
         ? 'btn-primary border-primary'
         : 'btn-ghost border-base-300');
       btn.onclick = () => renderPage(i);
@@ -778,11 +827,31 @@
 
   // The prev/next buttons call this; it was missing from the original.
   function changePage(delta) {
-    const next = currentPage + delta;
-    if (next >= 0 && next < totalPages()) renderPage(next);
+    renderPage(currentPage + delta);
   }
 
-  function switchTab(tab) {
+  function applyFilter(query) {
+    const needle = query.trim().toLowerCase();
+    matching = needle
+      ? allItems.filter(el => el.dataset.search.includes(needle))
+      : allItems.slice();
+
+    const label = document.getElementById('filter-count');
+    if (label) {
+      label.textContent = needle
+        ? matching.length + ' of ' + allItems.length + ' posts'
+        : '';
+    }
+    renderPage(0);
+  }
+
+  function clearFilter() {
+    const input = document.getElementById('post-filter');
+    if (input) { input.value = ''; input.focus(); }
+    applyFilter('');
+  }
+
+  function switchTab(tab, updateHash = true) {
     const isCategories = tab === 'categories';
     document.getElementById('panel-categories').classList.toggle('hidden', !isCategories);
     document.getElementById('panel-allposts').classList.toggle('hidden', isCategories);
@@ -793,10 +862,23 @@
       btn.classList.toggle('shadow-sm', active);
       btn.classList.toggle('text-base-content', active);
       btn.classList.toggle('text-base-content/50', !active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
     });
 
-    if (!isCategories) renderPage(0);
+    // Keep the open tab in the URL, so it survives a reload and can be linked
+    if (updateHash) {
+      history.replaceState(null, '', isCategories ? location.pathname : '#all');
+    }
+    if (!isCategories) renderPage(currentPage);
   }
+
+  const filterInput = document.getElementById('post-filter');
+  if (filterInput) {
+    filterInput.addEventListener('input', e => applyFilter(e.target.value));
+  }
+
+  // Open on the tab named by the URL (#all), otherwise on Categories
+  switchTab(location.hash === '#all' ? 'allposts' : 'categories', false);
 </script>
   <!-- <div class="divider"></div> -->
 

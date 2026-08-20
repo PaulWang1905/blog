@@ -48,9 +48,11 @@
 <body>
 
 
-  <header>
-    {% include 'header.html' %}
-</header>
+  {# Posts light up "Blog"; the About page lights up "About"; any other
+     standalone page leaves the nav unmarked. #}
+  {% set nav_active = 'blog' if category and category != 'Page'
+                      else ('about' if link == '/page/about.html' else '') %}
+  {% include 'header.html' %}
 
 
 <div class="container mx-auto px-5 p-4 max-w-6xl">

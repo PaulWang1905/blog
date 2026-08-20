@@ -17,9 +17,8 @@
 <body>
 
 
-  <header>
-    {% include 'header.html' %}
-  </header>
+  {% set nav_active = 'blog' %}
+  {% include 'header.html' %}
 
   {# Figures for the stats bar, all derived from the posts in this category.
      `posts` arrives newest-first, so posts[0] is the latest and posts[-1]
