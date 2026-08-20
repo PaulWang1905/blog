@@ -1,48 +1,152 @@
 {# Layout for a single post or page (docs/post/*.html, docs/page/*.html).
    Context: meta_data, post_meta_data, title, author, summary, category,
    date, last_modified, content, phrases, image, tags, link #}
-{% extends "base.html" %}
 
-{% block page_title %}{{ title }} — {{ meta_data.title }}{% endblock %}
+{# A post's Image: may be a path relative to the web root (image/foo.jpg)
+   or a full URL to somewhere else. Root-relative paths need a leading
+   slash, because posts are served from /post/; URLs must be left alone. #}
+{% set image_is_url = image and '://' in image %}
+{% set image_src = image if image_is_url else '/' ~ image %}
+{% set image_abs = image if image_is_url else meta_data.link ~ '/' ~ image %}
+<!DOCTYPE html>
+<html lang="en" data-theme="winter">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% if summary %}<meta name="description" content="{{ summary }}">{% endif %}
+  {% if author %}<meta name="author" content="{{ author }}">{% endif %}
+  <meta property="og:title" content="{{ title }}">
+  {% if summary %}<meta property="og:description" content="{{ summary }}">{% endif %}
+  <meta property="og:type" content="article">
+  {% if image %}<meta property="og:image" content="{{ image_abs }}">{% endif %}
+  <link href="/styles.css" rel="stylesheet">
+  <link href="/pygments.css" rel="stylesheet">
+  <title>{{ title }} — {{ meta_data.title }}</title>
+  <style>
+    .highlight { position: relative; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
+    .highlight pre { margin: 0; background: transparent; }
+    .prose pre { padding: 0; background: transparent; border-radius: 0; }
+    .prose code::before, .prose code::after { content: none; }
+    .copy-btn {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      padding: 0.2rem 0.6rem; font-size: 0.75rem; border-radius: 0.25rem;
+      background: rgba(255,255,255,0.15); color: #ccc; border: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer; opacity: 0; transition: opacity 0.2s;
+    }
+    .highlight:hover .copy-btn { opacity: 1; }
+    .copy-btn.copied { background: rgba(100,200,100,0.3); color: #9f9; }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
 
-{% block meta %}
-{% if summary %}<meta name="description" content="{{ summary }}">{% endif %}
-{% if author %}<meta name="author" content="{{ author }}">{% endif %}
-<meta property="og:title" content="{{ title }}">
-{% if summary %}<meta property="og:description" content="{{ summary }}">{% endif %}
-<meta property="og:type" content="article">
-{% endblock %}
 
-{% block content %}
-<article>
-  <h1 class="text-3xl font-semibold leading-tight tracking-tight">{{ title }}</h1>
+<body>
 
-  <p class="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
-    {% if date %}<time datetime="{{ date }}">{{ date.strftime('%d %B %Y') }}</time>{% endif %}
-    {% if author %}<span>· {{ author }}</span>{% endif %}
-    {% if category %}
-    <span>· <a href="/blog_{{ category }}.html" class="underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-500">{{ category }}</a></span>
-    {% endif %}
-  </p>
 
-  {% if summary %}
-  <p class="mt-4 border-l-2 border-neutral-200 pl-4 text-neutral-600 italic dark:border-neutral-700 dark:text-neutral-400">{{ summary }}</p>
-  {% endif %}
+  <header>
+    {% include 'header.html' %}
+</header>
 
-  <div class="prose prose-neutral mt-8 max-w-none dark:prose-invert">
-    {{ content }}
+
+<div class="container mx-auto px-5 p-4 max-w-6xl">
+
+  <div tabindex="0" class="bg-primary text-primary-content focus:bg-primary focus:text-primary-content collapse p-5 rounded-lg">
+    <div class="collapse-title">
+      <div class="breadcrumbs max-w-4xl text-sm">
+        <ul>
+          {# Pages (Category: Page) have no category listing to point at, so
+             they breadcrumb back to the home page instead of the blog. #}
+          {% if category and category != 'Page' %}
+          <li><a href="/blog_index.html">Blog</a></li>
+          <li><a href="/blog_{{ category }}.html">{{ category }}</a></li>
+          {% else %}
+          <li><a href="/index.html">Home</a></li>
+          {% endif %}
+          <li><a href="{{ link }}"> {{ title }} </a> </li>
+        </ul>
+      </div>
+     <h1 class="text-2xl font-bold py-2"> {{ title }} </h1>
+     {% for tag in tags %}
+     <span class="badge">{{ tag }}</span>
+     {% endfor %}
+    <p class="py-2 text-sm opacity-90">{{ summary }}</p>
+    </div>
+
+    <div class="collapse-content text-sm">
+      {% if author %}<p>By {{ author }}</p>{% endif %}
+      {% if date %}<p>Published on {{ date.strftime("%A %Y-%m-%d") }} </p>{% endif %}
+      {% if last_modified %}<p>Last Modified on {{ last_modified.strftime("%A %Y-%m-%d") }} </p>{% endif %}
+    </div>
   </div>
 
-  {% if tags %}
-  <p class="mt-10 flex flex-wrap gap-2">
-    {% for tag in tags %}
-    <span class="rounded-full border border-neutral-200 px-3 py-0.5 text-xs text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">{{ tag }}</span>
-    {% endfor %}
-  </p>
+  {# Only show a cover image when the post sets its own; the site-wide
+     default from meta_data.json is a listing placeholder, not a banner. #}
+  {% if image and image != meta_data.image %}
+    <div class="carousel w-full mx-auto my-6 rounded-xl shadow-2xl overflow-hidden flex items-center justify-center">
+      <div class="carousel-item w-full relative group">
+        <div class="relative w-full h-56 md:h-80 overflow-hidden">
+          <div class="absolute inset-0">
+            <img
+              src="{{ image_src }}"
+              class="w-full h-full object-cover filter blur-lg scale-150"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async" />
+          </div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <img
+              src="{{ image_src }}"
+              class="max-w-full max-h-full object-contain transition-transform duration-500 ease-in-out group-hover:scale-105"
+              alt="{% if post_meta_data.Image_caption %}{{ post_meta_data.Image_caption }}{% else %}Article featured image{% endif %}"
+              loading="lazy"
+              decoding="async" />
+          </div>
+        </div>
+        {% if post_meta_data.Image_caption %}
+        <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-3 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+          <p class="text-center text-sm">{{ post_meta_data.Image_caption }}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
   {% endif %}
 
-  {% if last_modified and last_modified != date %}
-  <p class="mt-6 text-sm text-neutral-500 dark:text-neutral-400">Last updated {{ last_modified.strftime('%d %B %Y') }}</p>
-  {% endif %}
-</article>
-{% endblock %}
+  <div class="divider"></div>
+
+  <div class="bg-base-200 p-5 rounded-lg">
+    <article class="prose prose-base max-w-none">
+      {{ content }}
+    </article>
+  </div>
+
+</div>
+
+<!-- <div class="divider"></div> -->
+{% include 'footer.html' %}
+
+<script>
+  // "Copy" button on every Pygments code block
+  document.querySelectorAll('.highlight').forEach(block => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    block.appendChild(btn);
+    btn.addEventListener('click', () => {
+      const code = block.querySelector('pre').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

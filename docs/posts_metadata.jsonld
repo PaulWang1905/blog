@@ -3,7 +3,7 @@
   "@type": "ItemList",
   "name": "Puyu's Personal Blog - Blog Posts",
   "description": "Collection of blog posts from Puyu's Personal Blog",
-  "numberOfItems": 1,
+  "numberOfItems": 11,
   "itemListElement": [
     {
       "@type": "BlogPosting",
@@ -37,6 +37,344 @@
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://blog.puyuwang.org/post/hello-world.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/silver_age.html",
+      "headline": "Silver Age",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2026-07-17",
+      "dateModified": "2026-07-17",
+      "description": "A short story about a deduplication officer in a world where reality can duplicate, exploring themes of memory, choice, and the nature of reality.",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Story",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "Story"
+      ],
+      "url": "https://blog.puyuwang.org/post/silver_age.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/silver_age.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/math_test.html",
+      "headline": "Math Rendering Test",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2026-04-03",
+      "dateModified": "2026-04-03",
+      "description": "A test post for LaTeX math formula rendering.",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Test",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "math",
+        "test",
+        "latex"
+      ],
+      "url": "https://blog.puyuwang.org/post/math_test.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/math_test.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/20241125.html",
+      "headline": "悼念贾舜尧",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2024-11-25",
+      "dateModified": "2024-11-25",
+      "description": "贾舜尧，一个才华横溢的年轻人，不幸离世。",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "中文",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "悼念",
+        "哲学"
+      ],
+      "url": "https://blog.puyuwang.org/post/20241125.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/20241125.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/20240726(1).html",
+      "headline": "Setup Wireguard",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2024-07-26",
+      "dateModified": "2025-11-01",
+      "description": "Setting up Wireguard for",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Blog",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "Wireguard",
+        "VPN"
+      ],
+      "url": "https://blog.puyuwang.org/post/20240726(1).html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/20240726(1).html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/20240726.html",
+      "headline": "Using ‘dd’ to benchmark SSD",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2024-07-26",
+      "dateModified": "2024-07-26",
+      "description": "Using dd might be the simplest way to benchmark an SSD on Unix-like systems. It is also very dangerous (obviously). I only recommend this method in TEST environments.",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Blog",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "Linux",
+        "Benchmark",
+        "SSD"
+      ],
+      "url": "https://blog.puyuwang.org/post/20240726.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/20240726.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/20240724.html",
+      "headline": "Note for 24-07-24",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2024-07-24",
+      "dateModified": "2024-07-24",
+      "description": "Note for 24-07-24 updates",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Blog",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "RandomThoughts"
+      ],
+      "url": "https://blog.puyuwang.org/post/20240724.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/20240724.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/20240720_Chinese_Coinage.html",
+      "headline": "Chinese Coinage",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2024-07-20",
+      "dateModified": "2025-04-05",
+      "description": "A note on reading a book about Chinese Coinage",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Notes",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "Chinese",
+        "Coinage"
+      ],
+      "url": "https://blog.puyuwang.org/post/20240720_Chinese_Coinage.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/20240720_Chinese_Coinage.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/reading202407.html",
+      "headline": "Reading",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2024-07-20",
+      "dateModified": "2024-07-20",
+      "description": "A brief description of my document.",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Notes",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "Reading"
+      ],
+      "url": "https://blog.puyuwang.org/post/reading202407.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/reading202407.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/LifeWriting.html",
+      "headline": "LifeWriting 课程小结",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2020-09-10",
+      "dateModified": "2020-09-10",
+      "description": "Life Writing课程小结",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "中文",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "LifeWriting"
+      ],
+      "url": "https://blog.puyuwang.org/post/LifeWriting.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/LifeWriting.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/2017.html",
+      "headline": "看勳伯格的和聲學",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2017-01-01",
+      "dateModified": "2024-11-28",
+      "description": "這些天我一直在看SCHOENBERG的書",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "中文",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "Music",
+        "Schoenberg"
+      ],
+      "url": "https://blog.puyuwang.org/post/2017.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/2017.html"
       }
     }
   ]

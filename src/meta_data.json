@@ -1,13 +1,26 @@
 {
     "title": "Puyu's Personal Blog",
-    "description": "Personal writing: music, film, books, and life.",
+    "description": ["Personal writing: music, film, books, and life."],
     "author": "Puyu Wang",
     "date": "2026-08-18",
     "link": "https://blog.puyuwang.org",
-    "image": "image/default.png",
+    "image": "image/default.jpg",
     "phrases": [
-        "Well begun is half done.",
-        "Write drunk, edit sober.",
-        "A journey of a thousand miles begins with a single step."
+        "天之蒼蒼，其正色邪",
+        "吾日三省吾身",
+        "知行合一",
+        "行有餘力，則以學文",
+        "思無邪",
+        "先行其言，而後從之",
+        "盡美矣，又盡善也",
+        "好仁者，無以尚之",
+        "無所從來，亦無所去",
+        "所謂佛法者，即非佛法",
+        "道法自然",
+        "天下大事，必作於細",
+        "為無為，事無事，味無味",
+        "周雖舊邦,其命維新",
+        "德不孤，必有鄰",
+        "且有真人，而後有真知"
     ]
 }

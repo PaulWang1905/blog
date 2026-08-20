@@ -9,15 +9,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="The first post on Puyu's Personal Blog — how posts work in oxie.">
+  <meta name="description" content="A test post for LaTeX math formula rendering.">
   <meta name="author" content="Puyu Wang">
-  <meta property="og:title" content="Hello World">
-  <meta property="og:description" content="The first post on Puyu's Personal Blog — how posts work in oxie.">
+  <meta property="og:title" content="Math Rendering Test">
+  <meta property="og:description" content="A test post for LaTeX math formula rendering.">
   <meta property="og:type" content="article">
   <meta property="og:image" content="https://blog.puyuwang.org/image/default.jpg">
   <link href="/styles.css" rel="stylesheet">
   <link href="/pygments.css" rel="stylesheet">
-  <title>Hello World — Puyu's Personal Blog</title>
+  <title>Math Rendering Test — Puyu's Personal Blog</title>
   <style>
     .highlight { position: relative; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
     .highlight pre { margin: 0; background: transparent; }
@@ -117,24 +117,26 @@
           
           
           <li><a href="/blog_index.html">Blog</a></li>
-          <li><a href="/blog_Blog.html">Blog</a></li>
+          <li><a href="/blog_Test.html">Test</a></li>
           
-          <li><a href="/post/hello-world.html"> Hello World </a> </li>
+          <li><a href="/post/math_test.html"> Math Rendering Test </a> </li>
         </ul>
       </div>
-     <h1 class="text-2xl font-bold py-2"> Hello World </h1>
+     <h1 class="text-2xl font-bold py-2"> Math Rendering Test </h1>
      
-     <span class="badge">oxie</span>
+     <span class="badge">math</span>
      
-     <span class="badge">writing</span>
+     <span class="badge">test</span>
      
-    <p class="py-2 text-sm opacity-90">The first post on Puyu's Personal Blog — how posts work in oxie.</p>
+     <span class="badge">latex</span>
+     
+    <p class="py-2 text-sm opacity-90">A test post for LaTeX math formula rendering.</p>
     </div>
 
     <div class="collapse-content text-sm">
       <p>By Puyu Wang</p>
-      <p>Published on Tuesday 2026-08-18 </p>
-      <p>Last Modified on Tuesday 2026-08-18 </p>
+      <p>Published on Friday 2026-04-03 </p>
+      <p>Last Modified on Friday 2026-04-03 </p>
     </div>
   </div>
 
@@ -145,33 +147,44 @@
 
   <div class="bg-base-200 p-5 rounded-lg">
     <article class="prose prose-base max-w-none">
-      <h1>Hello World</h1>
-<p>Every file in <code>source/post/</code> becomes a post. The frontmatter above uses
-<strong>capitalised keys</strong> (<code>Title</code>, <code>Authors</code>, <code>Date</code>, <code>Category</code>, <code>Tags</code>), which
-oxie reads to build the blog index and per-category pages.</p>
-<h2>Things that work out of the box</h2>
-<ul>
-<li>Tables, footnotes<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> and <code>~~strikethrough~~</code></li>
-<li>Fenced code with syntax highlighting:</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">oxie</span><span class="w"> </span><span class="kn">import</span> <span class="n">Site</span><span class="p">,</span> <span class="n">SiteConfig</span>
+      <h1>Math Rendering Test</h1>
+<h2>Inline Math</h2>
+<p>Einstein's famous equation: <span class="arithmatex">\(E = mc^2\)</span></p>
+<p>The quadratic formula: <span class="arithmatex">\(x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}\)</span></p>
+<p>Euler's identity: <span class="arithmatex">\(e^{i\pi} + 1 = 0\)</span></p>
+<h2>Display Math</h2>
+<p>Gaussian integral:</p>
+<div class="arithmatex">\[\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}\]</div>
+<p>Maxwell's equations (Gauss's law):</p>
+<div class="arithmatex">\[\nabla \cdot \mathbf{E} = \frac{\rho}{\varepsilon_0}\]</div>
+<p>A matrix:</p>
+<div class="arithmatex">\[A = \begin{pmatrix} a &amp; b \\ c &amp; d \end{pmatrix}\]</div>
+<p>Taylor series expansion:</p>
+<div class="arithmatex">\[f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!}(x - a)^n\]</div>
+<h2>Mixed Content</h2>
+<p>Given a probability distribution <span class="arithmatex">\(p(x)\)</span>, the entropy is defined as:</p>
+<div class="arithmatex">\[H(X) = -\sum_{x \in \mathcal{X}} p(x) \log p(x)\]</div>
+<p>For continuous distributions, this becomes <span class="arithmatex">\(H(X) = -\int p(x) \log p(x)\, dx\)</span>.</p>
+<h2>Code Highlighting</h2>
+<p>Python:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">fibonacci</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fibonacci</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
 
-<span class="n">Site</span><span class="p">(</span><span class="n">SiteConfig</span><span class="p">())</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fibonacci</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>  <span class="c1"># 55</span>
 </code></pre></div>
-<ul>
-<li>Maths, via <code>pymdownx.arithmatex</code></li>
-<li>Category pages: this post is in <em>Blog</em>, so it appears on <code>blog_Blog.html</code></li>
-</ul>
-<h2>Next steps</h2>
-<p>Delete this file, write your own, and rebuild.</p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>Footnotes look like this.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
+<p>JavaScript:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="nx">greet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nx">name</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="sb">`Hello, </span><span class="si">${</span><span class="nx">name</span><span class="si">}</span><span class="sb">!`</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">greet</span><span class="p">(</span><span class="s2">"World"</span><span class="p">));</span>
+</code></pre></div>
+<p>SPARQL:</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span> <span class="nv">?subject</span> <span class="nv">?predicate</span> <span class="nv">?object</span>
+<span class="k">WHERE</span> <span class="p">{</span>
+  <span class="nv">?subject</span> <span class="nv">?predicate</span> <span class="nv">?object</span> <span class="p">.</span>
+  <span class="k">FILTER</span><span class="p">(</span><span class="nv">?subject</span> <span class="o">=</span> <span class="nl">&lt;http://example.org/resource&gt;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
     </article>
   </div>
 

@@ -1,58 +1,105 @@
 {# Home page (docs/index.html).
    Context: title, author, date, description, phrases, content, posts,
-   pages, updates #}
-{% extends "base.html" %}
-
-{% block meta %}
+   pages, updates.
+   Note: `meta_data` is NOT passed to this template. #}
+<!DOCTYPE html>
+<html lang="en" data-theme="winter">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% if description %}<meta name="description" content="{{ description }}">{% endif %}
 {% if author %}<meta name="author" content="{{ author }}">{% endif %}
-{% endblock %}
+<meta property="og:title" content="{{ title }}">
+{% if description %}<meta property="og:description" content="{{ description }}">{% endif %}
+<meta property="og:type" content="website">
+<link href="/styles.css" rel="stylesheet">
+<link href="/pygments.css" rel="stylesheet">
 
-{% block content %}
-<section class="prose prose-neutral max-w-none dark:prose-invert">
-  {{ content }}
-</section>
+<title>{{ title }}</title>
 
-{% if updates %}
-<section class="mt-12">
-  <h2 class="text-xl font-semibold tracking-tight">Recent updates</h2>
-  <ul class="mt-4 space-y-2 text-sm">
-    {% for update in updates %}
-    <li class="flex gap-3">
-      <time datetime="{{ update.date }}" class="shrink-0 text-neutral-500 dark:text-neutral-400">{{ update.date.strftime('%d %b %Y') }}</time>
-      <span>{{ update.content }}</span>
-    </li>
-    {% endfor %}
-  </ul>
-</section>
-{% endif %}
+</head>
+<body>
 
-{% if posts %}
-<section class="mt-12">
-  <h2 class="text-xl font-semibold tracking-tight">Recent posts</h2>
-  <ul class="mt-4 divide-y divide-neutral-200 dark:divide-neutral-800">
-    {% for post in posts[:5] %}
-    <li class="py-4">
-      <a href="{{ post.link }}" class="font-medium underline-offset-2 hover:underline">{{ post.title }}</a>
-      {% if post.date %}<time datetime="{{ post.date }}" class="ml-2 text-xs text-neutral-500 dark:text-neutral-400">{{ post.date.strftime('%d %b %Y') }}</time>{% endif %}
-      {% if post.summary %}<p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">{{ post.summary }}</p>{% endif %}
-    </li>
-    {% endfor %}
-  </ul>
-  {% if posts | length > 5 %}
-  <p class="mt-4 text-sm"><a href="/blog_index.html" class="underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-500">All {{ posts | length }} posts →</a></p>
-  {% endif %}
-</section>
-{% endif %}
+  <header>
+    {% include 'header.html' %}
+  </header>
 
-{% if pages %}
-<section class="mt-12">
-  <h2 class="text-xl font-semibold tracking-tight">Pages</h2>
-  <ul class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-    {% for page in pages %}
-    <li><a href="{{ page.link }}" class="underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-500">{{ page.title }}</a></li>
-    {% endfor %}
-  </ul>
-</section>
-{% endif %}
-{% endblock %}
+  <div class="container mx-auto px-5 p-4 max-w-4xl">
+
+    <!-- ===================== Masthead ===================== -->
+    <section class="pt-10 pb-6">
+      <h1 class="text-4xl font-bold tracking-tight">{{ title }}</h1>
+      {% if description %}
+      <p class="mt-2 text-base-content/60">{{ description }}</p>
+      {% endif %}
+
+      {# Whatever is written in source/index.md #}
+      {% if content %}
+      <div class="prose prose-sm max-w-none mt-5">
+        {{ content }}
+      </div>
+      {% endif %}
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ===================== Post feed ===================== -->
+    <section>
+      {% if posts %}
+      <ul class="flex flex-col">
+        {% for post in posts %}
+        <li class="border-b border-base-300 py-6">
+          <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1.5">
+            <time datetime="{{ post.date.isoformat() }}" class="tabular-nums">{{ post.date.strftime("%d %b %Y") }}</time>
+            {% if post.category %}
+            <span class="text-base-content/20">·</span>
+            <a href="/blog_{{ post.category }}.html" class="hover:text-primary transition-colors">{{ post.category }}</a>
+            {% endif %}
+          </div>
+
+          <h2 class="text-xl font-bold leading-snug tracking-tight">
+            <a href="{{ post.link }}" class="hover:text-primary transition-colors">{{ post.title }}</a>
+          </h2>
+
+          {% if post.summary %}
+          <p class="mt-1.5 text-sm leading-relaxed text-base-content/70">{{ post.summary }}</p>
+          {% endif %}
+
+          {% if post.tags %}
+          <div class="mt-3 flex flex-wrap gap-1.5">
+            {% for tag in post.tags %}
+            <span class="badge badge-sm badge-outline">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+
+      <p class="py-6 text-sm">
+        <a href="/blog_index.html" class="link link-primary">Browse by category →</a>
+      </p>
+      {% else %}
+      <p class="py-8 text-base-content/60">
+        No posts yet. Add a Markdown file to <code>source/post/</code>.
+      </p>
+      {% endif %}
+    </section>
+
+    {# Standalone pages are reachable from the nav, but list any others here
+       so nothing added to source/page/ becomes unreachable. #}
+    {% if pages %}
+    <section class="pb-8 text-xs text-base-content/45">
+      Pages:
+      {% for page in pages %}
+      <a href="{{ page.link }}" class="ml-2 hover:text-primary transition-colors">{{ page.title }}</a>
+      {% endfor %}
+    </section>
+    {% endif %}
+
+  </div>
+
+  {% include 'footer.html' %}
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+{# Photography page (docs/photography.html).
+   Context: meta_data, phrases, albums, all_photos.
+   Only rendered when `photography=True` in build.py's SiteConfig and
+   source/photo/photos.md exists. #}
+<!DOCTYPE html>
+<html lang="en" data-theme="caramellatte">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="/styles.css" rel="stylesheet">
+<title>Photography — {{ meta_data.title }}</title>
+<style>
+  /* System font stack — Apple-like */
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+</style>
+</head>
+<body>
+
+<header>{% include 'header.html' %}</header>
+
+<!-- Hero -->
+<section class="py-16 border-b border-base-200">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+    <h1 class="text-5xl font-semibold tracking-tighter mb-3">Photography</h1>
+    <p class="text-base-content/40 text-sm tracking-wide">
+      {{ all_photos | length }} photo{{ 's' if all_photos | length != 1 }}
+      {%- if albums | length > 1 %} &middot; {{ albums | length }} albums{% endif %}
+    </p>
+  </div>
+</section>
+
+<!-- Album filter tabs -->
+{% if albums | length > 1 %}
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl pt-6 pb-2">
+  <div class="inline-flex gap-0.5 bg-base-200 rounded-xl p-1">
+    <button class="album-tab px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer bg-base-100 shadow-sm text-base-content"
+            data-album="__all__" onclick="filterAlbum(this, null)">All</button>
+    {% for album in albums %}
+    <button class="album-tab px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer text-base-content/50 hover:text-base-content"
+            data-album="{{ album.name }}" onclick="filterAlbum(this, '{{ album.name }}')">{{ album.name }}</button>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- Gallery -->
+<main class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl py-6">
+  {% if all_photos %}
+  <div class="columns-1 sm:columns-2 lg:columns-3 gap-4" id="gallery">
+    {% for photo in all_photos %}
+    <div class="break-inside-avoid mb-4 rounded-2xl overflow-hidden cursor-pointer group relative gallery-item"
+         data-album="{{ photo.album if photo.album else '' }}"
+         onclick="openLightbox({{ loop.index0 }})"
+         role="button" tabindex="0"
+         onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox({{ loop.index0 }})">
+      <img src="/{{ photo.thumb }}"
+           alt="{{ photo.alt }}"
+           loading="lazy"
+           class="w-full block transition-all duration-500 group-hover:scale-[1.03] group-hover:brightness-90">
+      {% if photo.alt %}
+      <div class="absolute inset-0 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <p class="w-full px-4 py-3 bg-gradient-to-t from-black/70 via-black/20 to-transparent text-white text-xs font-medium tracking-wide">
+          {{ photo.alt }}
+        </p>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-center text-base-content/40 py-24 text-sm">
+    No photos yet — add images to <code class="font-mono">source/photo/photos.md</code>.
+  </p>
+  {% endif %}
+</main>
+
+<!-- Lightbox -->
+<dialog id="lb-modal" class="modal">
+  <div class="modal-box w-full max-w-4xl bg-base-200 p-0 rounded-2xl overflow-hidden shadow-2xl flex flex-col">
+
+    <!-- Top bar -->
+    <div class="flex items-center justify-between px-5 py-3 border-b border-base-300">
+      <span id="lb-counter" class="text-xs text-base-content/40 tabular-nums"></span>
+      <form method="dialog">
+        <button class="btn btn-sm btn-ghost btn-circle text-base-content/50 hover:text-base-content">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- Image — fixed height so modal doesn't resize between photos -->
+    <div class="flex items-center justify-center bg-base-300 h-[65vh]">
+      <img id="lb-img" src="" alt="" class="w-full h-full object-contain transition-opacity duration-200">
+    </div>
+
+    <!-- Caption + nav -->
+    <div class="flex items-center gap-4 px-5 py-4 border-t border-base-300">
+      <button id="lb-prev" onclick="stepLightbox(-1)"
+              class="btn btn-sm btn-ghost btn-circle text-base-content/50 hover:text-base-content shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div class="flex-1 text-center min-w-0">
+        <p id="lb-caption" class="text-sm font-medium text-base-content truncate"></p>
+        <p id="lb-desc" class="text-xs text-base-content/50 mt-0.5 leading-relaxed"></p>
+      </div>
+      <button id="lb-next" onclick="stepLightbox(1)"
+              class="btn btn-sm btn-ghost btn-circle text-base-content/50 hover:text-base-content shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop"><button>close</button></form>
+</dialog>
+
+<script>
+const PHOTOS = {{ all_photos | tojson }};
+let activeAlbum = null;
+let lbIndex = 0;
+
+function visiblePhotos() {
+  return activeAlbum ? PHOTOS.filter(p => p.album === activeAlbum) : PHOTOS;
+}
+
+function openLightbox(globalIdx) {
+  const photo = PHOTOS[globalIdx];
+  const visible = visiblePhotos();
+  lbIndex = visible.indexOf(photo);
+  if (lbIndex === -1) lbIndex = 0;
+  syncLightbox();
+  document.getElementById('lb-modal').showModal();
+}
+
+function stepLightbox(dir) {
+  const visible = visiblePhotos();
+  lbIndex = Math.max(0, Math.min(visible.length - 1, lbIndex + dir));
+  syncLightbox();
+}
+
+function syncLightbox() {
+  const visible = visiblePhotos();
+  const p = visible[lbIndex];
+  const img = document.getElementById('lb-img');
+
+  // Fade out, swap src, fade in only once loaded
+  img.style.opacity = '0';
+  const newImg = new Image();
+  newImg.onload = () => {
+    img.src = newImg.src;
+    img.style.opacity = '1';
+  };
+  newImg.src = '/' + p.src;   // photo srcs are relative to the site root
+
+  img.alt = p.alt;
+  document.getElementById('lb-caption').textContent = p.alt;
+  document.getElementById('lb-desc').textContent = p.description || '';
+  document.getElementById('lb-counter').textContent = `${lbIndex + 1} / ${visible.length}`;
+  document.getElementById('lb-prev').disabled = lbIndex === 0;
+  document.getElementById('lb-next').disabled = lbIndex === visible.length - 1;
+}
+
+function filterAlbum(btn, album) {
+  activeAlbum = album;
+  document.querySelectorAll('.album-tab').forEach(b => {
+    const active = b === btn;
+    b.classList.toggle('bg-base-100', active);
+    b.classList.toggle('shadow-sm', active);
+    b.classList.toggle('text-base-content', active);
+    b.classList.toggle('text-base-content/50', !active);
+  });
+  document.querySelectorAll('.gallery-item').forEach(el => {
+    el.classList.toggle('hidden', album !== null && el.dataset.album !== album);
+  });
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lb-modal').open) return;
+  if (e.key === 'ArrowLeft') stepLightbox(-1);
+  if (e.key === 'ArrowRight') stepLightbox(1);
+});
+</script>
+
+{% include 'footer.html' %}
+
+</body>
+</html>

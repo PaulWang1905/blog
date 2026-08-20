@@ -1,0 +1,851 @@
+{# Reading notes (docs/readings_note.html).
+   A standalone page: it fetches the reading list from the Readings
+   repository at view time, so it needs no content in this repo.
+   Context: meta_data, phrases.
+   Only rendered when listed under `simple_pages` in build.py. #}
+<!DOCTYPE html>
+<html lang="en" data-theme="caramellatte">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-adsense-account" content="ca-pub-9133490777581705">
+<link href="/styles.css" rel="stylesheet">
+
+<title>Reading Notes — {{ meta_data.title }}</title>
+
+</head>
+<body class="bg-base-200 min-h-screen">
+
+  <header>
+    {% include 'header.html' %}
+  </header>
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <!-- Header -->
+        <div class="card bg-base-100 shadow-md mb-6">
+            <div class="card-body text-left">
+                <div class="max-w-none w-full">
+                    <h1 class="text-3xl font-bold mb-2">Reading Note Viewer</h1>
+                    <p class="text-base-content/70 mb-4">Live reading list from my Github repository</p>
+                    <div class="flex items-center gap-4 text-sm">
+                        <a href="https://github.com/PaulWang1905/Readings" target="_blank" 
+                           class="btn btn-outline btn-primary btn-sm gap-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            GitHub Repository
+                        </a>
+                        <span id="lastSync" class="opacity-70"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="card bg-base-100 shadow-md">
+            <div class="card-body items-center text-center">
+                <span class="loading loading-spinner loading-md text-primary"></span>
+                <span class="text-base-content/70">Loading readings...</span>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" class="hidden alert alert-error">
+            <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <div>
+                <h3 class="font-bold">Error loading readings</h3>
+                <div class="text-xs" id="errorMessage"></div>
+                <button onclick="app.loadReadings()" class="btn btn-sm btn-ghost mt-2">
+                    Try again
+                </button>
+            </div>
+        </div>
+
+        <!-- Refresh Section -->
+        <div id="refreshSection" class="hidden card bg-base-100 shadow-md mb-6">
+            <div class="card-body">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="card-title text-success">Data Loaded Successfully</h3>
+                        <p class="opacity-70" id="lastUpdated">Last updated: Loading...</p>
+                    </div>
+                    <button onclick="app.loadReadings()" class="btn btn-primary">
+                        Refresh Data
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent" class="hidden">
+            <!-- Statistics -->
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body p-4">
+                        <div class="text-2xl font-bold text-primary" id="statTotal">0</div>
+                        <div class="text-sm opacity-70">Total Readings</div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body p-4">
+                        <div class="text-2xl font-bold text-primary" id="statAuthors">0</div>
+                        <div class="text-sm opacity-70">Authors</div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body p-4">
+                        <div class="text-2xl font-bold text-primary" id="statSubjects">0</div>
+                        <div class="text-sm opacity-70">Subjects</div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body p-4">
+                        <div class="text-2xl font-bold text-primary" id="statThisYear">0</div>
+                        <div class="text-sm opacity-70">This Year</div>
+                    </div>
+                </div>
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body p-4">
+                        <div class="text-2xl font-bold text-primary" id="statWithNotes">0</div>
+                        <div class="text-sm opacity-70">With Notes</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card bg-base-100 shadow-md mb-6">
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h2 class="card-title mb-3">Filter by Subject</h2>
+                        <div id="subjectTags" class="flex flex-wrap gap-2">
+                            <!-- Subject tags will be inserted here -->
+                        </div>
+                    </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Search</span>
+                        </label>
+                        <input type="text" id="searchInput" placeholder="Search papers..." 
+                               class="input input-bordered w-full">
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Sort by</span>
+                        </label>
+                        <select id="sortSelect" class="select select-bordered w-full">
+                            <option value="dateRead">Recently Read</option>
+                            <option value="dateReadOld">Oldest Read</option>
+                            <option value="title">Title (A-Z)</option>
+                            <option value="author">Author (A-Z)</option>
+                            <option value="paperDate">Publication Date</option>
+                        </select>
+                    </div>
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">View</span>
+                        </label>
+                        <select id="viewSelect" class="select select-bordered w-full">
+                            <option value="cards">Cards</option>
+                            <option value="list">Table</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-end">
+                    <span class="text-sm opacity-70">
+                        Showing <span id="resultCount">0</span> of <span id="totalCount">0</span> readings
+                    </span>
+                </div>
+            </div>
+
+            <!-- Results -->
+           
+        </div>
+        <div id="resultsContainer">
+                <!-- Cards View -->
+                <div id="cardsView" class="grid grid-cols-1 gap-6">
+                    <!-- Cards will be inserted here -->
+                </div>
+
+                <!-- List View -->
+                <div id="listView" class="hidden card bg-base-100 shadow-md overflow-hidden">
+                    <!-- Table will be inserted here -->
+                </div>
+
+                <!-- No Results -->
+                <div id="noResults" class="hidden card bg-base-100 shadow-md">
+                    <div class="card-body items-center text-center">
+                        <svg class="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <h3 class="card-title text-lg mb-1">No readings found</h3>
+                        <p class="opacity-70 text-sm">Try adjusting your filters or search terms</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        class ReadingsManager {
+            constructor() {
+                this.REPO_URL = 'https://raw.githubusercontent.com/PaulWang1905/Readings/refs/heads/main/RDFs/readings.ttl';
+                this.rawContent = '';
+                this.readings = [];
+                this.filteredReadings = [];
+                this.subjects = new Set();
+                this.activeSubjects = new Set();
+                this.authors = new Map(); // Map of author URI to name
+                this.init();
+            }
+
+            init() {
+                // Set up event listeners after DOM is loaded
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.getElementById('searchInput').addEventListener('input', () => this.applyFilters());
+                    document.getElementById('sortSelect').addEventListener('change', () => this.applyFilters());
+                    document.getElementById('viewSelect').addEventListener('change', () => this.changeView());
+                    
+                    // Load readings after DOM is ready
+                    this.loadReadings();
+                });
+            }
+
+            async loadReadings() {
+                this.showLoading();
+                
+                try {
+                    console.log('Fetching TTL file from:', this.REPO_URL);
+                    const response = await fetch(this.REPO_URL);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    
+                    this.rawContent = await response.text();
+                    if (!this.rawContent.trim()) throw new Error('Empty file');
+                    
+                    console.log('TTL file loaded, size:', this.rawContent.length, 'chars');
+                    
+                    this.parseReadings();
+                    this.showContent();
+                    
+                    // Update last sync time
+                    const now = new Date();
+                    document.getElementById('lastUpdated').textContent = 
+                        `Last updated: ${now.toLocaleDateString()} at ${now.toLocaleTimeString()}`;
+                    
+                } catch (error) {
+                    console.error('Error loading readings:', error);
+                    this.showError(error.message);
+                }
+            }
+
+            parseReadings() {
+                this.readings = [];
+                this.subjects.clear();
+                this.authors.clear();
+                
+                try {
+                    console.log('Starting to parse TTL content...');
+                    
+                    // First, let's handle line continuations properly
+                    // In TTL, lines starting with whitespace are continuations
+                    const lines = this.rawContent.split('\n');
+                    const normalizedLines = [];
+                    let currentLine = '';
+                    
+                    for (let line of lines) {
+                        if (line.match(/^\s/) && currentLine) {
+                            // This is a continuation line
+                            currentLine += ' ' + line.trim();
+                        } else {
+                            // This is a new statement
+                            if (currentLine) {
+                                normalizedLines.push(currentLine.trim());
+                            }
+                            currentLine = line.trim();
+                        }
+                    }
+                    if (currentLine) {
+                        normalizedLines.push(currentLine.trim());
+                    }
+                    
+                    // Now join lines until we get complete statements (ending with '.')
+                    const statements = [];
+                    let currentStatement = '';
+                    
+                    for (let line of normalizedLines) {
+                        if (!line || line.startsWith('#') || line.startsWith('@')) {
+                            continue;
+                        }
+                        
+                        currentStatement += ' ' + line;
+                        
+                        if (line.endsWith('.')) {
+                            statements.push(currentStatement.trim());
+                            currentStatement = '';
+                        }
+                    }
+                    
+                    console.log(`Found ${statements.length} complete RDF statements`);
+                    
+                    // Parse author statements first
+                    statements.forEach(statement => {
+                        if (statement.includes('/authors/') && statement.includes('foaf:Person')) {
+                            this.parseAuthorStatement(statement);
+                        }
+                    });
+                    
+                    console.log(`Found ${this.authors.size} authors`);
+                    
+                    // Parse entry statements
+                    let entriesProcessed = 0;
+                    statements.forEach(statement => {
+                        if (statement.includes('/entry/') && statement.includes('bibo:AcademicArticle')) {
+                            const entry = this.parseEntryStatement(statement);
+                            if (entry && entry.title) {
+                                this.readings.push(entry);
+                                entriesProcessed++;
+                                
+                                // Debug log for first few entries
+                                if (entriesProcessed <= 3) {
+                                    console.log(`Entry ${entriesProcessed}:`, {
+                                        title: entry.title,
+                                        authors: entry.authors,
+                                        authorCount: entry.authors.length,
+                                        subjects: entry.subjects,
+                                        subjectCount: entry.subjects.length
+                                    });
+                                }
+                            }
+                        }
+                    });
+
+                    console.log(`Parsed ${this.readings.length} readings`);
+                    
+                } catch (error) {
+                    console.error('Error in parseReadings:', error);
+                    throw error;
+                }
+            }
+
+            parseAuthorStatement(statement) {
+                const authorUriMatch = statement.match(/<([^>]*\/authors\/[^>]*)>/);
+                const nameMatch = statement.match(/foaf:name\s+"([^"]+)"/);
+                
+                if (authorUriMatch && nameMatch) {
+                    this.authors.set(authorUriMatch[1], nameMatch[1]);
+                }
+            }
+
+            parseEntryStatement(statement) {
+                const entry = {
+                    id: '',
+                    title: '',
+                    authors: [],
+                    readDate: '',
+                    paperDate: '',
+                    subjects: [],
+                    comments: '',
+                    link: ''
+                };
+
+                // Extract entry ID
+                const idMatch = statement.match(/^<([^>]*\/entry\/[^>]*)>/);
+                if (idMatch) entry.id = idMatch[1];
+
+                // Extract title
+                const titleMatch = statement.match(/dc:title\s+"([^"]+)"/);
+                if (titleMatch) entry.title = titleMatch[1];
+
+                // Extract read date
+                const readDateMatch = statement.match(/readings:dateRead\s+"([^"]+)"/);
+                if (readDateMatch) entry.readDate = readDateMatch[1];
+
+                // Extract paper date  
+                const paperDateMatch = statement.match(/dc:date\s+"([^"]+)"/);
+                if (paperDateMatch) entry.paperDate = paperDateMatch[1];
+
+                // Extract authors - prioritize ordered bibo:authorList over unordered dc:creator
+                // Pattern 1: Ordered author list (bibo:authorList) - PRIORITY
+                const authorListMatch = statement.match(/bibo:authorList\s+\(\s*((?:<[^>]+>\s*)+)\s*\)/);
+                if (authorListMatch) {
+                    const authorListBlock = authorListMatch[1];
+                    const authorUris = authorListBlock.match(/<([^>]+)>/g);
+                    
+                    if (authorUris) {
+                        // Process authors in the exact order they appear in the list
+                        authorUris.forEach(uriMatch => {
+                            const authorUri = uriMatch.slice(1, -1); // Remove < and >
+                            let authorName = this.authors.get(authorUri);
+                            
+                            if (!authorName) {
+                                // Fallback: extract name from URI and decode
+                                authorName = decodeURIComponent(authorUri.split('/').pop())
+                                    .replace(/%20/g, ' ')
+                                    .replace(/%C3%A9/g, 'é')
+                                    .replace(/%C3%B6/g, 'ö')
+                                    .replace(/%C5%A1/g, 'š')
+                                    .replace(/%C4%87/g, 'ć')
+                                    .replace(/%C3%A8/g, 'è')
+                                    .replace(/%C3%BC/g, 'ü')
+                                    .replace(/%C3%A4/g, 'ä')
+                                    .replace(/%C3%A0/g, 'à')
+                                    .replace(/%C3%AD/g, 'í')
+                                    .replace(/%C3%B4/g, 'ô')
+                                    .replace(/%C3%AA/g, 'ê');
+                            }
+                            
+                            if (authorName) {
+                                entry.authors.push(authorName);
+                            }
+                        });
+                    }
+                }
+                
+                // Pattern 2: Multiple authors in dc:creator block (fallback when no authorList)
+                if (entry.authors.length === 0) {
+                    const creatorBlockMatch = statement.match(/dc:creator\s+((?:<[^>]+>,?\s*)+)/);
+                    if (creatorBlockMatch) {
+                        const authorsBlock = creatorBlockMatch[1];
+                        const authorUris = authorsBlock.match(/<([^>]+)>/g);
+                        
+                        if (authorUris) {
+                            authorUris.forEach(uriMatch => {
+                                const authorUri = uriMatch.slice(1, -1); // Remove < and >
+                                let authorName = this.authors.get(authorUri);
+                                
+                                if (!authorName) {
+                                    // Fallback: extract name from URI and decode
+                                    authorName = decodeURIComponent(authorUri.split('/').pop())
+                                        .replace(/%20/g, ' ')
+                                        .replace(/%C3%A9/g, 'é')
+                                        .replace(/%C3%B6/g, 'ö')
+                                        .replace(/%C5%A1/g, 'š')
+                                        .replace(/%C4%87/g, 'ć')
+                                        .replace(/%C3%A8/g, 'è')
+                                        .replace(/%C3%BC/g, 'ü')
+                                        .replace(/%C3%A4/g, 'ä')
+                                        .replace(/%C3%A0/g, 'à')
+                                        .replace(/%C3%AD/g, 'í')
+                                        .replace(/%C3%B4/g, 'ô')
+                                        .replace(/%C3%AA/g, 'ê');
+                                }
+                                
+                                if (authorName && !entry.authors.includes(authorName)) {
+                                    entry.authors.push(authorName);
+                                }
+                            });
+                        }
+                    }
+                }
+                
+                // Pattern 3: Fallback for individual dc:creator statements
+                if (entry.authors.length === 0) {
+                    const authorMatches = statement.matchAll(/dc:creator\s+<([^>]+)>/g);
+                    for (let match of authorMatches) {
+                        const authorUri = match[1];
+                        let authorName = this.authors.get(authorUri);
+                        
+                        if (!authorName) {
+                            // Fallback: extract name from URI
+                            authorName = decodeURIComponent(authorUri.split('/').pop())
+                                .replace(/%20/g, ' ')
+                                .replace(/%C3%A9/g, 'é')
+                                .replace(/%C3%B6/g, 'ö')
+                                .replace(/%C5%A1/g, 'š')
+                                .replace(/%C4%87/g, 'ć')
+                                .replace(/%C3%A8/g, 'è')
+                                .replace(/%C3%BC/g, 'ü')
+                                .replace(/%C3%A4/g, 'ä');
+                        }
+                        
+                        if (authorName && !entry.authors.includes(authorName)) {
+                            entry.authors.push(authorName);
+                        }
+                    }
+                }
+
+                // Extract subjects - handle multiple subjects in comma-separated format
+                // First try to find the entire dcterms:subject block
+                const subjectBlockMatch = statement.match(/dcterms:subject\s+((?:"[^"]+",?\s*)+)/);
+                if (subjectBlockMatch) {
+                    const subjectsBlock = subjectBlockMatch[1];
+                    // Extract all quoted strings from the subjects block
+                    const subjectMatches = subjectsBlock.matchAll(/"([^"]+)"/g);
+                    for (let match of subjectMatches) {
+                        const subject = match[1].trim();
+                        if (subject && !entry.subjects.includes(subject)) {
+                            entry.subjects.push(subject);
+                            this.subjects.add(subject);
+                        }
+                    }
+                } else {
+                    // Fallback: try individual dcterms:subject matches
+                    const individualMatches = statement.matchAll(/dcterms:subject\s+"([^"]+)"/g);
+                    for (let match of individualMatches) {
+                        const subject = match[1].trim();
+                        if (subject && !entry.subjects.includes(subject)) {
+                            entry.subjects.push(subject);
+                            this.subjects.add(subject);
+                        }
+                    }
+                }
+
+                // Extract comments - handle escaped quotes and newlines
+                const commentMatch = statement.match(/rdfs:comment\s+"((?:[^"\\]|\\.)*)"/);
+                if (commentMatch) {
+                    entry.comments = commentMatch[1]
+                        .replace(/\\"/g, '"')
+                        .replace(/\\\\/g, '\\')
+                        .replace(/\\n/g, '\n');
+                }
+
+                // Extract link - can be quoted string or URI
+                const linkMatch = statement.match(/dc:source\s+(?:"([^"]+)"|<([^>]+)>)/);
+                if (linkMatch) {
+                    entry.link = linkMatch[1] || linkMatch[2];
+                }
+
+                return entry;
+            }
+
+            showLoading() {
+                document.getElementById('loadingState').classList.remove('hidden');
+                document.getElementById('errorState').classList.add('hidden');
+                document.getElementById('refreshSection').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('hidden');
+            }
+
+            showError(message) {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('errorState').classList.remove('hidden');
+                document.getElementById('refreshSection').classList.add('hidden');
+                document.getElementById('mainContent').classList.add('hidden');
+                document.getElementById('errorMessage').textContent = message;
+            }
+
+            showContent() {
+                document.getElementById('loadingState').classList.add('hidden');
+                document.getElementById('errorState').classList.add('hidden');
+                document.getElementById('refreshSection').classList.remove('hidden');
+                document.getElementById('mainContent').classList.remove('hidden');
+                
+                this.updateStatistics();
+                this.renderSubjectTags();
+                this.applyFilters();
+            }
+
+            updateStatistics() {
+                document.getElementById('statTotal').textContent = this.readings.length;
+                
+                const uniqueAuthors = new Set();
+                this.readings.forEach(r => r.authors.forEach(a => uniqueAuthors.add(a)));
+                document.getElementById('statAuthors').textContent = uniqueAuthors.size;
+                
+                document.getElementById('statSubjects').textContent = this.subjects.size;
+                
+                const thisYear = new Date().getFullYear();
+                const thisYearCount = this.readings.filter(r => {
+                    try {
+                        return new Date(r.readDate).getFullYear() === thisYear;
+                    } catch { return false; }
+                }).length;
+                document.getElementById('statThisYear').textContent = thisYearCount;
+                
+                const withNotes = this.readings.filter(r => r.comments).length;
+                document.getElementById('statWithNotes').textContent = withNotes;
+            }
+
+            renderSubjectTags() {
+                const container = document.getElementById('subjectTags');
+                container.innerHTML = '';
+                
+                // All button
+                const allBtn = this.createTag('All', () => {
+                    this.activeSubjects.clear();
+                    // Remove active class from all subject tags
+                    document.querySelectorAll('#subjectTags .btn').forEach(tag => {
+                        tag.classList.remove('btn-primary');
+                        tag.classList.add('btn-outline');
+                    });
+                    // Add active class to the All button
+                    allBtn.classList.add('btn-primary');
+                    allBtn.classList.remove('btn-outline');
+                    this.applyFilters();
+                }, true);
+                allBtn.classList.add('btn-primary'); // All is active by default
+                allBtn.classList.remove('btn-outline');
+                container.appendChild(allBtn);
+                
+                // Subject buttons
+                Array.from(this.subjects).sort().forEach(subject => {
+                    const btn = this.createTag(subject, () => {
+                        // Clear all selections first
+                        document.querySelectorAll('#subjectTags .btn').forEach(tag => {
+                            tag.classList.remove('btn-primary');
+                            tag.classList.add('btn-outline');
+                        });
+                        // Toggle this subject
+                        this.toggleSubject(subject);
+                    });
+                    btn.id = `subject-${btoa(subject)}`;
+                    container.appendChild(btn);
+                });
+            }
+
+            createTag(text, onClick, isAll = false) {
+                const tag = document.createElement('button');
+                tag.className = 'btn btn-sm btn-outline';
+                tag.textContent = text;
+                tag.onclick = onClick;
+                return tag;
+            }
+
+            toggleSubject(subject) {
+                // Clear all active subjects first (single selection only)
+                this.activeSubjects.clear();
+                
+                // Add the clicked subject
+                this.activeSubjects.add(subject);
+                
+                // Update UI - remove active class from all subject tags first
+                document.querySelectorAll('#subjectTags .btn').forEach(tag => {
+                    tag.classList.remove('btn-primary');
+                    tag.classList.add('btn-outline');
+                });
+                
+                // Add active class to the selected subject
+                const selectedTag = document.getElementById(`subject-${btoa(subject)}`);
+                if (selectedTag) {
+                    selectedTag.classList.add('btn-primary');
+                    selectedTag.classList.remove('btn-outline');
+                }
+                
+                this.applyFilters();
+            }
+
+            applyFilters() {
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                const sortBy = document.getElementById('sortSelect').value;
+                
+                // Filter
+                this.filteredReadings = this.readings.filter(r => {
+                    // Subject filter
+                    if (this.activeSubjects.size > 0) {
+                        if (!r.subjects.some(s => this.activeSubjects.has(s))) return false;
+                    }
+                    
+                    // Search filter
+                    if (searchTerm) {
+                        const searchableText = [
+                            r.title,
+                            ...r.authors,
+                            r.comments,
+                            ...r.subjects
+                        ].join(' ').toLowerCase();
+                        if (!searchableText.includes(searchTerm)) return false;
+                    }
+                    
+                    return true;
+                });
+                
+                // Sort
+                this.filteredReadings.sort((a, b) => {
+                    switch(sortBy) {
+                        case 'dateRead':
+                            return new Date(b.readDate || 0) - new Date(a.readDate || 0);
+                        case 'dateReadOld':
+                            return new Date(a.readDate || 0) - new Date(b.readDate || 0);
+                        case 'title':
+                            return (a.title || '').localeCompare(b.title || '');
+                        case 'author':
+                            return (a.authors[0] || '').localeCompare(b.authors[0] || '');
+                        case 'paperDate':
+                            return new Date(b.paperDate || 0) - new Date(a.paperDate || 0);
+                        default:
+                            return 0;
+                    }
+                });
+                
+                // Update counts
+                document.getElementById('resultCount').textContent = this.filteredReadings.length;
+                document.getElementById('totalCount').textContent = this.readings.length;
+                
+                this.renderResults();
+            }
+
+            renderResults() {
+                const view = document.getElementById('viewSelect').value;
+                
+                // Hide all views
+                document.getElementById('cardsView').classList.add('hidden');
+                document.getElementById('listView').classList.add('hidden');
+                document.getElementById('noResults').classList.add('hidden');
+                
+                if (this.filteredReadings.length === 0) {
+                    document.getElementById('noResults').classList.remove('hidden');
+                    return;
+                }
+                
+                switch(view) {
+                    case 'cards':
+                        this.renderCards();
+                        break;
+                    case 'list':
+                        this.renderList();
+                        break;
+                }
+            }
+
+            renderCards() {
+                const container = document.getElementById('cardsView');
+                container.classList.remove('hidden');
+                container.innerHTML = '';
+                
+                this.filteredReadings.forEach(reading => {
+                    const card = document.createElement('div');
+                    card.className = 'card bg-gradient-to-br from-base-100 to-base-200/50 shadow-lg border border-base-300/50';
+                    
+                    const formattedReadDate = this.formatDate(reading.readDate);
+                    const formattedPaperDate = this.formatDate(reading.paperDate, true);
+                    
+                    card.innerHTML = `
+                        <div class="card-body p-6">
+                            <!-- Header with title and dates -->
+                            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+                                <div class="flex-1">
+                                    <h3 class="card-title text-xl font-bold text-base-content mb-2 leading-tight">${this.escape(reading.title)}</h3>
+                                    <div class="text-base-content/70 mb-3 font-medium">
+                                        ${reading.authors.map(a => this.escape(a)).join(', ') || 'Unknown author'}
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col gap-1 md:items-end text-sm text-base-content/70">
+                                    <div>Read: ${formattedReadDate}</div>
+                                    ${reading.paperDate ? `<div>Published: ${formattedPaperDate}</div>` : ''}
+                                </div>
+                            </div>
+
+                            <!-- Subjects -->
+                            ${reading.subjects.length > 0 ? `
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                ${reading.subjects.map(s => `<span class="badge badge-outline  text-xs">${this.escape(s)}</span>`).join('')}
+                            </div>
+                            ` : ''}
+                            
+                            <!-- Comments -->
+                            ${reading.comments ? `
+                            <div class="bg-base-200/60 rounded-lg p-4 mb-4 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-16 h-16 bg-primary/5 rounded-full -translate-y-8 translate-x-8"></div>
+                                <div class="relative">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <svg class="w-4 h-4 text-primary/70" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"/>
+                                        </svg>
+                                        <span class="text-sm font-medium text-primary/80 uppercase tracking-wide">Note</span>
+                                    </div>
+                                    <p class="text-base-content/90 leading-relaxed">${this.escape(reading.comments)}</p>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            <!-- Action button -->
+                            ${reading.link ? `
+                            <div class="card-actions justify-end">
+                                <a href="${this.escape(reading.link)}" target="_blank" class="btn btn-primary btn-sm gap-2">
+                                    <span>View Paper</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                    
+                    container.appendChild(card);
+                });
+            }
+
+            renderList() {
+                const container = document.getElementById('listView');
+                container.classList.remove('hidden');
+                container.innerHTML = `
+                    <div class="overflow-x-auto">
+                        <table class="table table-zebra w-full">
+                            <thead>
+                                <tr>
+                                    <th class="w-2/5">Title</th>
+                                    <th class="w-1/5">Authors</th>
+                                    <th class="w-1/5">Subjects</th>
+                                    <th class="w-1/6">Read</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${this.filteredReadings.map(r => `
+                                    <tr>
+                                        <td class="w-2/5">
+                                            ${r.link ? 
+                                                `<a href="${this.escape(r.link)}" target="_blank" class="link link-primary">${this.escape(r.title)}</a>` : 
+                                                this.escape(r.title)
+                                            }
+                                        </td>
+                                        <td class="w-1/5 max-w-0">
+                                            <div class="truncate" title="${r.authors.map(a => this.escape(a)).join(', ')}">${r.authors.map(a => this.escape(a)).join(', ')}</div>
+                                        </td>
+                                        <td class="w-1/5">${r.subjects.map(s => `<span class="badge badge-outline badge-sm">${this.escape(s)}</span>`).join(' ')}</td>
+                                        <td class="w-1/6">${this.formatDate(r.readDate)}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            changeView() {
+                this.renderResults();
+            }
+
+            formatDate(dateStr, monthYear = false) {
+                if (!dateStr) return 'Unknown';
+                
+                try {
+                    if (monthYear && dateStr.match(/^\d{4}-\d{2}$/)) {
+                        const [year, month] = dateStr.split('-');
+                        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                        return `${monthNames[parseInt(month) - 1]} ${year}`;
+                    }
+                    
+                    const date = new Date(dateStr);
+                    if (isNaN(date)) return dateStr;
+                    
+                    return date.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'short', 
+                        day: monthYear ? undefined : 'numeric' 
+                    });
+                } catch {
+                    return dateStr;
+                }
+            }
+
+            escape(text) {
+                const div = document.createElement('div');
+                div.textContent = text || '';
+                return div.innerHTML;
+            }
+        }
+
+        // Initialize the app
+        const app = new ReadingsManager();
+    </script>
+
+    <div class="divider"></div>
+</div>
+    {% include 'footer.html' %} 
+
+</body>
+</html>
+         

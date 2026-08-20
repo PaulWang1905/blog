@@ -1,78 +1,503 @@
 
 
-<!doctype html>
-<html lang="en">
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" data-theme="winter">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>About — Puyu's Personal Blog</title>
-
-<meta name="description" content="About Puyu's Personal Blog.">
-<meta name="author" content="Puyu Wang">
-<meta property="og:title" content="About">
-<meta property="og:description" content="About Puyu's Personal Blog.">
-<meta property="og:type" content="article">
-
-<link rel="stylesheet" href="/styles.css">
-<link rel="stylesheet" href="/pygments.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About Puyu's Personal Blog.">
+  <meta name="author" content="Puyu Wang">
+  <meta property="og:title" content="About">
+  <meta property="og:description" content="About Puyu's Personal Blog.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://blog.puyuwang.org/image/default.jpg">
+  <link href="/styles.css" rel="stylesheet">
+  <link href="/pygments.css" rel="stylesheet">
+  <title>About — Puyu's Personal Blog</title>
+  <style>
+    .highlight { position: relative; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
+    .highlight pre { margin: 0; background: transparent; }
+    .prose pre { padding: 0; background: transparent; border-radius: 0; }
+    .prose code::before, .prose code::after { content: none; }
+    .copy-btn {
+      position: absolute; top: 0.5rem; right: 0.5rem;
+      padding: 0.2rem 0.6rem; font-size: 0.75rem; border-radius: 0.25rem;
+      background: rgba(255,255,255,0.15); color: #ccc; border: 1px solid rgba(255,255,255,0.2);
+      cursor: pointer; opacity: 0; transition: opacity 0.2s;
+    }
+    .highlight:hover .copy-btn { opacity: 1; }
+    .copy-btn.copied { background: rgba(100,200,100,0.3); color: #9f9; }
+  </style>
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 </head>
-<body class="min-h-screen bg-white text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100">
 
-<div class="mx-auto flex min-h-screen max-w-2xl flex-col px-5">
 
-  <header class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-neutral-200 py-7 dark:border-neutral-800">
-    <a href="/index.html" class="text-lg font-semibold tracking-tight no-underline hover:text-amber-700 dark:hover:text-amber-500">
-      About
+<body>
+
+
+  <header>
+    
+<div class="navbar bg-base-100 shadow-lg sticky top-0 z-50 backdrop-blur-sm bg-base-100/90">
+  <div class="navbar-start">
+
+    <!-- Mobile menu button; the inline links below take over on large screens -->
+    <div class="dropdown lg:hidden">
+      <label tabindex="0" class="btn btn-ghost btn-circle hover:bg-base-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+        </svg>
+      </label>
+      <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 p-2 shadow-lg bg-base-100 rounded-box w-52 z-50">
+        
+        <li><a class="hover:text-primary transition-colors duration-200" href="/blog_index.html">Blog</a></li>
+        <li><a class="hover:text-primary transition-colors duration-200" href="/page/about.html">About</a></li>
+        <li><a class="hover:text-primary transition-colors duration-200" href="https://puyuwang.org">Main site</a></li>
+      </ul>
+    </div>
+
+    <!-- Site title -->
+    <a class="btn btn-ghost normal-case text-xl hover:scale-105 transition-transform duration-200" href="/index.html">
+      <span class="box-decoration-clone bg-gradient-to-r from-indigo-600 to-pink-500 text-white px-2">
+        Puyu's Blog
+      </span>
     </a>
-    <nav class="flex gap-5 text-sm">
-      <a href="/index.html" class="text-neutral-600 hover:text-amber-700 dark:text-neutral-400 dark:hover:text-amber-500">Home</a>
-      <a href="/blog_index.html" class="text-neutral-600 hover:text-amber-700 dark:text-neutral-400 dark:hover:text-amber-500">Blog</a>
-    </nav>
-  </header>
 
-  <main class="flex-1 py-10">
+    <div class="hidden lg:flex">
+      <a class="btn btn-ghost text-xl hover:scale-105 transition-transform duration-200" href="/blog_index.html">Blog</a>
+      <a class="btn btn-ghost text-xl hover:scale-105 transition-transform duration-200" href="/page/about.html">About</a>
+      <a class="btn btn-ghost text-xl hover:scale-105 transition-transform duration-200" href="https://puyuwang.org">Main site</a>
+    </div>
 
-<article>
-  <h1 class="text-3xl font-semibold leading-tight tracking-tight">About</h1>
+  </div>
 
-  <p class="mt-3 text-sm text-neutral-500 dark:text-neutral-400">
-    <time datetime="2026-08-18">18 August 2026</time>
-    <span>· Puyu Wang</span>
-    
-    <span>· <a href="/blog_Page.html" class="underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-500">Page</a></span>
-    
-  </p>
+  <div class="navbar-end">
 
-  
-  <p class="mt-4 border-l-2 border-neutral-200 pl-4 text-neutral-600 italic dark:border-neutral-700 dark:text-neutral-400">About Puyu's Personal Blog.</p>
-  
+    <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller -->
+    <label class="swap swap-rotate hover:scale-110 transition-transform duration-200">
+      <input type="checkbox" class="theme-controller" value="dark" aria-label="Toggle dark mode" />
+      <!-- Sun icon -->
+      <svg
+        class="swap-off h-10 w-10 fill-current"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24">
+        <path
+          d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
+      </svg>
 
-  <div class="prose prose-neutral mt-8 max-w-none dark:prose-invert">
-    <h1>About</h1>
-<p>Files in <code>source/page/</code> are pages rather than posts: they are listed on the
-home page but stay out of the blog index.</p>
-<p>Tell your readers who you are here.</p>
+      <!-- Moon icon -->
+      <svg
+        class="swap-on h-10 w-10 fill-current"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24">
+        <path
+          d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
+      </svg>
+    </label>
+
+  </div>
+</div>
+</header>
+
+
+<div class="container mx-auto px-5 p-4 max-w-6xl">
+
+  <div tabindex="0" class="bg-primary text-primary-content focus:bg-primary focus:text-primary-content collapse p-5 rounded-lg">
+    <div class="collapse-title">
+      <div class="breadcrumbs max-w-4xl text-sm">
+        <ul>
+          
+          
+          <li><a href="/index.html">Home</a></li>
+          
+          <li><a href="/page/about.html"> About </a> </li>
+        </ul>
+      </div>
+     <h1 class="text-2xl font-bold py-2"> About </h1>
+     
+     <span class="badge">about</span>
+     
+    <p class="py-2 text-sm opacity-90">About Puyu's Personal Blog.</p>
+    </div>
+
+    <div class="collapse-content text-sm">
+      <p>By Puyu Wang</p>
+      <p>Published on Tuesday 2026-08-18 </p>
+      <p>Last Modified on Tuesday 2026-08-18 </p>
+    </div>
   </div>
 
   
-  <p class="mt-10 flex flex-wrap gap-2">
-    
-    <span class="rounded-full border border-neutral-200 px-3 py-0.5 text-xs text-neutral-500 dark:border-neutral-700 dark:text-neutral-400">about</span>
-    
-  </p>
   
 
-  
-</article>
+  <div class="divider"></div>
 
-  </main>
-
-  <footer class="border-t border-neutral-200 py-8 text-center text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-500">
-    <p class="italic">Write drunk, edit sober.</p>
-    <p class="mt-2">Built with <a href="https://github.com/PaulWang1905/oxie" class="underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-500">oxie</a>.</p>
-  </footer>
+  <div class="bg-base-200 p-5 rounded-lg">
+    <article class="prose prose-base max-w-none">
+      <h1>About</h1>
+<p>Files in <code>source/page/</code> are pages rather than posts: they are listed on the home page but stay out of the blog index.</p>
+    </article>
+  </div>
 
 </div>
+
+<!-- <div class="divider"></div> -->
+
+<footer class="metro-footer bg-base-200 text-base-content mt-8 border-t border-primary/30">
+  <div class="max-w-5xl mx-auto px-4 py-12">
+
+    <!-- ===================== Metro tile grid ===================== -->
+    <div class="metro-grid">
+
+      <!-- Profile (left, with social links folded in) -->
+      <div class="mtile mtile--p metro-profile">
+        <img class="metro-avatar" src="/image/profile.jpg" alt="Puyu Wang" loading="lazy" />
+        <div class="metro-id">
+          <div class="metro-name">Puyu Wang</div>
+          <div class="mtile__sub">DPhil Student &middot; University of Oxford</div>
+        </div>
+        <div class="metro-socials">
+          <a href="https://x.com/puyu1001" aria-label="X (Twitter)">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="https://github.com/paulwang1905" aria-label="GitHub">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="https://linkedin.com/in/puyu-wang" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="https://eng.ox.ac.uk/people/puyu-wang/" aria-label="Oxford profile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right column: aphorism tile + three nav tiles beneath it -->
+      <div class="metro-right">
+
+        <!-- Rotating quote (live tile) -->
+        <div class="metro-quote-tile">
+          <div class="metro-face c0">
+            <span class="mtile__label">Aphorism</span>
+            <blockquote class="metro-phrase"><span id="phrase"></span></blockquote>
+            <span class="metro-mark" aria-hidden="true">&#10078;</span>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="metro-nav">
+          <a href="/index.html" class="mtile mtile--s" aria-label="Home">
+            <span class="mtile__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+                <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+              </svg>
+            </span>
+            <span class="mtile__title">Home</span>
+          </a>
+
+          <a href="/blog_index.html" class="mtile mtile--a" aria-label="Blog">
+            <span class="mtile__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
+                <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm0 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3z"/>
+              </svg>
+            </span>
+            <span class="mtile__title">Blog</span>
+          </a>
+
+          <a href="/page/about.html" class="mtile mtile--n" aria-label="About">
+            <span class="mtile__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+              </svg>
+            </span>
+            <span class="mtile__title">About</span>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ===================== Bottom bar ===================== -->
+    <div class="metro-bottom">
+      <p>&copy; <span id="footer-year">2026</span> Puyu Wang &mdash; All rights reserved</p>
+      <nav class="metro-links">
+        <a href="https://puyuwang.org">Main site</a>
+        <a href="/blog_index.html">Blog</a>
+        <span class="metro-built">
+          Built with <a href="https://github.com/PaulWang1905/oxie">oxie</a>
+        </span>
+        <a href="#top" class="metro-toplink" aria-label="Back to top">
+          Top
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z"/>
+          </svg>
+        </a>
+      </nav>
+    </div>
+
+  </div>
+</footer>
+
+
+<style>
+    /* ===== Metro (Modern UI) footer =====
+       Plain CSS on daisyUI's theme variables, so it is never purged and
+       follows both the winter and dark themes. */
+    .metro-footer {
+        font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .metro-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+    @media (min-width: 768px) {
+        .metro-grid { grid-template-columns: 1fr 1.7fr; align-items: stretch; }
+    }
+
+    /* right column stacks the quote tile over the three nav tiles */
+    .metro-right { display: flex; flex-direction: column; gap: 0.6rem; height: 100%; }
+    .metro-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }
+
+    /* --- base tile --- */
+    .mtile {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0.9rem 1.1rem;
+        border-radius: 0;                 /* Metro = sharp corners */
+        text-decoration: none;
+        transition: filter 0.15s ease, transform 0.1s ease;
+    }
+    .mtile:hover { filter: brightness(1.08); }
+    a.mtile:active { transform: scale(0.97); }        /* Metro press */
+
+    /* --- tile colours, straight from the daisyUI theme palette --- */
+    .mtile--p { background: var(--color-primary);   color: var(--color-primary-content); }
+    .mtile--s { background: var(--color-secondary); color: var(--color-secondary-content); }
+    .mtile--a { background: var(--color-accent);    color: var(--color-accent-content); }
+    .mtile--n { background: var(--color-base-300);  color: var(--color-base-content); }
+
+    /* --- tile content --- */
+    .mtile__icon { line-height: 0; }
+    .mtile__icon svg { width: 24px; height: 24px; }
+    .mtile__title { font-weight: 600; font-size: 1rem; }
+    .mtile__sub   { font-size: 0.74rem; opacity: 0.85; margin-top: 0.15rem; }
+    .mtile__label {
+        font-size: 0.6rem;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        opacity: 0.78;
+    }
+
+    /* --- profile tile --- */
+    .metro-profile { min-height: 13rem; }
+    .metro-avatar {
+        width: 3.75rem;
+        height: 3.75rem;
+        object-fit: cover;
+        border-radius: 0;                 /* square, true to Metro */
+    }
+    .metro-name { font-size: 1.4rem; font-weight: 700; line-height: 1.15; }
+    .metro-socials { display: flex; gap: 0.9rem; }
+    .metro-socials a { line-height: 0; opacity: 0.85; transition: opacity 0.15s ease, transform 0.15s ease; }
+    .metro-socials a:hover { opacity: 1; transform: translateY(-2px); }
+    .metro-socials svg { width: 20px; height: 20px; }
+
+    /* --- nav tiles --- */
+    .metro-nav .mtile { min-height: 5rem; }
+
+    /* --- quote live tile: Windows 8 face flip --- */
+    .metro-quote-tile {
+        position: relative;
+        flex: 1 1 auto;
+        min-height: 7rem;
+        overflow: hidden;
+        background: var(--color-base-300);   /* theme-matching backing, seen edge-on mid-flip */
+        perspective: 900px;
+    }
+    .metro-face {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 0.9rem 1.1rem;
+        transform-origin: center center;
+        backface-visibility: hidden;
+        will-change: transform;
+    }
+    .metro-quote-tile:hover .metro-face { filter: brightness(1.08); }
+    .metro-face.c0 { background: var(--color-primary);   color: var(--color-primary-content); }
+    .metro-face.c1 { background: var(--color-secondary); color: var(--color-secondary-content); }
+    .metro-face.c2 { background: var(--color-accent);    color: var(--color-accent-content); }
+
+    /* the flap tumbles forward: old face rotates up & away, new face drops in */
+    .metro-face.flip-out { animation: metroFlipOut 0.32s ease-in forwards; }
+    .metro-face.flip-in  { animation: metroFlipIn 0.5s cubic-bezier(0.2, 0.75, 0.2, 1) forwards; }
+    @keyframes metroFlipOut {
+        from { transform: rotateX(0deg); }
+        to   { transform: rotateX(90deg); }
+    }
+    @keyframes metroFlipIn {
+        from { transform: rotateX(-90deg); }
+        to   { transform: rotateX(0deg); }
+    }
+
+    .metro-phrase { margin: 0; }
+    #phrase { display: inline-block; font-weight: 600; font-size: 1.15rem; line-height: 1.3; }
+
+    .metro-mark {
+        position: absolute;
+        right: 0.4rem;
+        bottom: -0.9rem;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 4.25rem;
+        line-height: 1;
+        font-weight: 700;
+        opacity: 0.16;
+        pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .metro-face.flip-out, .metro-face.flip-in { animation: none; }
+        .mtile { transition: none; }
+    }
+
+    /* --- bottom bar --- */
+    .metro-bottom {
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+        padding-top: 1.25rem;
+        border-top: 1px solid color-mix(in oklab, var(--color-base-content) 20%, transparent);
+        font-size: 0.82rem;
+        color: color-mix(in oklab, var(--color-base-content) 60%, transparent);
+    }
+    @media (min-width: 640px) { .metro-bottom { flex-direction: row; } }
+
+    .metro-links { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; justify-content: center; }
+    .metro-links a {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: color-mix(in oklab, var(--color-base-content) 70%, transparent);
+        transition: color 0.2s ease;
+    }
+    .metro-links a:hover { color: var(--color-primary); }
+    .metro-toplink { display: inline-flex; align-items: center; gap: 0.35rem; }
+
+    /* "Built with oxie" — same size as the links, but not itself a nav item */
+    .metro-built {
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.7rem;
+        font-weight: 700;
+        color: color-mix(in oklab, var(--color-base-content) 45%, transparent);
+    }
+    .metro-built a { text-decoration: underline; text-underline-offset: 2px; }
+</style>
+
+<script>
+    (function() {
+        // Configuration
+        const config = {
+            displayTime: 4500,
+            fadeTime: 320        // matches the flip-out duration above
+        };
+
+        // Phrases (rendered as proper JSON by the build; falls back if empty)
+        const phrases = ["\u5929\u4e4b\u84bc\u84bc\uff0c\u5176\u6b63\u8272\u90aa", "\u543e\u65e5\u4e09\u7701\u543e\u8eab", "\u77e5\u884c\u5408\u4e00", "\u884c\u6709\u9918\u529b\uff0c\u5247\u4ee5\u5b78\u6587", "\u601d\u7121\u90aa", "\u5148\u884c\u5176\u8a00\uff0c\u800c\u5f8c\u5f9e\u4e4b", "\u76e1\u7f8e\u77e3\uff0c\u53c8\u76e1\u5584\u4e5f", "\u597d\u4ec1\u8005\uff0c\u7121\u4ee5\u5c1a\u4e4b", "\u7121\u6240\u5f9e\u4f86\uff0c\u4ea6\u7121\u6240\u53bb", "\u6240\u8b02\u4f5b\u6cd5\u8005\uff0c\u5373\u975e\u4f5b\u6cd5", "\u9053\u6cd5\u81ea\u7136", "\u5929\u4e0b\u5927\u4e8b\uff0c\u5fc5\u4f5c\u65bc\u7d30", "\u70ba\u7121\u70ba\uff0c\u4e8b\u7121\u4e8b\uff0c\u5473\u7121\u5473", "\u5468\u96d6\u820a\u90a6,\u5176\u547d\u7dad\u65b0", "\u5fb7\u4e0d\u5b64\uff0c\u5fc5\u6709\u9130", "\u4e14\u6709\u771f\u4eba\uff0c\u800c\u5f8c\u6709\u771f\u77e5"] || ['Simplicity is the ultimate sophistication', 'Design is intelligence made visible'];
+        let currentIndex = 0;
+        let colorIndex = 0;
+
+        // Elements
+        const phraseElement = document.getElementById('phrase');
+        const face = phraseElement ? phraseElement.closest('.metro-face') : null;
+        const tileColors = ['c0', 'c1', 'c2'];
+
+        // Repaint the tile face with the next palette colour
+        function paintFace() {
+            if (!face) return;
+            face.classList.remove('c0', 'c1', 'c2');
+            face.classList.add(tileColors[colorIndex]);
+        }
+
+        // Flip the face out, swap text + colour, then flip the new face in
+        function showNextQuote() {
+            if (!face) return;
+            face.classList.remove('flip-in');
+            face.classList.add('flip-out');
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % phrases.length;
+                colorIndex = (colorIndex + 1) % tileColors.length;
+                phraseElement.textContent = phrases[currentIndex];
+                paintFace();
+                face.classList.remove('flip-out');
+                void face.offsetWidth;            // reflow so flip-in restarts cleanly
+                face.classList.add('flip-in');
+            }, config.fadeTime);
+        }
+
+        // Initialize
+        function initialize() {
+            // Keep the copyright year current
+            const yearEl = document.getElementById('footer-year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+            if (!phraseElement || !phrases.length) return;
+
+            // Show the first phrase, then rotate (only if there is more than one)
+            phraseElement.textContent = phrases[0];
+            paintFace();
+            if (phrases.length > 1) setInterval(showNextQuote, config.displayTime);
+        }
+
+        // Start when document is loaded
+        if (document.readyState !== 'loading') {
+            initialize();
+        } else {
+            document.addEventListener('DOMContentLoaded', initialize);
+        }
+    })();
+</script>
+
+<script>
+  // "Copy" button on every Pygments code block
+  document.querySelectorAll('.highlight').forEach(block => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    block.appendChild(btn);
+    btn.addEventListener('click', () => {
+      const code = block.querySelector('pre').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+      });
+    });
+  });
+</script>
 
 </body>
 </html>

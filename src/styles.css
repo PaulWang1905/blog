@@ -7,9 +7,22 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* daisyUI supplies the component classes (navbar, card, stats, badge, btn,
+ * divider ...) and the `base-*` / `primary` / `secondary` / `accent` colour
+ * tokens the templates are built on.
+ *
+ * `winter` is the default light theme; `dark` is what the header's
+ * `.theme-controller` toggle switches to, and what visitors whose OS asks
+ * for dark mode get by default. */
+@plugin "daisyui" {
+  themes: winter --default, dark --prefersdark;
+}
+
 /* Where to look for class names. Paths are relative to this file (src/).
  * Scanning the Jinja templates as well as the generated HTML means a class
- * is never purged just because the CSS was rebuilt before the HTML. */
+ * is never purged just because the CSS was rebuilt before the HTML — and it
+ * is what keeps the class names that only exist inside the templates'
+ * JavaScript (pagination buttons, tab switching) alive. */
 @source "../src/**/*.html";
 @source "../docs/**/*.html";
 @source "../source/**/*.md";
@@ -17,4 +30,115 @@
 /* Site-wide tokens. Override to rebrand. */
 @theme {
   --font-display: ui-serif, Georgia, "Times New Roman", serif;
+}
+
+/* A hairline rule, used to separate entries on the home page feed. */
+.rule {
+  border: 0;
+  border-top: 1px solid color-mix(in oklab, var(--color-base-content) 15%, transparent);
+}
+
+/* ============================================================
+   CV timeline (About page)
+
+   Plain CSS on top of daisyUI's theme variables. Kept out of
+   @layer / @apply on purpose:
+     - never purged, regardless of build order;
+     - no marker-class or "utility doesn't exist" pitfalls;
+     - adapts to both the winter (light) and dark themes for free.
+
+   Use it from Markdown with md_in_html:
+
+     <ul class="cv-timeline" markdown="1">
+       <li class="cv-item">
+         <span class="cv-date">2023 — now</span>
+         <span class="cv-label">University of Oxford</span>
+         <p class="cv-title">DPhil in Engineering Science</p>
+         <p class="cv-desc">What you did there.</p>
+       </li>
+     </ul>
+   ============================================================ */
+.cv-timeline {
+  list-style: none;
+  max-width: 44rem;
+  margin: 2rem auto;
+  padding: 0;
+  position: relative;
+}
+
+/* the vertical rail */
+.cv-timeline::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 2px;
+  background: var(--color-base-300);
+}
+
+.cv-item {
+  position: relative;
+  padding: 0 0 2rem 2.5rem;
+}
+
+.cv-item:last-child {
+  padding-bottom: 0;
+}
+
+/* the dot */
+.cv-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3rem;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  border: 3px solid var(--color-base-100);
+  box-shadow: 0 0 0 1px var(--color-base-300);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cv-item:hover::before {
+  transform: scale(1.2);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-primary) 15%, transparent);
+}
+
+.cv-date {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border: 1px solid color-mix(in oklab, var(--color-accent) 35%, transparent);
+  border-radius: 9999px;
+  padding: 0.12rem 0.65rem;
+  margin-bottom: 0.45rem;
+}
+
+.cv-label {
+  display: block;
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.cv-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-base-content);
+  margin: 0.1rem 0 0;
+  line-height: 1.35;
+}
+
+.cv-desc {
+  color: color-mix(in oklab, var(--color-base-content) 72%, transparent);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 0.45rem 0 0;
 }
