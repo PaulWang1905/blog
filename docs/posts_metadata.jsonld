@@ -3,8 +3,42 @@
   "@type": "ItemList",
   "name": "Puyu's Personal Blog - Blog Posts",
   "description": "Collection of blog posts from Puyu's Personal Blog",
-  "numberOfItems": 10,
+  "numberOfItems": 8,
   "itemListElement": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/20260822-GarlicButterPrawns.html",
+      "headline": "Garlic Butter Prawns",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2026-08-22",
+      "dateModified": "2026-08-22",
+      "description": "I cooked this at a friend's place. According to myself and my friend, it was good.",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Recipe",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "Prawn",
+        "Butter"
+      ],
+      "url": "https://blog.puyuwang.org/post/20260822-GarlicButterPrawns.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/20260822-GarlicButterPrawns.html"
+      }
+    },
     {
       "@type": "BlogPosting",
       "@id": "https://blog.puyuwang.org/post/silver_age.html",
@@ -40,41 +74,6 @@
     },
     {
       "@type": "BlogPosting",
-      "@id": "https://blog.puyuwang.org/post/math_test.html",
-      "headline": "Math Rendering Test",
-      "author": {
-        "@type": "Person",
-        "name": "Puyu Wang"
-      },
-      "datePublished": "2026-04-03",
-      "dateModified": "2026-04-03",
-      "description": "A test post for LaTeX math formula rendering.",
-      "about": {
-        "@type": "DefinedTerm",
-        "name": "Test",
-        "inDefinedTermSet": {
-          "@type": "DefinedTermSet",
-          "name": "Blog Categories"
-        }
-      },
-      "keywords": [
-        "math",
-        "test",
-        "latex"
-      ],
-      "url": "https://blog.puyuwang.org/post/math_test.html",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Puyu's Personal Blog",
-        "url": "https://blog.puyuwang.org"
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://blog.puyuwang.org/post/math_test.html"
-      }
-    },
-    {
-      "@type": "BlogPosting",
       "@id": "https://blog.puyuwang.org/post/20241125.html",
       "headline": "悼念贾舜尧",
       "author": {
@@ -105,75 +104,6 @@
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://blog.puyuwang.org/post/20241125.html"
-      }
-    },
-    {
-      "@type": "BlogPosting",
-      "@id": "https://blog.puyuwang.org/post/20240726(1).html",
-      "headline": "Setup Wireguard",
-      "author": {
-        "@type": "Person",
-        "name": "Puyu Wang"
-      },
-      "datePublished": "2024-07-26",
-      "dateModified": "2025-11-01",
-      "description": "Setting up Wireguard for",
-      "about": {
-        "@type": "DefinedTerm",
-        "name": "Blog",
-        "inDefinedTermSet": {
-          "@type": "DefinedTermSet",
-          "name": "Blog Categories"
-        }
-      },
-      "keywords": [
-        "Wireguard",
-        "VPN"
-      ],
-      "url": "https://blog.puyuwang.org/post/20240726(1).html",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Puyu's Personal Blog",
-        "url": "https://blog.puyuwang.org"
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://blog.puyuwang.org/post/20240726(1).html"
-      }
-    },
-    {
-      "@type": "BlogPosting",
-      "@id": "https://blog.puyuwang.org/post/20240726.html",
-      "headline": "Using ‘dd’ to benchmark SSD",
-      "author": {
-        "@type": "Person",
-        "name": "Puyu Wang"
-      },
-      "datePublished": "2024-07-26",
-      "dateModified": "2024-07-26",
-      "description": "Using dd might be the simplest way to benchmark an SSD on Unix-like systems. It is also very dangerous (obviously). I only recommend this method in TEST environments.",
-      "about": {
-        "@type": "DefinedTerm",
-        "name": "Blog",
-        "inDefinedTermSet": {
-          "@type": "DefinedTermSet",
-          "name": "Blog Categories"
-        }
-      },
-      "keywords": [
-        "Linux",
-        "Benchmark",
-        "SSD"
-      ],
-      "url": "https://blog.puyuwang.org/post/20240726.html",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Puyu's Personal Blog",
-        "url": "https://blog.puyuwang.org"
-      },
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": "https://blog.puyuwang.org/post/20240726.html"
       }
     },
     {
