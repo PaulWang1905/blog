@@ -2,6 +2,12 @@
    Context: meta_data, post_meta_data, title, author, summary, category,
    date, last_modified, content, phrases, image, tags, link #}
 
+{#- A post's Language: a BCP 47 tag (zh-Hant, zh-Hans, en) from the front
+   matter, driving <html lang>. Posts without one are English. The `true`
+   argument makes default() fire on an empty value as well as a missing
+   key, so a bare `Language:` line cannot render as "None". -#}
+{%- set page_lang = post_meta_data.Language | default('en', true) %}
+
 {# A post's Image: may be a path relative to the web root (image/foo.jpg)
    or a full URL to somewhere else. Root-relative paths need a leading
    slash, because posts are served from /post/; URLs must be left alone. #}
@@ -9,7 +15,7 @@
 {% set image_src = image if image_is_url else '/' ~ image %}
 {% set image_abs = image if image_is_url else meta_data.link ~ '/' ~ image %}
 <!DOCTYPE html>
-<html lang="en" data-theme="winter">
+<html lang="{{ page_lang }}" data-theme="winter">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">

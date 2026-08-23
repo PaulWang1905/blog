@@ -4,6 +4,7 @@ Summary: Life Writing课程小结
 Authors: Puyu Wang
 Date:    2020-09-10
 Category: 中文
+Language: zh-Hans
 Tags: [LifeWriting]
 Image:  https://upload.wikimedia.org/wikipedia/commons/8/8b/Sui_Sin_Far.jpg
 Image_caption: Sui Sin Far, Image from the private collection of Diana Birchall, granddaughter of Winnifred Eaton., CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons
