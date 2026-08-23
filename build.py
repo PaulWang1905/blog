@@ -5,12 +5,6 @@ Requires:  pip install -r requirements.txt  &&  npm install
 """
 from oxie import Site, SiteConfig
 
-# Note on src/meta_data.json: "description" is a one-element LIST, not a
-# string. oxie 0.3.1's IndexPage.parse() does meta_data["description"][0]
-# (it expects the list the Markdown meta extension produces), so a plain
-# string would reach the home page as its first character. Wrapping it
-# keeps the site description intact in the masthead and the <meta> tag.
-
 config = SiteConfig(
     # source/, src/ and docs/ are the defaults; override them if you move things.
     collect_dirs={

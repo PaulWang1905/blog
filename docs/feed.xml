@@ -3,7 +3,7 @@
   <channel>
     <title>Puyu's Personal Blog</title>
     <link>https://blog.puyuwang.org/index.html</link>
-    <description>['Personal writing here.']</description>
+    <description>Personal writing here.</description>
     <language>en</language>
     <atom:link href="https://blog.puyuwang.org/feed.xml" rel="self" type="application/rss+xml"/>
     <lastBuildDate>Sat, 22 Aug 2026 00:00:00 GMT</lastBuildDate>
