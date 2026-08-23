@@ -27,6 +27,10 @@
   {% if image %}<meta property="og:image" content="{{ image_abs }}">{% endif %}
   <link href="/styles.css" rel="stylesheet">
   <link href="/pygments.css" rel="stylesheet">
+  {# Feed autodiscovery: what browser extensions and readers look for when
+     they are handed a page URL rather than the feed URL itself. #}
+  <link rel="alternate" type="application/rss+xml" title="{{ meta_data.title }}" href="/feed.xml">
+  <link rel="alternate" type="application/ld+json" title="{{ meta_data.title }} — post metadata" href="/posts_metadata.jsonld">
   <title>{{ title }} — {{ meta_data.title }}</title>
   <style>
     .highlight { position: relative; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin: 1rem 0; }

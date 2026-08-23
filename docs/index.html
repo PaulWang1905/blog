@@ -12,6 +12,9 @@
 <link href="/styles.css" rel="stylesheet">
 <link href="/pygments.css" rel="stylesheet">
 
+<link rel="alternate" type="application/rss+xml" title="Puyu's Blog" href="/feed.xml">
+<link rel="alternate" type="application/ld+json" title="Puyu's Blog — post metadata" href="/posts_metadata.jsonld">
+
 <title>Puyu's Blog</title>
 
 </head>
@@ -107,7 +110,18 @@
 
   </div>
 
-  <div class="navbar-end">
+  <div class="navbar-end gap-1">
+
+    <!-- RSS: the readable subscribe page, which hands over the /feed.xml
+         address that every page also announces in its <head> -->
+    <a href="/feed.html" class="btn btn-ghost btn-sm btn-circle text-base-content/70 hover:text-primary"
+       aria-label="Subscribe by RSS" title="Subscribe by RSS">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M3 2.5a1 1 0 0 1 1-1A10.5 10.5 0 0 1 14.5 12a1 1 0 1 1-2 0A8.5 8.5 0 0 0 4 3.5a1 1 0 0 1-1-1z"/>
+        <path d="M3 7.25a1 1 0 0 1 1-1A5.75 5.75 0 0 1 9.75 12a1 1 0 1 1-2 0A3.75 3.75 0 0 0 4 8.25a1 1 0 0 1-1-1z"/>
+        <circle cx="4.4" cy="11.6" r="1.6"/>
+      </svg>
+    </a>
 
     <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller -->
     <label class="btn btn-ghost btn-sm btn-circle swap swap-rotate" aria-label="Toggle dark mode">
@@ -157,7 +171,7 @@
         
         <li class="border-b border-base-300 py-6">
           <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1.5">
-            <time datetime="2026-08-22" class="tabular-nums">22 Aug 2026</time>
+            <time datetime="2026-08-22T00:00:00+01:00" class="tabular-nums">22 Aug 2026</time>
             
             <span class="text-base-content/20">·</span>
             <a href="/blog_Recipe.html" class="hover:text-primary transition-colors">Recipe</a>
@@ -185,7 +199,7 @@
         
         <li class="border-b border-base-300 py-6">
           <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1.5">
-            <time datetime="2026-07-17" class="tabular-nums">17 Jul 2026</time>
+            <time datetime="2026-07-17T12:00:00+00:00" class="tabular-nums">17 Jul 2026</time>
             
             <span class="text-base-content/20">·</span>
             <a href="/blog_Story.html" class="hover:text-primary transition-colors">Story</a>
@@ -211,7 +225,7 @@
         
         <li class="border-b border-base-300 py-6">
           <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1.5">
-            <time datetime="2024-11-25" class="tabular-nums">25 Nov 2024</time>
+            <time datetime="2024-11-25T12:00:00+00:00" class="tabular-nums">25 Nov 2024</time>
             
             <span class="text-base-content/20">·</span>
             <a href="/blog_中文.html" class="hover:text-primary transition-colors">中文</a>
@@ -239,7 +253,7 @@
         
         <li class="border-b border-base-300 py-6">
           <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1.5">
-            <time datetime="2024-07-24" class="tabular-nums">24 Jul 2024</time>
+            <time datetime="2024-07-24T12:00:00+00:00" class="tabular-nums">24 Jul 2024</time>
             
             <span class="text-base-content/20">·</span>
             <a href="/blog_Blog.html" class="hover:text-primary transition-colors">Blog</a>
@@ -265,7 +279,7 @@
         
         <li class="border-b border-base-300 py-6">
           <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1.5">
-            <time datetime="2024-07-20" class="tabular-nums">20 Jul 2024</time>
+            <time datetime="2024-07-20T12:00:00+00:00" class="tabular-nums">20 Jul 2024</time>
             
             <span class="text-base-content/20">·</span>
             <a href="/blog_Notes.html" class="hover:text-primary transition-colors">Notes</a>
@@ -293,7 +307,7 @@
         
         <li class="border-b border-base-300 py-6">
           <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1.5">
-            <time datetime="2024-07-20" class="tabular-nums">20 Jul 2024</time>
+            <time datetime="2024-07-20T12:00:00+00:00" class="tabular-nums">20 Jul 2024</time>
             
             <span class="text-base-content/20">·</span>
             <a href="/blog_Notes.html" class="hover:text-primary transition-colors">Notes</a>
@@ -319,7 +333,7 @@
         
         <li class="border-b border-base-300 py-6">
           <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1.5">
-            <time datetime="2020-09-10" class="tabular-nums">10 Sep 2020</time>
+            <time datetime="2020-09-10T12:00:00+00:00" class="tabular-nums">10 Sep 2020</time>
             
             <span class="text-base-content/20">·</span>
             <a href="/blog_中文.html" class="hover:text-primary transition-colors">中文</a>
@@ -345,7 +359,7 @@
         
         <li class="border-b border-base-300 py-6">
           <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1.5">
-            <time datetime="2017-01-01" class="tabular-nums">01 Jan 2017</time>
+            <time datetime="2017-01-01T12:00:00+00:00" class="tabular-nums">01 Jan 2017</time>
             
             <span class="text-base-content/20">·</span>
             <a href="/blog_中文.html" class="hover:text-primary transition-colors">中文</a>
@@ -475,6 +489,16 @@
       <nav class="metro-links">
         <a href="https://puyuwang.org">Main site</a>
         <a href="/blog_index.html">Blog</a>
+        
+        <a href="/feed.html" class="metro-feedlink" aria-label="Subscribe by RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3 2.5a1 1 0 0 1 1-1A10.5 10.5 0 0 1 14.5 12a1 1 0 1 1-2 0A8.5 8.5 0 0 0 4 3.5a1 1 0 0 1-1-1z"/>
+            <path d="M3 7.25a1 1 0 0 1 1-1A5.75 5.75 0 0 1 9.75 12a1 1 0 1 1-2 0A3.75 3.75 0 0 0 4 8.25a1 1 0 0 1-1-1z"/>
+            <circle cx="4.4" cy="11.6" r="1.6"/>
+          </svg>
+          RSS
+        </a>
+        <a href="/posts_metadata.jsonld" aria-label="Post metadata as JSON-LD">JSON-LD</a>
         <span class="metro-built">
           Built with <a href="https://github.com/PaulWang1905/oxie">oxie</a>
         </span>
@@ -646,6 +670,7 @@
     }
     .metro-links a:hover { color: var(--color-primary); }
     .metro-toplink { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .metro-feedlink { display: inline-flex; align-items: center; gap: 0.3rem; }
 
     /* "Built with oxie" — same size as the links, but not itself a nav item */
     .metro-built {

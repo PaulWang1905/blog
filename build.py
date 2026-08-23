@@ -35,5 +35,36 @@ config = SiteConfig(
     # then add a /photography.html link to src/header.html.
 )
 
+# --- Post-build: the subscribe page ------------------------------------
+# docs/feed.xml is a document, not a page, so a browser shows it as raw XML
+# to anyone who clicks an RSS link expecting something readable. The usual
+# fix — an XSLT stylesheet on the feed — has an expiry date now: Chrome
+# disables XSLT on 17 November 2026, and Firefox and WebKit intend to
+# follow. So the readable version is a real HTML page instead.
+#
+# This runs after Site.build() rather than through oxie's `simple_pages`,
+# which renders with only meta_data and phrases in context; the page also
+# needs the posts. Tailwind has already run by this point, but styles.css
+# scans src/**/*.html as well as docs/, so the template's classes survive.
+FEED_PAGE_TEMPLATE = "feed_page_template.html"
+FEED_PAGE_OUTPUT = "feed.html"
+
+
+def build_feed_page(site):
+    """Render docs/feed.html, the human-readable face of docs/feed.xml."""
+    posts = site.posts[:site.config.feed_max_items]
+    rendered = site.template(FEED_PAGE_TEMPLATE).render(
+        meta_data=site.meta_data,
+        phrases=site.meta_data["phrases"],
+        posts=posts,
+    )
+    path = site.config.output_dir / FEED_PAGE_OUTPUT
+    path.write_text(rendered, encoding="utf-8")
+    print(f"Feed page written to {path} ({len(posts)} items)")
+
+
 if __name__ == "__main__":
-    Site(config).build()
+    site = Site(config)
+    site.build()
+    if config.feed:
+        build_feed_page(site)

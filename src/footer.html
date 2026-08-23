@@ -85,6 +85,18 @@
       <nav class="metro-links">
         <a href="https://puyuwang.org">Main site</a>
         <a href="/blog_index.html">Blog</a>
+        {# /feed.html is the readable subscribe page for the RSS feed;
+           /posts_metadata.jsonld is the same posts as schema.org records.
+           Both are written by the build. #}
+        <a href="/feed.html" class="metro-feedlink" aria-label="Subscribe by RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3 2.5a1 1 0 0 1 1-1A10.5 10.5 0 0 1 14.5 12a1 1 0 1 1-2 0A8.5 8.5 0 0 0 4 3.5a1 1 0 0 1-1-1z"/>
+            <path d="M3 7.25a1 1 0 0 1 1-1A5.75 5.75 0 0 1 9.75 12a1 1 0 1 1-2 0A3.75 3.75 0 0 0 4 8.25a1 1 0 0 1-1-1z"/>
+            <circle cx="4.4" cy="11.6" r="1.6"/>
+          </svg>
+          RSS
+        </a>
+        <a href="/posts_metadata.jsonld" aria-label="Post metadata as JSON-LD">JSON-LD</a>
         <span class="metro-built">
           Built with <a href="https://github.com/PaulWang1905/oxie">oxie</a>
         </span>
@@ -256,6 +268,7 @@
     }
     .metro-links a:hover { color: var(--color-primary); }
     .metro-toplink { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .metro-feedlink { display: inline-flex; align-items: center; gap: 0.3rem; }
 
     /* "Built with oxie" — same size as the links, but not itself a nav item */
     .metro-built {

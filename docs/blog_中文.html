@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Posts in 中文 on Puyu's Personal Blog.">
 <link href="/styles.css" rel="stylesheet">
+<link rel="alternate" type="application/rss+xml" title="Puyu's Personal Blog" href="/feed.xml">
+<link rel="alternate" type="application/ld+json" title="Puyu's Personal Blog — post metadata" href="/posts_metadata.jsonld">
 
 <title>中文 — Puyu's Personal Blog</title>
 
@@ -103,7 +105,18 @@
 
   </div>
 
-  <div class="navbar-end">
+  <div class="navbar-end gap-1">
+
+    <!-- RSS: the readable subscribe page, which hands over the /feed.xml
+         address that every page also announces in its <head> -->
+    <a href="/feed.html" class="btn btn-ghost btn-sm btn-circle text-base-content/70 hover:text-primary"
+       aria-label="Subscribe by RSS" title="Subscribe by RSS">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M3 2.5a1 1 0 0 1 1-1A10.5 10.5 0 0 1 14.5 12a1 1 0 1 1-2 0A8.5 8.5 0 0 0 4 3.5a1 1 0 0 1-1-1z"/>
+        <path d="M3 7.25a1 1 0 0 1 1-1A5.75 5.75 0 0 1 9.75 12a1 1 0 1 1-2 0A3.75 3.75 0 0 0 4 8.25a1 1 0 0 1-1-1z"/>
+        <circle cx="4.4" cy="11.6" r="1.6"/>
+      </svg>
+    </a>
 
     <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller -->
     <label class="btn btn-ghost btn-sm btn-circle swap swap-rotate" aria-label="Toggle dark mode">
@@ -329,7 +342,7 @@
         <!-- Post Content -->
         <div class="grow sm:px-4 flex flex-col">
           <div class="flex items-center text-xs text-base-content/50 mb-1">
-            <time datetime="2024-11-25">Nov 25, 2024</time>
+            <time datetime="2024-11-25T12:00:00+00:00">Nov 25, 2024</time>
           </div>
 
           <h3 class="text-lg font-bold tracking-tight leading-snug mb-1">
@@ -363,7 +376,7 @@
         <!-- Post Content -->
         <div class="grow sm:px-4 flex flex-col">
           <div class="flex items-center text-xs text-base-content/50 mb-1">
-            <time datetime="2020-09-10">Sep 10, 2020</time>
+            <time datetime="2020-09-10T12:00:00+00:00">Sep 10, 2020</time>
           </div>
 
           <h3 class="text-lg font-bold tracking-tight leading-snug mb-1">
@@ -395,7 +408,7 @@
         <!-- Post Content -->
         <div class="grow sm:px-4 flex flex-col">
           <div class="flex items-center text-xs text-base-content/50 mb-1">
-            <time datetime="2017-01-01">Jan 01, 2017</time>
+            <time datetime="2017-01-01T12:00:00+00:00">Jan 01, 2017</time>
           </div>
 
           <h3 class="text-lg font-bold tracking-tight leading-snug mb-1">
@@ -508,6 +521,16 @@
       <nav class="metro-links">
         <a href="https://puyuwang.org">Main site</a>
         <a href="/blog_index.html">Blog</a>
+        
+        <a href="/feed.html" class="metro-feedlink" aria-label="Subscribe by RSS">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M3 2.5a1 1 0 0 1 1-1A10.5 10.5 0 0 1 14.5 12a1 1 0 1 1-2 0A8.5 8.5 0 0 0 4 3.5a1 1 0 0 1-1-1z"/>
+            <path d="M3 7.25a1 1 0 0 1 1-1A5.75 5.75 0 0 1 9.75 12a1 1 0 1 1-2 0A3.75 3.75 0 0 0 4 8.25a1 1 0 0 1-1-1z"/>
+            <circle cx="4.4" cy="11.6" r="1.6"/>
+          </svg>
+          RSS
+        </a>
+        <a href="/posts_metadata.jsonld" aria-label="Post metadata as JSON-LD">JSON-LD</a>
         <span class="metro-built">
           Built with <a href="https://github.com/PaulWang1905/oxie">oxie</a>
         </span>
@@ -679,6 +702,7 @@
     }
     .metro-links a:hover { color: var(--color-primary); }
     .metro-toplink { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .metro-feedlink { display: inline-flex; align-items: center; gap: 0.3rem; }
 
     /* "Built with oxie" — same size as the links, but not itself a nav item */
     .metro-built {

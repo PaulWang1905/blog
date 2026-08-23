@@ -73,7 +73,18 @@
 
   </div>
 
-  <div class="navbar-end">
+  <div class="navbar-end gap-1">
+
+    <!-- RSS: the readable subscribe page, which hands over the /feed.xml
+         address that every page also announces in its <head> -->
+    <a href="/feed.html" class="btn btn-ghost btn-sm btn-circle text-base-content/70 hover:text-primary"
+       aria-label="Subscribe by RSS" title="Subscribe by RSS">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M3 2.5a1 1 0 0 1 1-1A10.5 10.5 0 0 1 14.5 12a1 1 0 1 1-2 0A8.5 8.5 0 0 0 4 3.5a1 1 0 0 1-1-1z"/>
+        <path d="M3 7.25a1 1 0 0 1 1-1A5.75 5.75 0 0 1 9.75 12a1 1 0 1 1-2 0A3.75 3.75 0 0 0 4 8.25a1 1 0 0 1-1-1z"/>
+        <circle cx="4.4" cy="11.6" r="1.6"/>
+      </svg>
+    </a>
 
     <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller -->
     <label class="btn btn-ghost btn-sm btn-circle swap swap-rotate" aria-label="Toggle dark mode">

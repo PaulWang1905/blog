@@ -2,7 +2,8 @@
 Title:   Garlic Butter Prawns
 Summary: I cooked this at a friend's place. According to myself and my friend, it was good.
 Authors: Puyu Wang
-Date:    2026-08-22
+Date:    2026-08-22 00:00:00+01:00
+Last_modified: 2026-08-23 03:07:00+01:00
 Category: Recipe
 Tags: [Prawn, Butter]
 ---

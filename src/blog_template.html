@@ -8,6 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="All posts on {{ title }}, by category.">
 <link href="/styles.css" rel="stylesheet">
+<link rel="alternate" type="application/rss+xml" title="{{ title }}" href="/feed.xml">
+<link rel="alternate" type="application/ld+json" title="{{ title }} — post metadata" href="/posts_metadata.jsonld">
 
 <title>Blog — {{ title }}</title>
 
@@ -40,6 +42,24 @@
         <span class="text-base-content/20">·</span>
         <span class="text-xs text-base-content/45">latest {{ posts[0].date.strftime("%b %Y") }}</span>
         {% endif %}
+      </div>
+
+      {# Spelled out here rather than left to <head> autodiscovery, because
+         this is the page someone is on when they decide to follow the blog.
+         /feed.html is the readable subscribe page; it hands over the feed
+         address and links the raw XML. #}
+      <div class="flex items-center gap-2 mt-4 flex-wrap">
+        <a href="/feed.html" class="btn btn-sm btn-outline btn-primary gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M3 2.5a1 1 0 0 1 1-1A10.5 10.5 0 0 1 14.5 12a1 1 0 1 1-2 0A8.5 8.5 0 0 0 4 3.5a1 1 0 0 1-1-1z"/>
+            <path d="M3 7.25a1 1 0 0 1 1-1A5.75 5.75 0 0 1 9.75 12a1 1 0 1 1-2 0A3.75 3.75 0 0 0 4 8.25a1 1 0 0 1-1-1z"/>
+            <circle cx="4.4" cy="11.6" r="1.6"/>
+          </svg>
+          Subscribe via RSS
+        </a>
+        <a href="/posts_metadata.jsonld" class="btn btn-sm btn-ghost text-base-content/50 hover:text-primary font-mono text-xs">
+          JSON-LD
+        </a>
       </div>
     </div>
 

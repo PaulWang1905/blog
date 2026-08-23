@@ -1,53 +1,19 @@
 
-
-
-
-
-
 <!DOCTYPE html>
-<html lang="zh-Hans" data-theme="winter">
+<html lang="en" data-theme="winter">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Life Writing课程小结">
-  <meta name="author" content="Puyu Wang">
-  <meta property="og:title" content="LifeWriting 课程小结">
-  <meta property="og:description" content="Life Writing课程小结">
-  <meta property="og:type" content="article">
-  <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/8/8b/Sui_Sin_Far.jpg">
-  <link href="/styles.css" rel="stylesheet">
-  <link href="/pygments.css" rel="stylesheet">
-  
-  <link rel="alternate" type="application/rss+xml" title="Puyu's Personal Blog" href="/feed.xml">
-  <link rel="alternate" type="application/ld+json" title="Puyu's Personal Blog — post metadata" href="/posts_metadata.jsonld">
-  <title>LifeWriting 课程小结 — Puyu's Personal Blog</title>
-  <style>
-    .highlight { position: relative; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
-    .highlight pre { margin: 0; background: transparent; }
-    .prose pre { padding: 0; background: transparent; border-radius: 0; }
-    .prose code::before, .prose code::after { content: none; }
-    .copy-btn {
-      position: absolute; top: 0.5rem; right: 0.5rem;
-      padding: 0.2rem 0.6rem; font-size: 0.75rem; border-radius: 0.25rem;
-      background: rgba(255,255,255,0.15); color: #ccc; border: 1px solid rgba(255,255,255,0.2);
-      cursor: pointer; opacity: 0; transition: opacity 0.2s;
-    }
-    .highlight:hover .copy-btn { opacity: 1; }
-    .copy-btn.copied { background: rgba(100,200,100,0.3); color: #9f9; }
-  </style>
-  <script>
-    window.MathJax = {
-      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }
-    };
-  </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Subscribe to Puyu's Personal Blog by RSS.">
+<link href="/styles.css" rel="stylesheet">
+<link rel="alternate" type="application/rss+xml" title="Puyu's Personal Blog" href="/feed.xml">
+<link rel="alternate" type="application/ld+json" title="Puyu's Personal Blog — post metadata" href="/posts_metadata.jsonld">
+
+<title>Subscribe — Puyu's Personal Blog</title>
+
 </head>
-
-
 <body>
 
-
-  
   
   
 
@@ -169,87 +135,199 @@
   </div>
 </header>
 
+  <div class="container mx-auto px-5 p-4 max-w-3xl">
 
-<div class="container mx-auto px-5 p-4 max-w-6xl">
+    <!-- ===================== Masthead ===================== -->
+    <section class="pt-10 pb-6">
+      <h1 class="text-4xl font-bold tracking-tight">Subscribe</h1>
+      <p class="mt-2 text-base-content/60">
+        New posts from Puyu's Personal Blog, delivered to a reader of your choosing.
+      </p>
+    </section>
 
-  <div tabindex="0" class="bg-primary text-primary-content focus:bg-primary focus:text-primary-content collapse p-5 rounded-lg">
-    <div class="collapse-title">
-      <div class="breadcrumbs max-w-4xl text-sm">
-        <ul>
-          
-          
-          <li><a href="/blog_index.html">Blog</a></li>
-          <li><a href="/blog_中文.html">中文</a></li>
-          
-          <li><a href="/post/LifeWriting.html"> LifeWriting 课程小结 </a> </li>
-        </ul>
+    <!-- ===================== The feed URL ===================== -->
+    <section class="bg-base-200 rounded-lg p-5 sm:p-6">
+      <label for="feed-url" class="text-xs font-bold uppercase tracking-[0.15em] text-base-content/50">
+        Feed address
+      </label>
+
+      <div class="flex flex-col sm:flex-row gap-2 mt-3">
+        <input id="feed-url" type="text" readonly value="https://blog.puyuwang.org/feed.xml"
+               aria-label="RSS feed address"
+               class="input w-full font-mono text-sm bg-base-100"
+               onfocus="this.select()" />
+        <button id="feed-copy" type="button" class="btn btn-primary sm:w-32 shrink-0">
+          Copy
+        </button>
       </div>
-     <h1 class="text-2xl font-bold py-2"> LifeWriting 课程小结 </h1>
-     
-     <span class="badge">LifeWriting</span>
-     
-    <p class="py-2 text-sm opacity-90">Life Writing课程小结</p>
-    </div>
 
-    <div class="collapse-content text-sm">
-      <p>By Puyu Wang</p>
-      <p>Published on Thursday 2020-09-10 </p>
-      <p>Last Modified on Thursday 2020-09-10 </p>
-    </div>
+      <p class="mt-4 text-sm text-base-content/60">
+        Paste it into any feed reader. If you don't have one yet,
+        <a href="https://netnewswire.com" class="link link-primary">NetNewsWire</a> (Mac and iOS),
+        <a href="https://feedbin.com" class="link link-primary">Feedbin</a> (web) and
+        <a href="https://newsblur.com" class="link link-primary">NewsBlur</a> (web) all work.
+        Most readers also accept <span class="font-mono text-xs">https://blog.puyuwang.org</span> and find
+        the feed themselves.
+      </p>
+    </section>
+
+    <!-- ===================== What is in the feed ===================== -->
+    <section class="mt-10">
+      <div class="flex items-baseline gap-3 flex-wrap">
+        <h2 class="text-lg font-bold tracking-tight">Currently in the feed</h2>
+        <span class="text-xs text-base-content/45">8 posts</span>
+      </div>
+
+      
+      <ul class="flex flex-col mt-3">
+        
+        <li class="border-b border-base-300 py-4">
+          <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1">
+            <time datetime="2026-08-22T00:00:00+01:00" class="tabular-nums">22 Aug 2026</time>
+            
+            <span class="text-base-content/20">·</span>
+            <a href="/blog_Recipe.html" class="hover:text-primary transition-colors">Recipe</a>
+            
+          </div>
+          <h3 class="font-bold leading-snug tracking-tight">
+            <a href="/post/20260822-GarlicButterPrawns.html" class="hover:text-primary transition-colors">Garlic Butter Prawns</a>
+          </h3>
+          
+          <p class="mt-1 text-sm text-base-content/60">I cooked this at a friend's place. According to myself and my friend, it was good.</p>
+          
+        </li>
+        
+        <li class="border-b border-base-300 py-4">
+          <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1">
+            <time datetime="2026-07-17T12:00:00+00:00" class="tabular-nums">17 Jul 2026</time>
+            
+            <span class="text-base-content/20">·</span>
+            <a href="/blog_Story.html" class="hover:text-primary transition-colors">Story</a>
+            
+          </div>
+          <h3 class="font-bold leading-snug tracking-tight">
+            <a href="/post/silver_age.html" class="hover:text-primary transition-colors">Silver Age</a>
+          </h3>
+          
+          <p class="mt-1 text-sm text-base-content/60">A short story about a deduplication officer in a world where reality can duplicate, exploring themes of memory, choice, and the nature of reality.</p>
+          
+        </li>
+        
+        <li class="border-b border-base-300 py-4">
+          <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1">
+            <time datetime="2024-11-25T12:00:00+00:00" class="tabular-nums">25 Nov 2024</time>
+            
+            <span class="text-base-content/20">·</span>
+            <a href="/blog_中文.html" class="hover:text-primary transition-colors">中文</a>
+            
+          </div>
+          <h3 class="font-bold leading-snug tracking-tight">
+            <a href="/post/20241125.html" class="hover:text-primary transition-colors">悼念贾舜尧</a>
+          </h3>
+          
+          <p class="mt-1 text-sm text-base-content/60">贾舜尧，一个才华横溢的年轻人，不幸离世。</p>
+          
+        </li>
+        
+        <li class="border-b border-base-300 py-4">
+          <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1">
+            <time datetime="2024-07-24T12:00:00+00:00" class="tabular-nums">24 Jul 2024</time>
+            
+            <span class="text-base-content/20">·</span>
+            <a href="/blog_Blog.html" class="hover:text-primary transition-colors">Blog</a>
+            
+          </div>
+          <h3 class="font-bold leading-snug tracking-tight">
+            <a href="/post/20240724.html" class="hover:text-primary transition-colors">Note for 24-07-24</a>
+          </h3>
+          
+          <p class="mt-1 text-sm text-base-content/60">Note for 24-07-24 updates</p>
+          
+        </li>
+        
+        <li class="border-b border-base-300 py-4">
+          <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1">
+            <time datetime="2024-07-20T12:00:00+00:00" class="tabular-nums">20 Jul 2024</time>
+            
+            <span class="text-base-content/20">·</span>
+            <a href="/blog_Notes.html" class="hover:text-primary transition-colors">Notes</a>
+            
+          </div>
+          <h3 class="font-bold leading-snug tracking-tight">
+            <a href="/post/20240720_Chinese_Coinage.html" class="hover:text-primary transition-colors">Chinese Coinage</a>
+          </h3>
+          
+          <p class="mt-1 text-sm text-base-content/60">A note on reading a book about Chinese Coinage</p>
+          
+        </li>
+        
+        <li class="border-b border-base-300 py-4">
+          <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1">
+            <time datetime="2024-07-20T12:00:00+00:00" class="tabular-nums">20 Jul 2024</time>
+            
+            <span class="text-base-content/20">·</span>
+            <a href="/blog_Notes.html" class="hover:text-primary transition-colors">Notes</a>
+            
+          </div>
+          <h3 class="font-bold leading-snug tracking-tight">
+            <a href="/post/reading202407.html" class="hover:text-primary transition-colors">Reading</a>
+          </h3>
+          
+          <p class="mt-1 text-sm text-base-content/60">A brief description of my document.</p>
+          
+        </li>
+        
+        <li class="border-b border-base-300 py-4">
+          <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1">
+            <time datetime="2020-09-10T12:00:00+00:00" class="tabular-nums">10 Sep 2020</time>
+            
+            <span class="text-base-content/20">·</span>
+            <a href="/blog_中文.html" class="hover:text-primary transition-colors">中文</a>
+            
+          </div>
+          <h3 class="font-bold leading-snug tracking-tight">
+            <a href="/post/LifeWriting.html" class="hover:text-primary transition-colors">LifeWriting 课程小结</a>
+          </h3>
+          
+          <p class="mt-1 text-sm text-base-content/60">Life Writing课程小结</p>
+          
+        </li>
+        
+        <li class="border-b border-base-300 py-4">
+          <div class="flex items-center gap-2 text-xs text-base-content/45 mb-1">
+            <time datetime="2017-01-01T12:00:00+00:00" class="tabular-nums">01 Jan 2017</time>
+            
+            <span class="text-base-content/20">·</span>
+            <a href="/blog_中文.html" class="hover:text-primary transition-colors">中文</a>
+            
+          </div>
+          <h3 class="font-bold leading-snug tracking-tight">
+            <a href="/post/2017.html" class="hover:text-primary transition-colors">看勳伯格的和聲學</a>
+          </h3>
+          
+          <p class="mt-1 text-sm text-base-content/60">這些天我一直在看SCHOENBERG的書</p>
+          
+        </li>
+        
+      </ul>
+      
+    </section>
+
+    <!-- ===================== Escape hatches ===================== -->
+    <section class="mt-10 flex items-center gap-x-5 gap-y-2 flex-wrap text-sm">
+      <a href="/feed.xml" class="link link-hover text-base-content/60 hover:text-primary">
+        Raw feed (XML)
+      </a>
+      <a href="/posts_metadata.jsonld" class="link link-hover text-base-content/60 hover:text-primary">
+        Post metadata (JSON-LD)
+      </a>
+      <a href="/blog_index.html" class="link link-hover text-base-content/60 hover:text-primary">
+        Browse the blog instead
+      </a>
+    </section>
+
   </div>
 
-  
-  
-    <div class="carousel w-full mx-auto my-6 rounded-xl shadow-2xl overflow-hidden flex items-center justify-center">
-      <div class="carousel-item w-full relative group">
-        <div class="relative w-full h-56 md:h-80 overflow-hidden">
-          <div class="absolute inset-0">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Sui_Sin_Far.jpg"
-              class="w-full h-full object-cover filter blur-lg scale-150"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              decoding="async" />
-          </div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Sui_Sin_Far.jpg"
-              class="max-w-full max-h-full object-contain transition-transform duration-500 ease-in-out group-hover:scale-105"
-              alt="Sui Sin Far, Image from the private collection of Diana Birchall, granddaughter of Winnifred Eaton., CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons"
-              loading="lazy"
-              decoding="async" />
-          </div>
-        </div>
-        
-        <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-3 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-          <p class="text-center text-sm">Sui Sin Far, Image from the private collection of Diana Birchall, granddaughter of Winnifred Eaton., CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons</p>
-        </div>
-        
-      </div>
-    </div>
-  
-
-  <div class="divider"></div>
-
-  <div class="bg-base-200 p-5 rounded-lg">
-    <article class="prose prose-base max-w-none">
-      <h1>Life Writing 课程小结</h1>
-<p>这个暑假，我有幸入选了岭南大学的暑期交流生课程项目；当我知道授课的老师是黄运特教授之后，我毫不犹豫地选择了Life Writing 课程。 原因有两点：一，我研究生所读的专业是音乐文献编译（英文方向），虽然和外语学院的翻译专业还是有区别的，但是这个专业也涉及大量的翻译与写作，而我也曾经参与过传记、自传这类属于Life Writing范畴的翻译与校对。我想借参与英文写作类课程之机提高我的写作水平，尤其是在叙事方面。二 ，我本人的学术目标一直是将中国古代的音乐文献翻译为英文。这一点很多人给我泼过冷水，认为翻译的目标语言最好是母语，我最好把精力放在英译中上，中国人做中译英是先天不如英文母语者的。但作为一代移民作家，黄运特的母语是中文，写作用的语言则是英文。我也听说过有很多作家，用非母语写作并获得认可的，比如Joseph Conrad、林语堂。但是我对自己翻译文稿，总是不那么满意；所以我迫切地想知道，用外语写作这件事，究竟还可行不可行，如果可以，应该如何做。  </p>
-<p>在上第一节课的时候，老师就提醒说，对于一门两周多的课程，期望不要太大了：虽然已经排满了十几节课，但课时仍很有限。第一节课的时候，老师把我们每天要读的文章、要完成的作业等等信息用word文档发了下去。我们的作业分为好多项：两篇传记文章，要求一长一短，但其中一篇需要是自传；改写一篇介绍人物的英文文章；一个Presentation；自己设计一个网页。其中，Presentation 是要介绍自己如何构思并写作长文章的。而这些作业，都要在短短的两周内完成。</p>
-<p>老师第一周发下来的文章，主要是为了让我们看看什么样的文章是Life Writing。数量上共有六篇，可以分为两类：一类是由文言文翻译为英文的，比如陶渊明的《五柳先生传》、金圣叹的《不亦快哉三十三则》，另一类是直接用英文写成的。  </p>
-<p>文言文文章中，我印象比较深刻的是金圣叹的《不亦快哉三十三则》，由三十三个有趣的小故事组成，每一个故事的结尾，都有一个“不亦快哉！”。英文版是林语堂翻译的，但是在第一次阅读的时候，我没有读过中文版，也并不知道译者是谁，因为老师发的文本里并没有写译者的姓名。我阅读该文的第一印象就是译者的文笔非常好，既保留了金圣叹的幽默风格，英文也非常流畅自然。老师在讲解的时候说，他比较喜欢这篇文章的风格，我们的短文章就可以参考这个风格来写。我们甚至也可以直接写一个“某某某几十几则”。这些轶事和趣闻，被老师称为“anecdote”。  </p>
-<p>我们读的直接用英文写成的文章，比如Sui Sin Far（水仙花）和Zora Neale Hurston(佐拉·尼尔·赫斯顿)的文章，给我的感觉是种族的意识、身份认同占了很大的一部分，甚至是文章的精神内核的基础。举例来说，Sui Sin Far作为一个中国和英国混血作家，自幼在欧美长大，她关于自己生活回忆的文章中，有很多故事就是和她的中国血统的身份有直接关系，她精神世界也是矛盾的，她写到她觉得自己既不完全属于西方，也不属于东方。想必这样的文学只有在异乡长大的人才能写得出来，Sui Sin Far 小时因为被说是中国人而和其他小朋友打架、妹妹因为某些原因自称日本人这类经历，是我从未经历过、甚至从未想象过的。我在成长的时候，从未想过自己和别人有身份上的不同，种族、或者民族可以说是个毫不起眼的问题。黄教授也直言，在去美国之前，他自己也不知道自己是“黄种人”、亚洲人。这几乎可以说是一种被“强加”的社会标签。我们后来又读到了另一个亚裔作家创作的The Woman Warrior 部分章节，也带有很强的亚裔身份认同的话题属性。如果老师不是刻意选取这种题材的文章，这很可能是亚裔美国文学的共同特点了，不过，在这些故事中我确实很难找到共鸣点。  </p>
-<p>第二周的课程变得更有趣起来。我们完成了前期的作业，老师也给出了点评。我们也在讨论Presentation 的问题。但是我自己的作业的规划完成的不太顺利。我最早的计划试图将所有作业都围绕着一个核心来规划，比如将两篇传记文章作为一个整体来写作，都用第一人称，既可以分开阅读，也可以连起来阅读。长的一篇作为自传，短的一篇写一个身边的人。我最早的写作对象是我的室友，但是我没来及在截止时间之前收集够足够的材料用以支撑我的写作。在Deadline的前两天，我发现我无法再写下去了。我只好换成我的备用的对象来写：我写了一位对我影响很大的作曲家。因为各类的音乐史是我的本科和研究生阶段的主要课程之一，所以叙述音乐家的生平再加上他身边的一些小故事，对我说还是很容易的，很快我就完成了。但是我最初的计划就行不通了。  </p>
-<p>交完短文章之后的没几天，就轮到我的Presentation了，那几天我一直思索我如何进行接下来的作业。按照安排，那天我是第一个讲演的。我也如实地把我的无法实现的计划讲了一遍，但也讲了讲新计划。我讲了头两篇作业分别描写了两个对我很有影响的人，但一个是数学家伽罗华，一个是音乐家勋伯格。而我自传的主题，也是分别代表音乐和数学的感受和认识。受到复调小说的启发，我将模仿奏鸣曲式的手法（这个曲式可以有两个主题）来写作。那天黄教授对我的想法似乎很感兴趣。不过，当时我的心里其实是没底的，PPT上虽然已经有了，但是文章还没写多少，这个写法能不能行，我还不知道。最终我其实顺利地写完了，不过这都是后话了。    </p>
-<p>第二周阅读的材料也比第一周有趣一些。因为我们阅读的内容主要是黄教授自己的作品，因此有幸可以听到作者亲自对作品进行详细的讲解，甚至还能和作者进行讨论。我们主要看的是《陈查理传奇》和Inseparable这两部作品，内容其实都是华裔离散者的故事。虽然黄教授认为美国上世纪三四十年代的陈查理的故事与电影（他说鲁迅先生在上海的时候甚至也喜欢看）不是对华人种族歧视的产物，但是陈查理总能让我联想起傅满洲。黄教授还给我们分享了他的出版经历，从第一次见到陈查理的小说，到《陈查理传奇》成书，历时十年之久。这不是一件容易的事情：除了写作之外还需要搜集资料、到陈查理的原型郑阿平的居住地（夏威夷）考察、完稿后和出版商交涉等等。   </p>
-<p>短短的十几天的课程很快结束了。诚然，我的写作水平不可能在这十几天里就有翻天覆地的变化；但我觉得我最大的收获是看到了之前不可能见到的东西：水仙花、陈查理、Woman Warrior等等。但最重要的是，对于写作这件事情，黄教授娓娓道来、谈笑风生的样子，让我觉得，我的理想并非遥不可及。</p>
-    </article>
-  </div>
-
-</div>
-
-<!-- <div class="divider"></div> -->
 
 <footer class="metro-footer bg-base-200 text-base-content mt-8 border-t border-primary/30">
   <div class="max-w-5xl mx-auto px-4 py-12">
@@ -593,21 +671,29 @@
 </script>
 
 <script>
-  // "Copy" button on every Pygments code block
-  document.querySelectorAll('.highlight').forEach(block => {
-    const btn = document.createElement('button');
-    btn.className = 'copy-btn';
-    btn.textContent = 'Copy';
-    block.appendChild(btn);
+  // Copy the feed address. Falls back to selecting the field when the
+  // Clipboard API is unavailable — it needs a secure context, so a plain
+  // http:// preview of this page would otherwise leave a dead button.
+  (function () {
+    const btn = document.getElementById('feed-copy');
+    const field = document.getElementById('feed-url');
+    if (!btn || !field) return;
+
     btn.addEventListener('click', () => {
-      const code = block.querySelector('pre').innerText;
-      navigator.clipboard.writeText(code).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-      });
+      const done = (label) => {
+        btn.textContent = label;
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(field.value)
+          .then(() => done('Copied!'))
+          .catch(() => { field.select(); done('Press ⌘C'); });
+      } else {
+        field.select();
+        done('Press ⌘C');
+      }
     });
-  });
+  })();
 </script>
 
 </body>
