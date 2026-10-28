@@ -6,6 +6,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% include 'theme_head.html' %}
 <meta name="description" content="All posts on {{ title }}, by category.">
 <link href="/styles.css" rel="stylesheet">
 <link rel="alternate" type="application/rss+xml" title="{{ title }}" href="/feed.xml">
@@ -30,7 +31,7 @@
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
 
     <!-- Page heading -->
-    <div class="mb-6">
+    <div class="enter mb-6">
       <h1 class="text-3xl font-bold tracking-tight">Explore Categories</h1>
       <div class="flex items-center gap-3 mt-2 flex-wrap">
         <p class="text-base-content/50 text-sm">Discover articles organised by topics</p>
@@ -64,7 +65,7 @@
     </div>
 
     <!-- Tab switcher -->
-    <div class="flex gap-1 mb-8 bg-base-200 rounded-xl p-1 w-fit" role="tablist" aria-label="Browse posts">
+    <div class="enter flex gap-1 mb-8 bg-base-200 rounded-xl p-1 w-fit" style="--i: 1" role="tablist" aria-label="Browse posts">
       <button id="tab-categories" onclick="switchTab('categories')"
         role="tab" aria-selected="true" aria-controls="panel-categories"
         class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-base-100 shadow-sm text-base-content">
@@ -82,8 +83,8 @@
     <div id="panel-categories" role="tabpanel" aria-labelledby="tab-categories"
          class="grid grid-cols-1 md:grid-cols-2 gap-5">
       {% for category in ordered_categories %}
-      <a href="/{{ category.link }}"
-        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
+      <a href="/{{ category.link }}" style="--i: {{ [loop.index0 + 2, 10] | min }}"
+        class="enter flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
 
         <div class="px-6 pt-6 pb-4 flex-1">
           <!-- Header: name + count -->
@@ -147,9 +148,9 @@
 
       <div class="space-y-3 mb-5">
         {% for post in posts %}
-        <a href="{{ post.link }}"
+        <a href="{{ post.link }}" style="--i: {{ loop.index0 % 10 }}"
           data-search="{{ (post.title ~ ' ' ~ (post.summary or '') ~ ' ' ~ (post.category or '') ~ ' ' ~ (post.tags | join(' '))) | lower | e }}"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
           <div class="flex items-center gap-2 mb-2 flex-wrap">

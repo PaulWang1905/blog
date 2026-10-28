@@ -19,6 +19,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% include 'theme_head.html' %}
   {% if summary %}<meta name="description" content="{{ summary }}">{% endif %}
   {% if author %}<meta name="author" content="{{ author }}">{% endif %}
   <meta property="og:title" content="{{ title }}">
@@ -67,7 +68,7 @@
 
 <div class="container mx-auto px-5 p-4 max-w-6xl">
 
-  <div tabindex="0" class="bg-primary text-primary-content focus:bg-primary focus:text-primary-content collapse p-5 rounded-lg">
+  <div tabindex="0" style="--i: 0" class="enter bg-primary text-primary-content focus:bg-primary focus:text-primary-content collapse p-5 rounded-lg">
     <div class="collapse-title">
       <div class="breadcrumbs max-w-4xl text-sm">
         <ul>
@@ -99,7 +100,7 @@
   {# Only show a cover image when the post sets its own; the site-wide
      default from meta_data.json is a listing placeholder, not a banner. #}
   {% if image and image != meta_data.image %}
-    <div class="carousel w-full mx-auto my-6 rounded-xl shadow-2xl overflow-hidden flex items-center justify-center">
+    <div style="--i: 1" class="enter carousel w-full mx-auto my-6 rounded-xl shadow-2xl overflow-hidden flex items-center justify-center">
       <div class="carousel-item w-full relative group">
         <div class="relative w-full h-56 md:h-80 overflow-hidden">
           <div class="absolute inset-0">
@@ -131,7 +132,7 @@
 
   <div class="divider"></div>
 
-  <div class="bg-base-200 p-5 rounded-lg">
+  <div class="enter bg-base-200 p-5 rounded-lg" style="--i: 2">
     <article class="prose prose-base max-w-none">
       {{ content }}
     </article>

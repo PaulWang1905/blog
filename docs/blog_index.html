@@ -4,6 +4,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  // Theme, part 1 of 2 (included in every page's <head>, so it runs before
+  // anything is drawn): use the visitor's saved choice, or else the device's
+  // light/dark setting. Part 2, in header.html, keeps the switch in step and
+  // saves changes. The choice lives in localStorage, in the browser only.
+  (() => {
+    let theme = null;
+    try { theme = localStorage.getItem('theme'); } catch (e) {}
+    if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'winter';
+  })();
+</script>
 <meta name="description" content="All posts on Puyu's Personal Blog, by category.">
 <link href="/styles.css" rel="stylesheet">
 <link rel="alternate" type="application/rss+xml" title="Puyu's Personal Blog" href="/feed.xml">
@@ -24,7 +36,7 @@
 
 
 
-<header class="navbar sticky top-0 z-50 border-b border-base-300 bg-base-100/85 backdrop-blur-md px-2 sm:px-4">
+<header class="site-nav navbar sticky top-0 z-50 border-b border-base-300 bg-base-100/85 backdrop-blur-md px-2 sm:px-4">
 
   <div class="navbar-start gap-1">
 
@@ -118,7 +130,8 @@
       </svg>
     </a>
 
-    <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller -->
+    <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller.
+         theme_head.html picks the starting theme; the script below keeps it. -->
     <label class="btn btn-ghost btn-sm btn-circle swap swap-rotate" aria-label="Toggle dark mode">
       <input type="checkbox" class="theme-controller" value="dark" />
       <!-- Sun icon -->
@@ -133,6 +146,33 @@
       </svg>
     </label>
 
+    <script>
+      // Theme, part 2 of 2: theme_head.html has already set the theme in
+      // <head>; this ticks the switch to match, saves the visitor's choice
+      // when they flip it, and follows the device's setting until they do.
+      (() => {
+        const toggle = document.currentScript.previousElementSibling.querySelector('.theme-controller');
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const apply = (theme) => {
+          toggle.checked = theme === 'dark';
+          document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'winter';
+        };
+        apply(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
+        toggle.addEventListener('change', () => {
+          const theme = toggle.checked ? 'dark' : 'light';
+          apply(theme);
+          try { localStorage.setItem('theme', theme); } catch (e) {}
+        });
+        systemDark.addEventListener('change', (event) => {
+          let chosen = null;
+          try { chosen = localStorage.getItem('theme'); } catch (e) {}
+          if (!chosen) apply(event.matches ? 'dark' : 'light');
+        });
+      })();
+    </script>
+
   </div>
 </header>
 
@@ -144,17 +184,17 @@
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
 
     <!-- Page heading -->
-    <div class="mb-6">
+    <div class="enter mb-6">
       <h1 class="text-3xl font-bold tracking-tight">Explore Categories</h1>
       <div class="flex items-center gap-3 mt-2 flex-wrap">
         <p class="text-base-content/50 text-sm">Discover articles organised by topics</p>
         <span class="text-base-content/20">·</span>
         <span class="text-xs text-base-content/45">5 categories</span>
         <span class="text-base-content/20">·</span>
-        <span class="text-xs text-base-content/45">8 posts</span>
+        <span class="text-xs text-base-content/45">10 posts</span>
         
         <span class="text-base-content/20">·</span>
-        <span class="text-xs text-base-content/45">latest Aug 2026</span>
+        <span class="text-xs text-base-content/45">latest Sep 2026</span>
         
       </div>
 
@@ -175,7 +215,7 @@
     </div>
 
     <!-- Tab switcher -->
-    <div class="flex gap-1 mb-8 bg-base-200 rounded-xl p-1 w-fit" role="tablist" aria-label="Browse posts">
+    <div class="enter flex gap-1 mb-8 bg-base-200 rounded-xl p-1 w-fit" style="--i: 1" role="tablist" aria-label="Browse posts">
       <button id="tab-categories" onclick="switchTab('categories')"
         role="tab" aria-selected="true" aria-controls="panel-categories"
         class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-base-100 shadow-sm text-base-content">
@@ -184,7 +224,7 @@
       <button id="tab-allposts" onclick="switchTab('allposts')"
         role="tab" aria-selected="false" aria-controls="panel-allposts"
         class="tab-btn px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 text-base-content/50 hover:text-base-content">
-        All Posts <span class="ml-1.5 text-xs font-normal text-base-content/40">8</span>
+        All Posts <span class="ml-1.5 text-xs font-normal text-base-content/40">10</span>
       </button>
     </div>
 
@@ -193,15 +233,60 @@
     <div id="panel-categories" role="tabpanel" aria-labelledby="tab-categories"
          class="grid grid-cols-1 md:grid-cols-2 gap-5">
       
-      <a href="/blog_Recipe.html"
-        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
+      <a href="/blog_Blog.html" style="--i: 2"
+        class="enter flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
+
+        <div class="px-6 pt-6 pb-4 flex-1">
+          <!-- Header: name + count -->
+          <div class="flex items-start justify-between gap-3 mb-4">
+            <h3 class="text-xl font-bold text-base-content group-hover:text-primary transition-colors leading-tight">Blog</h3>
+            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-base-200 text-base-content/60 mt-0.5">
+              2 posts
+            </span>
+          </div>
+
+          <!-- Latest post -->
+          <div class="mb-4">
+            <p class="text-xs font-bold uppercase tracking-widest text-base-content/35 mb-1.5">Latest post</p>
+            <p class="text-sm font-medium text-base-content leading-snug line-clamp-2">I bought a Windows Phone in 2026</p>
+          </div>
+
+          <!-- Tags (the category's tag list repeats per post, so de-duplicate) -->
+          <div class="flex items-center gap-1.5 flex-wrap">
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">WindowsPhone</span>
+              
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">RandomThoughts</span>
+              
+            
+          </div>
+        </div>
+
+        <!-- Card footer -->
+        <div class="px-6 py-3 bg-base-200/50 border-t border-base-200 flex items-center justify-between mt-auto">
+          <span class="text-xs text-base-content/45">Updated Sep 17, 2026</span>
+          <span class="text-xs font-semibold text-base-content/35 group-hover:text-primary transition-colors flex items-center gap-1">
+            Browse all
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </span>
+        </div>
+
+      </a>
+      
+      <a href="/blog_Recipe.html" style="--i: 3"
+        class="enter flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
 
         <div class="px-6 pt-6 pb-4 flex-1">
           <!-- Header: name + count -->
           <div class="flex items-start justify-between gap-3 mb-4">
             <h3 class="text-xl font-bold text-base-content group-hover:text-primary transition-colors leading-tight">Recipe</h3>
             <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-base-200 text-base-content/60 mt-0.5">
-              1 post
+              2 posts
             </span>
           </div>
 
@@ -238,8 +323,8 @@
 
       </a>
       
-      <a href="/blog_Story.html"
-        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
+      <a href="/blog_Story.html" style="--i: 4"
+        class="enter flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
 
         <div class="px-6 pt-6 pb-4 flex-1">
           <!-- Header: name + count -->
@@ -279,8 +364,8 @@
 
       </a>
       
-      <a href="/blog_中文.html"
-        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
+      <a href="/blog_中文.html" style="--i: 5"
+        class="enter flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
 
         <div class="px-6 pt-6 pb-4 flex-1">
           <!-- Header: name + count -->
@@ -334,49 +419,8 @@
 
       </a>
       
-      <a href="/blog_Blog.html"
-        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
-
-        <div class="px-6 pt-6 pb-4 flex-1">
-          <!-- Header: name + count -->
-          <div class="flex items-start justify-between gap-3 mb-4">
-            <h3 class="text-xl font-bold text-base-content group-hover:text-primary transition-colors leading-tight">Blog</h3>
-            <span class="shrink-0 text-xs font-semibold px-2.5 py-1 rounded-full bg-base-200 text-base-content/60 mt-0.5">
-              1 post
-            </span>
-          </div>
-
-          <!-- Latest post -->
-          <div class="mb-4">
-            <p class="text-xs font-bold uppercase tracking-widest text-base-content/35 mb-1.5">Latest post</p>
-            <p class="text-sm font-medium text-base-content leading-snug line-clamp-2">Note for 24-07-24</p>
-          </div>
-
-          <!-- Tags (the category's tag list repeats per post, so de-duplicate) -->
-          <div class="flex items-center gap-1.5 flex-wrap">
-            
-              
-              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/65">RandomThoughts</span>
-              
-            
-          </div>
-        </div>
-
-        <!-- Card footer -->
-        <div class="px-6 py-3 bg-base-200/50 border-t border-base-200 flex items-center justify-between mt-auto">
-          <span class="text-xs text-base-content/45">Updated Jul 24, 2024</span>
-          <span class="text-xs font-semibold text-base-content/35 group-hover:text-primary transition-colors flex items-center gap-1">
-            Browse all
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-          </span>
-        </div>
-
-      </a>
-      
-      <a href="/blog_Notes.html"
-        class="flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
+      <a href="/blog_Notes.html" style="--i: 6"
+        class="enter flex flex-col bg-base-100 rounded-xl shadow-sm overflow-hidden border border-base-300 hover:border-base-content/25 hover:shadow-md transition-all duration-200 group">
 
         <div class="px-6 pt-6 pb-4 flex-1">
           <!-- Header: name + count -->
@@ -442,9 +486,38 @@
 
       <div class="space-y-3 mb-5">
         
-        <a href="/post/20260822-GarlicButterPrawns.html"
+        <a href="/post/20260917-DailyPost.html" style="--i: 0"
+          data-search="i bought a windows phone in 2026 i bought a windows phone in 2026. am i being nostalgia? maybe. blog windowsphone"
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+
+          <!-- Meta row -->
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
+            <time class="text-xs text-base-content/45 tabular-nums">17 Sep 2026</time>
+            <span class="text-base-content/20">·</span>
+            <span class="text-xs font-medium text-base-content/55">Blog</span>
+            
+            <span class="text-base-content/20">·</span>
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/60">WindowsPhone</span>
+              
+            
+            
+          </div>
+
+          <h3 class="text-sm font-semibold text-base-content group-hover:text-primary transition-colors leading-snug mb-1">
+            I bought a Windows Phone in 2026
+          </h3>
+
+          
+          <p class="text-xs text-base-content/55 leading-relaxed line-clamp-2">I bought a Windows Phone in 2026. Am I being nostalgia? Maybe.</p>
+          
+
+        </a>
+        
+        <a href="/post/20260822-GarlicButterPrawns.html" style="--i: 1"
           data-search="garlic butter prawns i cooked this at a friend&#39;s place. according to myself and my friend, it was good. recipe prawn butter"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
           <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -475,9 +548,42 @@
 
         </a>
         
-        <a href="/post/silver_age.html"
+        <a href="/post/20260823-DailyPost.html" style="--i: 2"
+          data-search="what i saw i cooked this at a friend&#39;s place. according to myself and my friend, it was good. recipe prawn butter"
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+
+          <!-- Meta row -->
+          <div class="flex items-center gap-2 mb-2 flex-wrap">
+            <time class="text-xs text-base-content/45 tabular-nums">22 Aug 2026</time>
+            <span class="text-base-content/20">·</span>
+            <span class="text-xs font-medium text-base-content/55">Recipe</span>
+            
+            <span class="text-base-content/20">·</span>
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/60">Prawn</span>
+              
+            
+              
+              <span class="px-2 py-0.5 text-xs rounded-full bg-base-200 text-base-content/60">Butter</span>
+              
+            
+            
+          </div>
+
+          <h3 class="text-sm font-semibold text-base-content group-hover:text-primary transition-colors leading-snug mb-1">
+            What I saw
+          </h3>
+
+          
+          <p class="text-xs text-base-content/55 leading-relaxed line-clamp-2">I cooked this at a friend's place. According to myself and my friend, it was good.</p>
+          
+
+        </a>
+        
+        <a href="/post/silver_age.html" style="--i: 3"
           data-search="silver age a short story about a deduplication officer in a world where reality can duplicate, exploring themes of memory, choice, and the nature of reality. story story"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
           <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -504,9 +610,9 @@
 
         </a>
         
-        <a href="/post/20241125.html"
+        <a href="/post/20241125.html" style="--i: 4"
           data-search="悼念贾舜尧 贾舜尧，一个才华横溢的年轻人，不幸离世。 中文 悼念 哲学"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
           <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -537,9 +643,9 @@
 
         </a>
         
-        <a href="/post/20240724.html"
+        <a href="/post/20240724.html" style="--i: 5"
           data-search="note for 24-07-24 note for 24-07-24 updates blog randomthoughts"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
           <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -566,9 +672,9 @@
 
         </a>
         
-        <a href="/post/20240720_Chinese_Coinage.html"
+        <a href="/post/20240720_Chinese_Coinage.html" style="--i: 6"
           data-search="chinese coinage a note on reading a book about chinese coinage notes chinese coinage"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
           <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -599,9 +705,9 @@
 
         </a>
         
-        <a href="/post/reading202407.html"
+        <a href="/post/reading202407.html" style="--i: 7"
           data-search="reading a brief description of my document. notes reading"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
           <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -628,9 +734,9 @@
 
         </a>
         
-        <a href="/post/LifeWriting.html"
+        <a href="/post/LifeWriting.html" style="--i: 8"
           data-search="lifewriting 课程小结 life writing课程小结 中文 lifewriting"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
           <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -657,9 +763,9 @@
 
         </a>
         
-        <a href="/post/2017.html"
+        <a href="/post/2017.html" style="--i: 9"
           data-search="看勳伯格的和聲學 這些天我一直在看schoenberg的書 中文 music schoenberg"
-          class="post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
+          class="enter post-item flex flex-col bg-base-100 rounded-xl border border-base-300 px-5 py-4 shadow-sm hover:border-base-content/20 hover:shadow-md transition-all duration-200 group">
 
           <!-- Meta row -->
           <div class="flex items-center gap-2 mb-2 flex-wrap">

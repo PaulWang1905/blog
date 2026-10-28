@@ -6,11 +6,51 @@
     <description>Personal writing here.</description>
     <language>en</language>
     <atom:link href="https://blog.puyuwang.org/feed.xml" rel="self" type="application/rss+xml"/>
-    <lastBuildDate>Fri, 21 Aug 2026 23:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 16 Sep 2026 23:00:00 GMT</lastBuildDate>
+    <item>
+      <title>I bought a Windows Phone in 2026</title>
+      <link>https://blog.puyuwang.org/post/20260917-DailyPost.html</link>
+      <guid isPermaLink="true">https://blog.puyuwang.org/post/20260917-DailyPost.html</guid>
+      <pubDate>Wed, 16 Sep 2026 23:00:00 GMT</pubDate>
+      <dc:creator>Puyu Wang</dc:creator>
+      <category>Blog</category>
+      <description>I bought a Windows Phone in 2026. Am I being nostalgia? Maybe.</description>
+      <content:encoded>&lt;p&gt;Recently I made a purchase of a Windows Phone -- a Nokia Lumia 635. 
+It says time since last charge: 4313 days 18 hours. That is 11 years, 9 months, and 28 days. &lt;/p&gt;
+&lt;p&gt;I owned two windows phone before. A Huawei W1 and Lumia 1320&lt;/p&gt;</content:encoded>
+    </item>
     <item>
       <title>Garlic Butter Prawns</title>
       <link>https://blog.puyuwang.org/post/20260822-GarlicButterPrawns.html</link>
       <guid isPermaLink="true">https://blog.puyuwang.org/post/20260822-GarlicButterPrawns.html</guid>
+      <pubDate>Fri, 21 Aug 2026 23:00:00 GMT</pubDate>
+      <dc:creator>Puyu Wang</dc:creator>
+      <category>Recipe</category>
+      <description>I cooked this at a friend's place. According to myself and my friend, it was good.</description>
+      <content:encoded>&lt;h1&gt;Garlic Butter Prawns&lt;/h1&gt;
+&lt;h2&gt;Ingredients&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;50g butter&lt;/li&gt;
+&lt;li&gt;Raw Prawns (peeled)&lt;/li&gt;
+&lt;li&gt;Chopped Garlic (3 or 4 cloves)&lt;/li&gt;
+&lt;li&gt;Mixed Herbs (might contain Thyme, Basil, Parsley...)&lt;/li&gt;
+&lt;li&gt;Salt and Pepper&lt;/li&gt;
+&lt;li&gt;Rosemary (we wanted to use this but didn't have any at the time, so we used mixed herbs instead)&lt;/li&gt;
+&lt;li&gt;Chopped Onion (1)&lt;/li&gt;
+&lt;li&gt;Starch powder&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Pipeline&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Marinate:&lt;/strong&gt; Coat the prawns with starch powder and pepper, then marinate for 10 minutes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Fry:&lt;/strong&gt; Melt the butter in a pan over medium heat. Once melted, add the chopped garlic and cook for 1 minute. Then add the chopped onion. Cook for 1 or 2 minute. &lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cook the prawns:&lt;/strong&gt; Add the raw prawns and fry until they turn pink/red. Add the mixed herbs and salt (and rosemary, if available), and stir well. Cook for 5 - 7 minutes in total. &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;I would definitely try again when I have rosemary.&lt;/p&gt;</content:encoded>
+    </item>
+    <item>
+      <title>What I saw</title>
+      <link>https://blog.puyuwang.org/post/20260823-DailyPost.html</link>
+      <guid isPermaLink="true">https://blog.puyuwang.org/post/20260823-DailyPost.html</guid>
       <pubDate>Fri, 21 Aug 2026 23:00:00 GMT</pubDate>
       <dc:creator>Puyu Wang</dc:creator>
       <category>Recipe</category>

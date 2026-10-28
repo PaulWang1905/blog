@@ -14,6 +14,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% include 'theme_head.html' %}
 <meta name="description" content="Subscribe to {{ meta_data.title }} by RSS.">
 <link href="/styles.css" rel="stylesheet">
 <link rel="alternate" type="application/rss+xml" title="{{ meta_data.title }}" href="/feed.xml">
@@ -30,7 +31,7 @@
   <div class="container mx-auto px-5 p-4 max-w-3xl">
 
     <!-- ===================== Masthead ===================== -->
-    <section class="pt-10 pb-6">
+    <section class="enter pt-10 pb-6">
       <h1 class="text-4xl font-bold tracking-tight">Subscribe</h1>
       <p class="mt-2 text-base-content/60">
         New posts from {{ meta_data.title }}, delivered to a reader of your choosing.
@@ -38,7 +39,7 @@
     </section>
 
     <!-- ===================== The feed URL ===================== -->
-    <section class="bg-base-200 rounded-lg p-5 sm:p-6">
+    <section class="enter bg-base-200 rounded-lg p-5 sm:p-6" style="--i: 1">
       <label for="feed-url" class="text-xs font-bold uppercase tracking-[0.15em] text-base-content/50">
         Feed address
       </label>
@@ -64,7 +65,7 @@
     </section>
 
     <!-- ===================== What is in the feed ===================== -->
-    <section class="mt-10">
+    <section class="enter mt-10" style="--i: 2">
       <div class="flex items-baseline gap-3 flex-wrap">
         <h2 class="text-lg font-bold tracking-tight">Currently in the feed</h2>
         <span class="text-xs text-base-content/45">{{ posts | length }} posts</span>

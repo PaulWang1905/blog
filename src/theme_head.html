@@ -1,0 +1,12 @@
+<script>
+  // Theme, part 1 of 2 (included in every page's <head>, so it runs before
+  // anything is drawn): use the visitor's saved choice, or else the device's
+  // light/dark setting. Part 2, in header.html, keeps the switch in step and
+  // saves changes. The choice lives in localStorage, in the browser only.
+  (() => {
+    let theme = null;
+    try { theme = localStorage.getItem('theme'); } catch (e) {}
+    if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'winter';
+  })();
+</script>

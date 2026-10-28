@@ -9,6 +9,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+  // Theme, part 1 of 2 (included in every page's <head>, so it runs before
+  // anything is drawn): use the visitor's saved choice, or else the device's
+  // light/dark setting. Part 2, in header.html, keeps the switch in step and
+  // saves changes. The choice lives in localStorage, in the browser only.
+  (() => {
+    let theme = null;
+    try { theme = localStorage.getItem('theme'); } catch (e) {}
+    if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'winter';
+  })();
+</script>
   <meta name="description" content="贾舜尧，一个才华横溢的年轻人，不幸离世。">
   <meta name="author" content="Puyu Wang">
   <meta property="og:title" content="悼念贾舜尧">
@@ -57,7 +69,7 @@
 
 
 
-<header class="navbar sticky top-0 z-50 border-b border-base-300 bg-base-100/85 backdrop-blur-md px-2 sm:px-4">
+<header class="site-nav navbar sticky top-0 z-50 border-b border-base-300 bg-base-100/85 backdrop-blur-md px-2 sm:px-4">
 
   <div class="navbar-start gap-1">
 
@@ -151,7 +163,8 @@
       </svg>
     </a>
 
-    <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller -->
+    <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller.
+         theme_head.html picks the starting theme; the script below keeps it. -->
     <label class="btn btn-ghost btn-sm btn-circle swap swap-rotate" aria-label="Toggle dark mode">
       <input type="checkbox" class="theme-controller" value="dark" />
       <!-- Sun icon -->
@@ -166,13 +179,40 @@
       </svg>
     </label>
 
+    <script>
+      // Theme, part 2 of 2: theme_head.html has already set the theme in
+      // <head>; this ticks the switch to match, saves the visitor's choice
+      // when they flip it, and follows the device's setting until they do.
+      (() => {
+        const toggle = document.currentScript.previousElementSibling.querySelector('.theme-controller');
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const apply = (theme) => {
+          toggle.checked = theme === 'dark';
+          document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'winter';
+        };
+        apply(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
+        toggle.addEventListener('change', () => {
+          const theme = toggle.checked ? 'dark' : 'light';
+          apply(theme);
+          try { localStorage.setItem('theme', theme); } catch (e) {}
+        });
+        systemDark.addEventListener('change', (event) => {
+          let chosen = null;
+          try { chosen = localStorage.getItem('theme'); } catch (e) {}
+          if (!chosen) apply(event.matches ? 'dark' : 'light');
+        });
+      })();
+    </script>
+
   </div>
 </header>
 
 
 <div class="container mx-auto px-5 p-4 max-w-6xl">
 
-  <div tabindex="0" class="bg-primary text-primary-content focus:bg-primary focus:text-primary-content collapse p-5 rounded-lg">
+  <div tabindex="0" style="--i: 0" class="enter bg-primary text-primary-content focus:bg-primary focus:text-primary-content collapse p-5 rounded-lg">
     <div class="collapse-title">
       <div class="breadcrumbs max-w-4xl text-sm">
         <ul>
@@ -205,7 +245,7 @@
 
   <div class="divider"></div>
 
-  <div class="bg-base-200 p-5 rounded-lg">
+  <div class="enter bg-base-200 p-5 rounded-lg" style="--i: 2">
     <article class="prose prose-base max-w-none">
       <h1>悼念贾舜尧</h1>
 <p>上个周日，11月10日，天气终于转好，终于能看见一点阳光，我之前看新闻声称英国在之前的11天里，阳光总计只有18分钟。这个数字是不是准确我不知道，但是我确实不记得上次看见阳光是什么时候了。这一天也是英国的纪念日: <em>Remembrance Sunday</em>，为了纪念阵亡将士，学院宿舍附近的公交车暂停了服务，我只好步行前往开会。如果没有打开微信，这一天或许只是普通的一天，最让人意外事情，就是清晨的阳光。</p>

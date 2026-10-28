@@ -8,6 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% include 'theme_head.html' %}
 <meta name="google-adsense-account" content="ca-pub-9133490777581705">
 <link href="/styles.css" rel="stylesheet">
 <link rel="alternate" type="application/rss+xml" title="{{ meta_data.title }}" href="/feed.xml">
@@ -21,7 +22,7 @@
   {% include 'header.html' %}
     <div class="max-w-7xl mx-auto px-4 py-6">
         <!-- Header -->
-        <div class="card bg-base-100 shadow-md mb-6">
+        <div class="enter card bg-base-100 shadow-md mb-6">
             <div class="card-body text-left">
                 <div class="max-w-none w-full">
                     <h1 class="text-3xl font-bold mb-2">Reading Note Viewer</h1>
@@ -41,7 +42,7 @@
         </div>
 
         <!-- Loading State -->
-        <div id="loadingState" class="card bg-base-100 shadow-md">
+        <div id="loadingState" class="enter card bg-base-100 shadow-md" style="--i: 1">
             <div class="card-body items-center text-center">
                 <span class="loading loading-spinner loading-md text-primary"></span>
                 <span class="text-base-content/70">Loading readings...</span>
@@ -78,7 +79,7 @@
         </div>
 
         <!-- Main Content -->
-        <div id="mainContent" class="hidden">
+        <div id="mainContent" class="enter hidden">
             <!-- Statistics -->
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
                 <div class="card bg-base-100 shadow-md">

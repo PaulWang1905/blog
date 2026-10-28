@@ -3,8 +3,41 @@
   "@type": "ItemList",
   "name": "Puyu's Personal Blog - Blog Posts",
   "description": "Collection of blog posts from Puyu's Personal Blog",
-  "numberOfItems": 8,
+  "numberOfItems": 10,
   "itemListElement": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/20260917-DailyPost.html",
+      "headline": "I bought a Windows Phone in 2026",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2026-09-17T00:00:00+01:00",
+      "dateModified": "2026-10-28T03:07:00+01:00",
+      "description": "I bought a Windows Phone in 2026. Am I being nostalgia? Maybe.",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Blog",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "WindowsPhone"
+      ],
+      "url": "https://blog.puyuwang.org/post/20260917-DailyPost.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/20260917-DailyPost.html"
+      }
+    },
     {
       "@type": "BlogPosting",
       "@id": "https://blog.puyuwang.org/post/20260822-GarlicButterPrawns.html",
@@ -37,6 +70,40 @@
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://blog.puyuwang.org/post/20260822-GarlicButterPrawns.html"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://blog.puyuwang.org/post/20260823-DailyPost.html",
+      "headline": "What I saw",
+      "author": {
+        "@type": "Person",
+        "name": "Puyu Wang"
+      },
+      "datePublished": "2026-08-22T00:00:00+01:00",
+      "dateModified": "2026-08-23T03:07:00+01:00",
+      "description": "I cooked this at a friend's place. According to myself and my friend, it was good.",
+      "about": {
+        "@type": "DefinedTerm",
+        "name": "Recipe",
+        "inDefinedTermSet": {
+          "@type": "DefinedTermSet",
+          "name": "Blog Categories"
+        }
+      },
+      "keywords": [
+        "Prawn",
+        "Butter"
+      ],
+      "url": "https://blog.puyuwang.org/post/20260823-DailyPost.html",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Puyu's Personal Blog",
+        "url": "https://blog.puyuwang.org"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://blog.puyuwang.org/post/20260823-DailyPost.html"
       }
     },
     {

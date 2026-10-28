@@ -9,6 +9,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+  // Theme, part 1 of 2 (included in every page's <head>, so it runs before
+  // anything is drawn): use the visitor's saved choice, or else the device's
+  // light/dark setting. Part 2, in header.html, keeps the switch in step and
+  // saves changes. The choice lives in localStorage, in the browser only.
+  (() => {
+    let theme = null;
+    try { theme = localStorage.getItem('theme'); } catch (e) {}
+    if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'winter';
+  })();
+</script>
   <meta name="description" content="Life Writing课程小结">
   <meta name="author" content="Puyu Wang">
   <meta property="og:title" content="LifeWriting 课程小结">
@@ -57,7 +69,7 @@
 
 
 
-<header class="navbar sticky top-0 z-50 border-b border-base-300 bg-base-100/85 backdrop-blur-md px-2 sm:px-4">
+<header class="site-nav navbar sticky top-0 z-50 border-b border-base-300 bg-base-100/85 backdrop-blur-md px-2 sm:px-4">
 
   <div class="navbar-start gap-1">
 
@@ -151,7 +163,8 @@
       </svg>
     </a>
 
-    <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller -->
+    <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller.
+         theme_head.html picks the starting theme; the script below keeps it. -->
     <label class="btn btn-ghost btn-sm btn-circle swap swap-rotate" aria-label="Toggle dark mode">
       <input type="checkbox" class="theme-controller" value="dark" />
       <!-- Sun icon -->
@@ -166,13 +179,40 @@
       </svg>
     </label>
 
+    <script>
+      // Theme, part 2 of 2: theme_head.html has already set the theme in
+      // <head>; this ticks the switch to match, saves the visitor's choice
+      // when they flip it, and follows the device's setting until they do.
+      (() => {
+        const toggle = document.currentScript.previousElementSibling.querySelector('.theme-controller');
+        const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+        const apply = (theme) => {
+          toggle.checked = theme === 'dark';
+          document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'winter';
+        };
+        apply(document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light');
+
+        toggle.addEventListener('change', () => {
+          const theme = toggle.checked ? 'dark' : 'light';
+          apply(theme);
+          try { localStorage.setItem('theme', theme); } catch (e) {}
+        });
+        systemDark.addEventListener('change', (event) => {
+          let chosen = null;
+          try { chosen = localStorage.getItem('theme'); } catch (e) {}
+          if (!chosen) apply(event.matches ? 'dark' : 'light');
+        });
+      })();
+    </script>
+
   </div>
 </header>
 
 
 <div class="container mx-auto px-5 p-4 max-w-6xl">
 
-  <div tabindex="0" class="bg-primary text-primary-content focus:bg-primary focus:text-primary-content collapse p-5 rounded-lg">
+  <div tabindex="0" style="--i: 0" class="enter bg-primary text-primary-content focus:bg-primary focus:text-primary-content collapse p-5 rounded-lg">
     <div class="collapse-title">
       <div class="breadcrumbs max-w-4xl text-sm">
         <ul>
@@ -200,7 +240,7 @@
 
   
   
-    <div class="carousel w-full mx-auto my-6 rounded-xl shadow-2xl overflow-hidden flex items-center justify-center">
+    <div style="--i: 1" class="enter carousel w-full mx-auto my-6 rounded-xl shadow-2xl overflow-hidden flex items-center justify-center">
       <div class="carousel-item w-full relative group">
         <div class="relative w-full h-56 md:h-80 overflow-hidden">
           <div class="absolute inset-0">
@@ -232,7 +272,7 @@
 
   <div class="divider"></div>
 
-  <div class="bg-base-200 p-5 rounded-lg">
+  <div class="enter bg-base-200 p-5 rounded-lg" style="--i: 2">
     <article class="prose prose-base max-w-none">
       <h1>Life Writing 课程小结</h1>
 <p>这个暑假，我有幸入选了岭南大学的暑期交流生课程项目；当我知道授课的老师是黄运特教授之后，我毫不犹豫地选择了Life Writing 课程。 原因有两点：一，我研究生所读的专业是音乐文献编译（英文方向），虽然和外语学院的翻译专业还是有区别的，但是这个专业也涉及大量的翻译与写作，而我也曾经参与过传记、自传这类属于Life Writing范畴的翻译与校对。我想借参与英文写作类课程之机提高我的写作水平，尤其是在叙事方面。二 ，我本人的学术目标一直是将中国古代的音乐文献翻译为英文。这一点很多人给我泼过冷水，认为翻译的目标语言最好是母语，我最好把精力放在英译中上，中国人做中译英是先天不如英文母语者的。但作为一代移民作家，黄运特的母语是中文，写作用的语言则是英文。我也听说过有很多作家，用非母语写作并获得认可的，比如Joseph Conrad、林语堂。但是我对自己翻译文稿，总是不那么满意；所以我迫切地想知道，用外语写作这件事，究竟还可行不可行，如果可以，应该如何做。  </p>
