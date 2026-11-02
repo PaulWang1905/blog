@@ -258,7 +258,8 @@
 
    Page-to-page: the browser crossfades between pages on the same
    site (Chrome, Edge, Safari 18.2+; others just load normally).
-   The navbar is named so it stays put while the page changes.
+   The navbar is kept out of that: it switches to the new page's
+   at once, instead of fading and morphing between the two.
    ============================================================ */
 @keyframes enter-up {
   from { opacity: 0; transform: translateY(14px); }
@@ -281,6 +282,15 @@
 
 .site-nav {
   view-transition-name: site-nav;
+}
+
+::view-transition-group(site-nav),
+::view-transition-new(site-nav) {
+  animation: none;
+}
+
+::view-transition-old(site-nav) {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
