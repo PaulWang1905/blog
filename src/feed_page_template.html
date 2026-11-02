@@ -15,12 +15,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% include 'theme_head.html' %}
-<meta name="description" content="Subscribe to {{ meta_data.title }} by RSS.">
+<meta name="description" content="Subscribe to {{ meta_data.title | e }} by RSS.">
 <link href="/styles.css" rel="stylesheet">
-<link rel="alternate" type="application/rss+xml" title="{{ meta_data.title }}" href="/feed.xml">
-<link rel="alternate" type="application/ld+json" title="{{ meta_data.title }} — post metadata" href="/posts_metadata.jsonld">
+<link rel="alternate" type="application/rss+xml" title="{{ meta_data.title | e }}" href="/feed.xml">
+<link rel="alternate" type="application/ld+json" title="{{ meta_data.title | e }} — post metadata" href="/posts_metadata.jsonld">
 
-<title>Subscribe — {{ meta_data.title }}</title>
+<title>Subscribe — {{ meta_data.title | e }}</title>
 
 </head>
 <body>
@@ -34,7 +34,7 @@
     <section class="enter pt-10 pb-6">
       <h1 class="text-4xl font-bold tracking-tight">Subscribe</h1>
       <p class="mt-2 text-base-content/60">
-        New posts from {{ meta_data.title }}, delivered to a reader of your choosing.
+        New posts from {{ meta_data.title | e }}, delivered to a reader of your choosing.
       </p>
     </section>
 
@@ -45,7 +45,7 @@
       </label>
 
       <div class="flex flex-col sm:flex-row gap-2 mt-3">
-        <input id="feed-url" type="text" readonly value="{{ feed_url }}"
+        <input id="feed-url" type="text" readonly value="{{ feed_url | e }}"
                aria-label="RSS feed address"
                class="input w-full font-mono text-sm bg-base-100"
                onfocus="this.select()" />
@@ -59,7 +59,7 @@
         <a href="https://netnewswire.com" class="link link-primary">NetNewsWire</a> (Mac and iOS),
         <a href="https://feedbin.com" class="link link-primary">Feedbin</a> (web) and
         <a href="https://newsblur.com" class="link link-primary">NewsBlur</a> (web) all work.
-        Most readers also accept <span class="font-mono text-xs">{{ site_url }}</span> and find
+        Most readers also accept <span class="font-mono text-xs">{{ site_url | e }}</span> and find
         the feed themselves.
       </p>
     </section>
@@ -79,14 +79,14 @@
             <time datetime="{{ post.date.isoformat() }}" class="tabular-nums">{{ post.date.strftime("%d %b %Y") }}</time>
             {% if post.category %}
             <span class="text-base-content/20">·</span>
-            <a href="/blog_{{ post.category }}.html" class="hover:text-primary transition-colors">{{ post.category }}</a>
+            <a href="/blog_{{ post.category | urlencode }}.html" class="hover:text-primary transition-colors">{{ post.category | e }}</a>
             {% endif %}
           </div>
           <h3 class="font-bold leading-snug tracking-tight">
-            <a href="{{ post.link }}" class="hover:text-primary transition-colors">{{ post.title }}</a>
+            <a href="{{ post.link | urlencode }}" class="hover:text-primary transition-colors">{{ post.title | e }}</a>
           </h3>
           {% if post.summary %}
-          <p class="mt-1 text-sm text-base-content/60">{{ post.summary }}</p>
+          <p class="mt-1 text-sm text-base-content/60">{{ post.summary | e }}</p>
           {% endif %}
         </li>
         {% endfor %}
@@ -122,6 +122,10 @@
     const field = document.getElementById('feed-url');
     if (!btn || !field) return;
 
+    // The shortcut to suggest when the visitor has to copy it themselves
+    const copyKey = /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent)
+      ? '⌘C' : 'Ctrl+C';
+
     btn.addEventListener('click', () => {
       const done = (label) => {
         btn.textContent = label;
@@ -130,10 +134,10 @@
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(field.value)
           .then(() => done('Copied!'))
-          .catch(() => { field.select(); done('Press ⌘C'); });
+          .catch(() => { field.select(); done('Press ' + copyKey); });
       } else {
         field.select();
-        done('Press ⌘C');
+        done('Press ' + copyKey);
       }
     });
   })();

@@ -9,8 +9,8 @@
 {% include 'theme_head.html' %}
 <meta name="robots" content="noindex">
 <link href="/styles.css" rel="stylesheet">
-<link rel="alternate" type="application/rss+xml" title="{{ meta_data.title }}" href="/feed.xml">
-<title>Page not found — {{ meta_data.title }}</title>
+<link rel="alternate" type="application/rss+xml" title="{{ meta_data.title | e }}" href="/feed.xml">
+<title>Page not found — {{ meta_data.title | e }}</title>
 </head>
 <body>
 

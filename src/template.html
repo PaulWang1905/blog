@@ -1,6 +1,11 @@
 {# Layout for a single post or page (docs/post/*.html, docs/page/*.html).
    Context: meta_data, post_meta_data, title, author, summary, category,
-   date, last_modified, content, phrases, image, tags, link #}
+   date, last_modified, content, phrases, image, tags, link
+
+   oxie renders with autoescape off, so every front-matter value is piped
+   through `e` (or `urlencode`, inside an href): a stray " or < in a title,
+   summary or image credit would otherwise break the markup. `content` is
+   the rendered Markdown and stays raw. The other page templates do the same. #}
 
 {#- A post's Language: a BCP 47 tag (zh-Hant, zh-Hans, en) from the front
    matter, driving <html lang>. Posts without one are English. The `true`
@@ -15,24 +20,24 @@
 {% set image_src = image if image_is_url else '/' ~ image %}
 {% set image_abs = image if image_is_url else meta_data.link ~ '/' ~ image %}
 <!DOCTYPE html>
-<html lang="{{ page_lang }}" data-theme="winter">
+<html lang="{{ page_lang | e }}" data-theme="winter">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   {% include 'theme_head.html' %}
-  {% if summary %}<meta name="description" content="{{ summary }}">{% endif %}
-  {% if author %}<meta name="author" content="{{ author }}">{% endif %}
-  <meta property="og:title" content="{{ title }}">
-  {% if summary %}<meta property="og:description" content="{{ summary }}">{% endif %}
+  {% if summary %}<meta name="description" content="{{ summary | e }}">{% endif %}
+  {% if author %}<meta name="author" content="{{ author | e }}">{% endif %}
+  <meta property="og:title" content="{{ title | e }}">
+  {% if summary %}<meta property="og:description" content="{{ summary | e }}">{% endif %}
   <meta property="og:type" content="article">
-  {% if image %}<meta property="og:image" content="{{ image_abs }}">{% endif %}
+  {% if image %}<meta property="og:image" content="{{ image_abs | e }}">{% endif %}
   <link href="/styles.css" rel="stylesheet">
   <link href="/pygments.css" rel="stylesheet">
   {# Feed autodiscovery: what browser extensions and readers look for when
      they are handed a page URL rather than the feed URL itself. #}
-  <link rel="alternate" type="application/rss+xml" title="{{ meta_data.title }}" href="/feed.xml">
-  <link rel="alternate" type="application/ld+json" title="{{ meta_data.title }} — post metadata" href="/posts_metadata.jsonld">
-  <title>{{ title }} — {{ meta_data.title }}</title>
+  <link rel="alternate" type="application/rss+xml" title="{{ meta_data.title | e }}" href="/feed.xml">
+  <link rel="alternate" type="application/ld+json" title="{{ meta_data.title | e }} — post metadata" href="/posts_metadata.jsonld">
+  <title>{{ title | e }} — {{ meta_data.title | e }}</title>
   <style>
     .highlight { position: relative; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
     .highlight pre { margin: 0; background: transparent; }
@@ -44,7 +49,8 @@
       background: rgba(255,255,255,0.15); color: #ccc; border: 1px solid rgba(255,255,255,0.2);
       cursor: pointer; opacity: 0; transition: opacity 0.2s;
     }
-    .highlight:hover .copy-btn { opacity: 1; }
+    .highlight:hover .copy-btn, .copy-btn:focus-visible { opacity: 1; }
+    @media (hover: none) { .copy-btn { opacity: 1; } }
     .copy-btn.copied { background: rgba(100,200,100,0.3); color: #9f9; }
   </style>
   <script>
@@ -76,22 +82,22 @@
              they breadcrumb back to the home page instead of the blog. #}
           {% if category and category != 'Page' %}
           <li><a href="/blog_index.html">Blog</a></li>
-          <li><a href="/blog_{{ category }}.html">{{ category }}</a></li>
+          <li><a href="/blog_{{ category | urlencode }}.html">{{ category | e }}</a></li>
           {% else %}
           <li><a href="/index.html">Home</a></li>
           {% endif %}
-          <li><a href="{{ link }}"> {{ title }} </a> </li>
+          <li><a href="{{ link | urlencode }}"> {{ title | e }} </a> </li>
         </ul>
       </div>
-     <h1 class="text-2xl font-bold py-2"> {{ title }} </h1>
+     <h1 class="text-2xl font-bold py-2"> {{ title | e }} </h1>
      {% for tag in tags %}
-     <span class="badge">{{ tag }}</span>
+     <span class="badge">{{ tag | e }}</span>
      {% endfor %}
-    <p class="py-2 text-sm opacity-90">{{ summary }}</p>
+    <p class="py-2 text-sm opacity-90">{{ summary | e }}</p>
     </div>
 
     <div class="collapse-content text-sm">
-      {% if author %}<p>By {{ author }}</p>{% endif %}
+      {% if author %}<p>By {{ author | e }}</p>{% endif %}
       {% if date %}<p>Published on {{ date.strftime("%A %Y-%m-%d") }} </p>{% endif %}
       {% if last_modified %}<p>Last Modified on {{ last_modified.strftime("%A %Y-%m-%d") }} </p>{% endif %}
     </div>
@@ -105,7 +111,7 @@
         <div class="relative w-full h-56 md:h-80 overflow-hidden">
           <div class="absolute inset-0">
             <img
-              src="{{ image_src }}"
+              src="{{ image_src | e }}"
               class="w-full h-full object-cover filter blur-lg scale-150"
               alt=""
               aria-hidden="true"
@@ -114,16 +120,16 @@
           </div>
           <div class="absolute inset-0 flex items-center justify-center">
             <img
-              src="{{ image_src }}"
+              src="{{ image_src | e }}"
               class="max-w-full max-h-full object-contain transition-transform duration-500 ease-in-out group-hover:scale-105"
-              alt="{% if post_meta_data.Image_caption %}{{ post_meta_data.Image_caption }}{% else %}Article featured image{% endif %}"
+              alt="{% if post_meta_data.Image_caption %}{{ post_meta_data.Image_caption | e }}{% else %}Article featured image{% endif %}"
               loading="lazy"
               decoding="async" />
           </div>
         </div>
         {% if post_meta_data.Image_caption %}
         <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-3 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-          <p class="text-center text-sm">{{ post_meta_data.Image_caption }}</p>
+          <p class="text-center text-sm">{{ post_meta_data.Image_caption | e }}</p>
         </div>
         {% endif %}
       </div>
@@ -147,16 +153,28 @@
   // "Copy" button on every Pygments code block
   document.querySelectorAll('.highlight').forEach(block => {
     const btn = document.createElement('button');
+    btn.type = 'button';
     btn.className = 'copy-btn';
     btn.textContent = 'Copy';
     block.appendChild(btn);
     btn.addEventListener('click', () => {
-      const code = block.querySelector('pre').innerText;
-      navigator.clipboard.writeText(code).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
+      const pre = block.querySelector('pre');
+      const flash = (label, copied) => {
+        btn.textContent = label;
+        btn.classList.toggle('copied', copied);
         setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-      });
+      };
+      // The Clipboard API needs a secure context; where it is missing or
+      // refused, select the code so it can be copied by hand.
+      const selectCode = () => {
+        window.getSelection().selectAllChildren(pre);
+        flash('Selected', false);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(pre.innerText).then(() => flash('Copied!', true), selectCode);
+      } else {
+        selectCode();
+      }
     });
   });
 </script>

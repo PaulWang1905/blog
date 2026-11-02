@@ -4,17 +4,17 @@
    Context: meta_data, phrases.
    Only rendered when listed under `simple_pages` in build.py. #}
 <!DOCTYPE html>
-<html lang="en" data-theme="caramellatte">
+<html lang="en" data-theme="winter">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% include 'theme_head.html' %}
 <meta name="google-adsense-account" content="ca-pub-9133490777581705">
 <link href="/styles.css" rel="stylesheet">
-<link rel="alternate" type="application/rss+xml" title="{{ meta_data.title }}" href="/feed.xml">
-<link rel="alternate" type="application/ld+json" title="{{ meta_data.title }} — post metadata" href="/posts_metadata.jsonld">
+<link rel="alternate" type="application/rss+xml" title="{{ meta_data.title | e }}" href="/feed.xml">
+<link rel="alternate" type="application/ld+json" title="{{ meta_data.title | e }} — post metadata" href="/posts_metadata.jsonld">
 
-<title>Reading Notes — {{ meta_data.title }}</title>
+<title>Reading Notes — {{ meta_data.title | e }}</title>
 
 </head>
 <body class="bg-base-200 min-h-screen">
@@ -126,14 +126,14 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div class="form-control">
-                        <label class="label">
+                        <label class="label" for="searchInput">
                             <span class="label-text">Search</span>
                         </label>
                         <input type="text" id="searchInput" placeholder="Search papers..." 
                                class="input input-bordered w-full">
                     </div>
                     <div class="form-control">
-                        <label class="label">
+                        <label class="label" for="sortSelect">
                             <span class="label-text">Sort by</span>
                         </label>
                         <select id="sortSelect" class="select select-bordered w-full">
@@ -145,7 +145,7 @@
                         </select>
                     </div>
                     <div class="form-control">
-                        <label class="label">
+                        <label class="label" for="viewSelect">
                             <span class="label-text">View</span>
                         </label>
                         <select id="viewSelect" class="select select-bordered w-full">
@@ -332,10 +332,10 @@
 
             parseAuthorStatement(statement) {
                 const authorUriMatch = statement.match(/<([^>]*\/authors\/[^>]*)>/);
-                const nameMatch = statement.match(/foaf:name\s+"([^"]+)"/);
-                
-                if (authorUriMatch && nameMatch) {
-                    this.authors.set(authorUriMatch[1], nameMatch[1]);
+                const name = this.literal(statement, 'foaf:name');
+
+                if (authorUriMatch && name) {
+                    this.authors.set(authorUriMatch[1], name);
                 }
             }
 
@@ -356,114 +356,27 @@
                 if (idMatch) entry.id = idMatch[1];
 
                 // Extract title
-                const titleMatch = statement.match(/dc:title\s+"([^"]+)"/);
-                if (titleMatch) entry.title = titleMatch[1];
+                entry.title = this.literal(statement, 'dc:title');
 
                 // Extract read date
-                const readDateMatch = statement.match(/readings:dateRead\s+"([^"]+)"/);
-                if (readDateMatch) entry.readDate = readDateMatch[1];
+                entry.readDate = this.literal(statement, 'readings:dateRead');
 
-                // Extract paper date  
-                const paperDateMatch = statement.match(/dc:date\s+"([^"]+)"/);
-                if (paperDateMatch) entry.paperDate = paperDateMatch[1];
+                // Extract paper date; the export writes an unknown one as "None"
+                entry.paperDate = this.literal(statement, 'dc:date');
+                if (entry.paperDate === 'None') entry.paperDate = '';
 
                 // Extract authors - prioritize ordered bibo:authorList over unordered dc:creator
                 // Pattern 1: Ordered author list (bibo:authorList) - PRIORITY
                 const authorListMatch = statement.match(/bibo:authorList\s+\(\s*((?:<[^>]+>\s*)+)\s*\)/);
                 if (authorListMatch) {
-                    const authorListBlock = authorListMatch[1];
-                    const authorUris = authorListBlock.match(/<([^>]+)>/g);
-                    
-                    if (authorUris) {
-                        // Process authors in the exact order they appear in the list
-                        authorUris.forEach(uriMatch => {
-                            const authorUri = uriMatch.slice(1, -1); // Remove < and >
-                            let authorName = this.authors.get(authorUri);
-                            
-                            if (!authorName) {
-                                // Fallback: extract name from URI and decode
-                                authorName = decodeURIComponent(authorUri.split('/').pop())
-                                    .replace(/%20/g, ' ')
-                                    .replace(/%C3%A9/g, 'é')
-                                    .replace(/%C3%B6/g, 'ö')
-                                    .replace(/%C5%A1/g, 'š')
-                                    .replace(/%C4%87/g, 'ć')
-                                    .replace(/%C3%A8/g, 'è')
-                                    .replace(/%C3%BC/g, 'ü')
-                                    .replace(/%C3%A4/g, 'ä')
-                                    .replace(/%C3%A0/g, 'à')
-                                    .replace(/%C3%AD/g, 'í')
-                                    .replace(/%C3%B4/g, 'ô')
-                                    .replace(/%C3%AA/g, 'ê');
-                            }
-                            
-                            if (authorName) {
-                                entry.authors.push(authorName);
-                            }
-                        });
-                    }
+                    this.addAuthors(entry, authorListMatch[1]);
                 }
-                
-                // Pattern 2: Multiple authors in dc:creator block (fallback when no authorList)
+
+                // Pattern 2: dc:creator blocks, comma-separated (fallback when no authorList).
+                // Every dc:creator in the statement is read, so a lone one is covered too.
                 if (entry.authors.length === 0) {
-                    const creatorBlockMatch = statement.match(/dc:creator\s+((?:<[^>]+>,?\s*)+)/);
-                    if (creatorBlockMatch) {
-                        const authorsBlock = creatorBlockMatch[1];
-                        const authorUris = authorsBlock.match(/<([^>]+)>/g);
-                        
-                        if (authorUris) {
-                            authorUris.forEach(uriMatch => {
-                                const authorUri = uriMatch.slice(1, -1); // Remove < and >
-                                let authorName = this.authors.get(authorUri);
-                                
-                                if (!authorName) {
-                                    // Fallback: extract name from URI and decode
-                                    authorName = decodeURIComponent(authorUri.split('/').pop())
-                                        .replace(/%20/g, ' ')
-                                        .replace(/%C3%A9/g, 'é')
-                                        .replace(/%C3%B6/g, 'ö')
-                                        .replace(/%C5%A1/g, 'š')
-                                        .replace(/%C4%87/g, 'ć')
-                                        .replace(/%C3%A8/g, 'è')
-                                        .replace(/%C3%BC/g, 'ü')
-                                        .replace(/%C3%A4/g, 'ä')
-                                        .replace(/%C3%A0/g, 'à')
-                                        .replace(/%C3%AD/g, 'í')
-                                        .replace(/%C3%B4/g, 'ô')
-                                        .replace(/%C3%AA/g, 'ê');
-                                }
-                                
-                                if (authorName && !entry.authors.includes(authorName)) {
-                                    entry.authors.push(authorName);
-                                }
-                            });
-                        }
-                    }
-                }
-                
-                // Pattern 3: Fallback for individual dc:creator statements
-                if (entry.authors.length === 0) {
-                    const authorMatches = statement.matchAll(/dc:creator\s+<([^>]+)>/g);
-                    for (let match of authorMatches) {
-                        const authorUri = match[1];
-                        let authorName = this.authors.get(authorUri);
-                        
-                        if (!authorName) {
-                            // Fallback: extract name from URI
-                            authorName = decodeURIComponent(authorUri.split('/').pop())
-                                .replace(/%20/g, ' ')
-                                .replace(/%C3%A9/g, 'é')
-                                .replace(/%C3%B6/g, 'ö')
-                                .replace(/%C5%A1/g, 'š')
-                                .replace(/%C4%87/g, 'ć')
-                                .replace(/%C3%A8/g, 'è')
-                                .replace(/%C3%BC/g, 'ü')
-                                .replace(/%C3%A4/g, 'ä');
-                        }
-                        
-                        if (authorName && !entry.authors.includes(authorName)) {
-                            entry.authors.push(authorName);
-                        }
+                    for (const creatorBlockMatch of statement.matchAll(/dc:creator\s+((?:<[^>]+>,?\s*)+)/g)) {
+                        this.addAuthors(entry, creatorBlockMatch[1]);
                     }
                 }
 
@@ -493,19 +406,13 @@
                     }
                 }
 
-                // Extract comments - handle escaped quotes and newlines
-                const commentMatch = statement.match(/rdfs:comment\s+"((?:[^"\\]|\\.)*)"/);
-                if (commentMatch) {
-                    entry.comments = commentMatch[1]
-                        .replace(/\\"/g, '"')
-                        .replace(/\\\\/g, '\\')
-                        .replace(/\\n/g, '\n');
-                }
+                // Extract comments (literal() undoes escaped quotes and newlines)
+                entry.comments = this.literal(statement, 'rdfs:comment');
 
-                // Extract link - can be quoted string or URI
+                // Extract link - can be quoted string or URI; only http(s) is kept
                 const linkMatch = statement.match(/dc:source\s+(?:"([^"]+)"|<([^>]+)>)/);
                 if (linkMatch) {
-                    entry.link = linkMatch[1] || linkMatch[2];
+                    entry.link = this.safeUrl(linkMatch[1] || linkMatch[2]);
                 }
 
                 return entry;
@@ -539,21 +446,22 @@
 
             updateStatistics() {
                 document.getElementById('statTotal').textContent = this.readings.length;
-                
+
                 const uniqueAuthors = new Set();
                 this.readings.forEach(r => r.authors.forEach(a => uniqueAuthors.add(a)));
                 document.getElementById('statAuthors').textContent = uniqueAuthors.size;
-                
+
                 document.getElementById('statSubjects').textContent = this.subjects.size;
-                
+
                 const thisYear = new Date().getFullYear();
                 const thisYearCount = this.readings.filter(r => {
-                    try {
-                        return new Date(r.readDate).getFullYear() === thisYear;
-                    } catch { return false; }
+                    const read = new Date(r.readDate);
+                    // A date-only string is UTC midnight; see formatDate()
+                    const year = this.isDateOnly(r.readDate) ? read.getUTCFullYear() : read.getFullYear();
+                    return year === thisYear;
                 }).length;
                 document.getElementById('statThisYear').textContent = thisYearCount;
-                
+
                 const withNotes = this.readings.filter(r => r.comments).length;
                 document.getElementById('statWithNotes').textContent = withNotes;
             }
@@ -561,69 +469,50 @@
             renderSubjectTags() {
                 const container = document.getElementById('subjectTags');
                 container.innerHTML = '';
-                
-                // All button
-                const allBtn = this.createTag('All', () => {
-                    this.activeSubjects.clear();
-                    // Remove active class from all subject tags
-                    document.querySelectorAll('#subjectTags .btn').forEach(tag => {
-                        tag.classList.remove('btn-primary');
-                        tag.classList.add('btn-outline');
-                    });
-                    // Add active class to the All button
-                    allBtn.classList.add('btn-primary');
-                    allBtn.classList.remove('btn-outline');
-                    this.applyFilters();
-                }, true);
-                allBtn.classList.add('btn-primary'); // All is active by default
-                allBtn.classList.remove('btn-outline');
-                container.appendChild(allBtn);
-                
-                // Subject buttons
-                Array.from(this.subjects).sort().forEach(subject => {
-                    const btn = this.createTag(subject, () => {
-                        // Clear all selections first
-                        document.querySelectorAll('#subjectTags .btn').forEach(tag => {
-                            tag.classList.remove('btn-primary');
-                            tag.classList.add('btn-outline');
-                        });
-                        // Toggle this subject
-                        this.toggleSubject(subject);
-                    });
-                    btn.id = `subject-${btoa(subject)}`;
+                // Buttons are kept by reference: an id built with btoa(subject)
+                // throws on any character outside Latin-1
+                this.subjectButtons = new Map();   // subject (null for All) → button
+
+                // A subject picked before a refresh stays picked, if it still exists
+                const [picked] = this.activeSubjects;
+                if (picked && !this.subjects.has(picked)) this.activeSubjects.clear();
+
+                const add = (label, subject) => {
+                    const btn = this.createTag(label, () => this.selectSubject(subject));
+                    this.subjectButtons.set(subject, btn);
                     container.appendChild(btn);
-                });
+                };
+                add('All', null);
+                Array.from(this.subjects).sort().forEach(subject => add(subject, subject));
+                this.highlightSubject();
             }
 
-            createTag(text, onClick, isAll = false) {
+            createTag(text, onClick) {
                 const tag = document.createElement('button');
+                tag.type = 'button';
                 tag.className = 'btn btn-sm btn-outline';
                 tag.textContent = text;
                 tag.onclick = onClick;
                 return tag;
             }
 
-            toggleSubject(subject) {
-                // Clear all active subjects first (single selection only)
+            // Single selection: one subject, or null for All
+            selectSubject(subject) {
                 this.activeSubjects.clear();
-                
-                // Add the clicked subject
-                this.activeSubjects.add(subject);
-                
-                // Update UI - remove active class from all subject tags first
-                document.querySelectorAll('#subjectTags .btn').forEach(tag => {
-                    tag.classList.remove('btn-primary');
-                    tag.classList.add('btn-outline');
-                });
-                
-                // Add active class to the selected subject
-                const selectedTag = document.getElementById(`subject-${btoa(subject)}`);
-                if (selectedTag) {
-                    selectedTag.classList.add('btn-primary');
-                    selectedTag.classList.remove('btn-outline');
-                }
-                
+                if (subject !== null) this.activeSubjects.add(subject);
+                this.highlightSubject();
                 this.applyFilters();
+            }
+
+            // Mark the active subject's button, or All when none is active
+            highlightSubject() {
+                const [active = null] = this.activeSubjects;
+                this.subjectButtons.forEach((btn, subject) => {
+                    const on = subject === active;
+                    btn.classList.toggle('btn-primary', on);
+                    btn.classList.toggle('btn-outline', !on);
+                    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+                });
             }
 
             applyFilters() {
@@ -811,31 +700,69 @@
 
             formatDate(dateStr, monthYear = false) {
                 if (!dateStr) return 'Unknown';
-                
+
                 try {
                     if (monthYear && dateStr.match(/^\d{4}-\d{2}$/)) {
                         const [year, month] = dateStr.split('-');
                         const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
                         return `${monthNames[parseInt(month) - 1]} ${year}`;
                     }
-                    
+
                     const date = new Date(dateStr);
                     if (isNaN(date)) return dateStr;
-                    
-                    return date.toLocaleDateString('en-US', { 
-                        year: 'numeric', 
-                        month: 'short', 
-                        day: monthYear ? undefined : 'numeric' 
+
+                    return date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: monthYear ? undefined : 'numeric',
+                        // A date-only string ("2023-01-19") parses as UTC midnight;
+                        // shown in local time it would be the day before anywhere
+                        // west of Greenwich
+                        timeZone: this.isDateOnly(dateStr) ? 'UTC' : undefined
                     });
                 } catch {
                     return dateStr;
                 }
             }
 
+            isDateOnly(dateStr) {
+                return /^\d{4}(-\d{2}){0,2}$/.test(dateStr || '');
+            }
+
+            // Safe in text and in attribute values: innerHTML escapes & < >
+            // but leaves the quotes that would end an attribute
             escape(text) {
                 const div = document.createElement('div');
                 div.textContent = text || '';
-                return div.innerHTML;
+                return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            }
+
+            // Only http(s) links become hrefs; anything else (javascript:, ...) is dropped
+            safeUrl(url) {
+                return /^https?:\/\//i.test(url || '') ? url : '';
+            }
+
+            // The "..." literal after `predicate`, with its \" \\ \n escapes undone
+            literal(statement, predicate) {
+                const match = statement.match(new RegExp(predicate + '\\s+"((?:[^"\\\\]|\\\\.)*)"'));
+                if (!match) return '';
+                const escapes = { n: '\n', t: '\t', r: '\r' };
+                return match[1].replace(/\\(.)/g, (_, c) => escapes[c] ?? c);
+            }
+
+            // Add each <uri> in `block` to entry.authors, in order: by its
+            // foaf:name, or else by the URI's last path segment
+            addAuthors(entry, block) {
+                for (const [, uri] of block.matchAll(/<([^>]+)>/g)) {
+                    let name = this.authors.get(uri);
+                    if (!name) {
+                        const slug = uri.split('/').pop();
+                        // A stray % makes decodeURIComponent throw, which would
+                        // fail the whole page; fall back to the raw slug
+                        try { name = decodeURIComponent(slug); } catch { name = slug; }
+                    }
+                    if (name && !entry.authors.includes(name)) entry.authors.push(name);
+                }
             }
         }
 

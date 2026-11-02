@@ -9,12 +9,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% include 'theme_head.html' %}
-<meta name="description" content="Posts in {{ category }} on {{ title }}.">
+<meta name="description" content="Posts in {{ category | e }} on {{ title | e }}.">
 <link href="/styles.css" rel="stylesheet">
-<link rel="alternate" type="application/rss+xml" title="{{ title }}" href="/feed.xml">
-<link rel="alternate" type="application/ld+json" title="{{ title }} — post metadata" href="/posts_metadata.jsonld">
+<link rel="alternate" type="application/rss+xml" title="{{ title | e }}" href="/feed.xml">
+<link rel="alternate" type="application/ld+json" title="{{ title | e }} — post metadata" href="/posts_metadata.jsonld">
 
-<title>{{ category }} — {{ title }}</title>
+<title>{{ category | e }} — {{ title | e }}</title>
 
 </head>
 <body>
@@ -49,7 +49,7 @@
         <h1
           class="text-5xl md:text-6xl font-extrabold uppercase bg-clip-text text-transparent"
           style="background-image: url('/image/wave-texture.jpg'); background-size: cover; background-position: center;">
-          {{ category }}
+          {{ category | e }}
         </h1>
       </div>
 
@@ -85,7 +85,7 @@
         <div class="stat-title">Tags</div>
         <div class="stat-value text-secondary">{{ unique_tags | length }}</div>
         <div class="stat-desc">
-          {% if ns.top_tag %}most used: {{ ns.top_tag }}{% endif %}
+          {% if ns.top_tag %}most used: {{ ns.top_tag | e }}{% endif %}
         </div>
       </div>
 
@@ -125,9 +125,9 @@
     <!-- Tag filter -->
     {% if tags %}
     <div class="enter flex flex-wrap gap-2" style="--i: 1">
-      <button class="btn btn-sm btn-primary tag-filter" data-tag="All">All</button>
+      <button class="btn btn-sm btn-primary tag-filter" data-tag="All" aria-pressed="true">All</button>
       {% for tag in tags | unique %}
-      <button class="btn btn-sm tag-filter" data-tag="{{ tag }}">{{ tag }}</button>
+      <button class="btn btn-sm tag-filter" aria-pressed="false" data-tag="{{ tag | e }}">{{ tag | e }}</button>
       {% endfor %}
     </div>
     {% endif %}
@@ -136,12 +136,12 @@
 
     <div class="flex flex-col space-y-4">
       {% for post in posts %}
-      <div style="--i: {{ [loop.index0 + 2, 10] | min }}" class="enter group flex flex-col sm:flex-row p-4 bg-base-100 hover:bg-base-200 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg post-card" data-tags="{{ post.tags | join(' ') }}">
+      <div style="--i: {{ [loop.index0 + 2, 10] | min }}" class="enter group flex flex-col sm:flex-row p-4 bg-base-100 hover:bg-base-200 shadow-md hover:shadow-lg transition-all duration-200 rounded-lg post-card" data-tags="{{ post.tags | join('|') | e }}">
         <!-- Post Image -->
         <div class="shrink-0 mb-3 sm:mb-0">
-          <a href="{{ post.link }}" class="block relative overflow-hidden rounded-lg sm:rounded-xl">
-            <img src="{{ post.image if '://' in post.image else '/' ~ post.image }}"
-                 alt="{{ post.title }}" loading="lazy"
+          <a href="{{ post.link | urlencode }}" class="block relative overflow-hidden rounded-lg sm:rounded-xl">
+            <img src="{{ (post.image if '://' in post.image else '/' ~ post.image) | e }}"
+                 alt="{{ post.title | e }}" loading="lazy"
                  class="w-full sm:w-24 sm:h-24 md:w-32 md:h-32 object-cover group-hover:scale-105 transition-transform duration-300">
           </a>
         </div>
@@ -153,15 +153,15 @@
           </div>
 
           <h3 class="text-lg font-bold tracking-tight leading-snug mb-1">
-            <a href="{{ post.link }}" class="hover:text-primary transition-colors duration-200">{{ post.title }}</a>
+            <a href="{{ post.link | urlencode }}" class="hover:text-primary transition-colors duration-200">{{ post.title | e }}</a>
           </h3>
 
-          <p class="text-sm text-base-content/70 mb-2 line-clamp-2">{{ post.summary }}</p>
+          <p class="text-sm text-base-content/70 mb-2 line-clamp-2">{{ post.summary | e }}</p>
 
           {% if post.tags %}
           <div class="flex flex-wrap gap-1.5 mt-auto">
             {% for tag in post.tags %}
-            <span class="badge badge-sm badge-outline">{{ tag }}</span>
+            <span class="badge badge-sm badge-outline">{{ tag | e }}</span>
             {% endfor %}
           </div>
           {% endif %}
@@ -186,13 +186,16 @@ document.addEventListener("DOMContentLoaded", () => {
   tagButtons.forEach((button) => {
     button.addEventListener("click", () => {
       // Only the clicked button stays highlighted
-      tagButtons.forEach((btn) => btn.classList.remove("btn-primary"));
-      button.classList.add("btn-primary");
+      tagButtons.forEach((btn) => {
+        btn.classList.toggle("btn-primary", btn === button);
+        btn.setAttribute("aria-pressed", btn === button ? "true" : "false");
+      });
 
       const selectedTag = button.getAttribute("data-tag");
 
       postCards.forEach((postCard) => {
-        const postTags = postCard.getAttribute("data-tags").split(' ');
+        // "|"-separated, so a multi-word tag ("Life Writing") stays whole
+        const postTags = postCard.getAttribute("data-tags").split('|');
         postCard.classList.toggle(
           "hidden",
           selectedTag !== "All" && !postTags.includes(selectedTag)

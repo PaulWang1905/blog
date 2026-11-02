@@ -3,15 +3,15 @@
    Only rendered when `photography=True` in build.py's SiteConfig and
    source/photo/photos.md exists. #}
 <!DOCTYPE html>
-<html lang="en" data-theme="caramellatte">
+<html lang="en" data-theme="winter">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% include 'theme_head.html' %}
 <link href="/styles.css" rel="stylesheet">
-<link rel="alternate" type="application/rss+xml" title="{{ meta_data.title }}" href="/feed.xml">
-<link rel="alternate" type="application/ld+json" title="{{ meta_data.title }} — post metadata" href="/posts_metadata.jsonld">
-<title>Photography — {{ meta_data.title }}</title>
+<link rel="alternate" type="application/rss+xml" title="{{ meta_data.title | e }}" href="/feed.xml">
+<link rel="alternate" type="application/ld+json" title="{{ meta_data.title | e }} — post metadata" href="/posts_metadata.jsonld">
+<title>Photography — {{ meta_data.title | e }}</title>
 <style>
   /* System font stack — Apple-like */
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -37,10 +37,11 @@
 <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl pt-6 pb-2">
   <div class="enter inline-flex gap-0.5 bg-base-200 rounded-xl p-1" style="--i: 1">
     <button class="album-tab px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer bg-base-100 shadow-sm text-base-content"
-            data-album="__all__" onclick="filterAlbum(this, null)">All</button>
+            data-album="__all__" aria-pressed="true" onclick="filterAlbum(this, null)">All</button>
     {% for album in albums %}
     <button class="album-tab px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer text-base-content/50 hover:text-base-content"
-            data-album="{{ album.name }}" onclick="filterAlbum(this, '{{ album.name }}')">{{ album.name }}</button>
+            data-album="{{ album.name | e }}" aria-pressed="false"
+            onclick="filterAlbum(this, this.dataset.album)">{{ album.name | e }}</button>
     {% endfor %}
   </div>
 </div>
@@ -52,18 +53,18 @@
   <div class="columns-1 sm:columns-2 lg:columns-3 gap-4" id="gallery">
     {% for photo in all_photos %}
     <div style="--i: {{ [loop.index0 + 2, 12] | min }}" class="enter break-inside-avoid mb-4 rounded-2xl overflow-hidden cursor-pointer group relative gallery-item"
-         data-album="{{ photo.album if photo.album else '' }}"
+         data-album="{{ (photo.album or '') | e }}"
          onclick="openLightbox({{ loop.index0 }})"
          role="button" tabindex="0"
-         onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox({{ loop.index0 }})">
-      <img src="/{{ photo.thumb }}"
-           alt="{{ photo.alt }}"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLightbox({{ loop.index0 }})}">
+      <img src="/{{ photo.thumb | e }}"
+           alt="{{ photo.alt | e }}"
            loading="lazy"
            class="w-full block transition-all duration-500 group-hover:scale-[1.03] group-hover:brightness-90">
       {% if photo.alt %}
       <div class="absolute inset-0 flex items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <p class="w-full px-4 py-3 bg-gradient-to-t from-black/70 via-black/20 to-transparent text-white text-xs font-medium tracking-wide">
-          {{ photo.alt }}
+          {{ photo.alt | e }}
         </p>
       </div>
       {% endif %}
@@ -85,7 +86,7 @@
     <div class="flex items-center justify-between px-5 py-3 border-b border-base-300">
       <span id="lb-counter" class="text-xs text-base-content/40 tabular-nums"></span>
       <form method="dialog">
-        <button class="btn btn-sm btn-ghost btn-circle text-base-content/50 hover:text-base-content">
+        <button aria-label="Close" class="btn btn-sm btn-ghost btn-circle text-base-content/50 hover:text-base-content">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
           </svg>
@@ -100,7 +101,7 @@
 
     <!-- Caption + nav -->
     <div class="flex items-center gap-4 px-5 py-4 border-t border-base-300">
-      <button id="lb-prev" onclick="stepLightbox(-1)"
+      <button id="lb-prev" onclick="stepLightbox(-1)" aria-label="Previous photo"
               class="btn btn-sm btn-ghost btn-circle text-base-content/50 hover:text-base-content shrink-0">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
@@ -110,7 +111,7 @@
         <p id="lb-caption" class="text-sm font-medium text-base-content truncate"></p>
         <p id="lb-desc" class="text-xs text-base-content/50 mt-0.5 leading-relaxed"></p>
       </div>
-      <button id="lb-next" onclick="stepLightbox(1)"
+      <button id="lb-next" onclick="stepLightbox(1)" aria-label="Next photo"
               class="btn btn-sm btn-ghost btn-circle text-base-content/50 hover:text-base-content shrink-0">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
@@ -125,6 +126,7 @@
 const PHOTOS = {{ all_photos | tojson }};
 let activeAlbum = null;
 let lbIndex = 0;
+let lbLoad = 0;   // bumped per photo shown, so a slow earlier load can't land on top of a later one
 
 function visiblePhotos() {
   return activeAlbum ? PHOTOS.filter(p => p.album === activeAlbum) : PHOTOS;
@@ -150,17 +152,19 @@ function syncLightbox() {
   const p = visible[lbIndex];
   const img = document.getElementById('lb-img');
 
-  // Fade out, swap src, fade in only once loaded
+  // Fade out, swap src, fade in once loaded (or failed, so the alt text shows)
   img.style.opacity = '0';
+  const load = ++lbLoad;
   const newImg = new Image();
-  newImg.onload = () => {
+  newImg.onload = newImg.onerror = () => {
+    if (load !== lbLoad) return;
     img.src = newImg.src;
     img.style.opacity = '1';
   };
   newImg.src = '/' + p.src;   // photo srcs are relative to the site root
 
-  img.alt = p.alt;
-  document.getElementById('lb-caption').textContent = p.alt;
+  img.alt = p.alt || '';
+  document.getElementById('lb-caption').textContent = p.alt || '';
   document.getElementById('lb-desc').textContent = p.description || '';
   document.getElementById('lb-counter').textContent = `${lbIndex + 1} / ${visible.length}`;
   document.getElementById('lb-prev').disabled = lbIndex === 0;
@@ -175,6 +179,7 @@ function filterAlbum(btn, album) {
     b.classList.toggle('shadow-sm', active);
     b.classList.toggle('text-base-content', active);
     b.classList.toggle('text-base-content/50', !active);
+    b.setAttribute('aria-pressed', active ? 'true' : 'false');
   });
   document.querySelectorAll('.gallery-item').forEach(el => {
     el.classList.toggle('hidden', album !== null && el.dataset.album !== album);
