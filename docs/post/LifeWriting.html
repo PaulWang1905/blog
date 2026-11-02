@@ -30,9 +30,9 @@
   <link href="/styles.css" rel="stylesheet">
   <link href="/pygments.css" rel="stylesheet">
   
-  <link rel="alternate" type="application/rss+xml" title="Puyu's Personal Blog" href="/feed.xml">
-  <link rel="alternate" type="application/ld+json" title="Puyu's Personal Blog — post metadata" href="/posts_metadata.jsonld">
-  <title>LifeWriting 课程小结 — Puyu's Personal Blog</title>
+  <link rel="alternate" type="application/rss+xml" title="Puyu&#39;s Personal Blog" href="/feed.xml">
+  <link rel="alternate" type="application/ld+json" title="Puyu&#39;s Personal Blog — post metadata" href="/posts_metadata.jsonld">
+  <title>LifeWriting 课程小结 — Puyu&#39;s Personal Blog</title>
   <style>
     .highlight { position: relative; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin: 1rem 0; }
     .highlight pre { margin: 0; background: transparent; }
@@ -44,7 +44,8 @@
       background: rgba(255,255,255,0.15); color: #ccc; border: 1px solid rgba(255,255,255,0.2);
       cursor: pointer; opacity: 0; transition: opacity 0.2s;
     }
-    .highlight:hover .copy-btn { opacity: 1; }
+    .highlight:hover .copy-btn, .copy-btn:focus-visible { opacity: 1; }
+    @media (hover: none) { .copy-btn { opacity: 1; } }
     .copy-btn.copied { background: rgba(100,200,100,0.3); color: #9f9; }
   </style>
   <script>
@@ -85,7 +86,7 @@
         
         <li>
           <a href="/blog_index.html"
-             class="active" aria-current="page">
+             class="menu-active" aria-current="page">
             Blog
           </a>
         </li>
@@ -165,8 +166,8 @@
 
     <!-- Light/dark toggle: flips the page's data-theme via daisyUI's theme-controller.
          theme_head.html picks the starting theme; the script below keeps it. -->
-    <label class="btn btn-ghost btn-sm btn-circle swap swap-rotate" aria-label="Toggle dark mode">
-      <input type="checkbox" class="theme-controller" value="dark" />
+    <label class="btn btn-ghost btn-sm btn-circle swap swap-rotate">
+      <input type="checkbox" class="theme-controller" value="dark" aria-label="Dark mode" />
       <!-- Sun icon -->
       <svg class="swap-off h-5 w-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
         <path
@@ -187,6 +188,9 @@
         const toggle = document.currentScript.previousElementSibling.querySelector('.theme-controller');
         const systemDark = window.matchMedia('(prefers-color-scheme: dark)');
 
+        const saved = () => {
+          try { return localStorage.getItem('theme'); } catch (e) { return null; }
+        };
         const apply = (theme) => {
           toggle.checked = theme === 'dark';
           document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'winter';
@@ -199,9 +203,13 @@
           try { localStorage.setItem('theme', theme); } catch (e) {}
         });
         systemDark.addEventListener('change', (event) => {
-          let chosen = null;
-          try { chosen = localStorage.getItem('theme'); } catch (e) {}
-          if (!chosen) apply(event.matches ? 'dark' : 'light');
+          if (!saved()) apply(event.matches ? 'dark' : 'light');
+        });
+        // Back/Forward can restore this page from the browser's cache exactly
+        // as it was left, so a theme switched on another page since then would
+        // not show. Re-read the choice whenever that happens.
+        window.addEventListener('pageshow', (event) => {
+          if (event.persisted) apply(saved() || (systemDark.matches ? 'dark' : 'light'));
         });
       })();
     </script>
@@ -219,7 +227,7 @@
           
           
           <li><a href="/blog_index.html">Blog</a></li>
-          <li><a href="/blog_中文.html">中文</a></li>
+          <li><a href="/blog_%E4%B8%AD%E6%96%87.html">中文</a></li>
           
           <li><a href="/post/LifeWriting.html"> LifeWriting 课程小结 </a> </li>
         </ul>
@@ -256,14 +264,14 @@
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Sui_Sin_Far.jpg"
               class="max-w-full max-h-full object-contain transition-transform duration-500 ease-in-out group-hover:scale-105"
-              alt="Sui Sin Far, Image from the private collection of Diana Birchall, granddaughter of Winnifred Eaton., CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons"
+              alt="Sui Sin Far, Image from the private collection of Diana Birchall, granddaughter of Winnifred Eaton., CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons"
               loading="lazy"
               decoding="async" />
           </div>
         </div>
         
         <div class="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-3 transition-opacity duration-300 opacity-0 group-hover:opacity-100">
-          <p class="text-center text-sm">Sui Sin Far, Image from the private collection of Diana Birchall, granddaughter of Winnifred Eaton., CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons</p>
+          <p class="text-center text-sm">Sui Sin Far, Image from the private collection of Diana Birchall, granddaughter of Winnifred Eaton., CC BY-SA 4.0 &lt;https://creativecommons.org/licenses/by-sa/4.0&gt;, via Wikimedia Commons</p>
         </div>
         
       </div>
@@ -315,7 +323,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
           </a>
           <a href="https://eng.ox.ac.uk/people/puyu-wang/" aria-label="Oxford profile">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.568 17.568 0 0 0 4.168 6.608 17.569 17.569 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.678.678 0 0 0-.58-.122l-2.19.547a1.745 1.745 0 0 1-1.657-.459L5.482 8.062a1.745 1.745 0 0 1-.46-1.657l.548-2.19a.678.678 0 0 0-.122-.58L3.654 1.328z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M8 2 0 5.5 8 9l6-2.625V11h1V5.9375L16 5.5 8 2z"/><path d="M3.5 8.2v2.55C3.5 11.99 5.51 13 8 13s4.5-1.01 4.5-2.25V8.2L8 10.17 3.5 8.2z"/></svg>
           </a>
         </div>
       </div>
@@ -576,8 +584,12 @@
             fadeTime: 320        // matches the flip-out duration above
         };
 
-        // Phrases (rendered as proper JSON by the build; falls back if empty)
-        const phrases = ["\u5929\u4e4b\u84bc\u84bc\uff0c\u5176\u6b63\u8272\u90aa", "\u543e\u65e5\u4e09\u7701\u543e\u8eab", "\u77e5\u884c\u5408\u4e00", "\u884c\u6709\u9918\u529b\uff0c\u5247\u4ee5\u5b78\u6587", "\u601d\u7121\u90aa", "\u5148\u884c\u5176\u8a00\uff0c\u800c\u5f8c\u5f9e\u4e4b", "\u76e1\u7f8e\u77e3\uff0c\u53c8\u76e1\u5584\u4e5f", "\u597d\u4ec1\u8005\uff0c\u7121\u4ee5\u5c1a\u4e4b", "\u7121\u6240\u5f9e\u4f86\uff0c\u4ea6\u7121\u6240\u53bb", "\u6240\u8b02\u4f5b\u6cd5\u8005\uff0c\u5373\u975e\u4f5b\u6cd5", "\u9053\u6cd5\u81ea\u7136", "\u5929\u4e0b\u5927\u4e8b\uff0c\u5fc5\u4f5c\u65bc\u7d30", "\u70ba\u7121\u70ba\uff0c\u4e8b\u7121\u4e8b\uff0c\u5473\u7121\u5473", "\u5468\u96d6\u820a\u90a6,\u5176\u547d\u7dad\u65b0", "\u5fb7\u4e0d\u5b64\uff0c\u5fc5\u6709\u9130", "\u4e14\u6709\u771f\u4eba\uff0c\u800c\u5f8c\u6709\u771f\u77e5"] || ['Simplicity is the ultimate sophistication', 'Design is intelligence made visible'];
+        // Phrases (rendered as proper JSON by the build; falls back if empty —
+        // checked by length, because an empty array is truthy in JS)
+        const builtPhrases = ["\u5929\u4e4b\u84bc\u84bc\uff0c\u5176\u6b63\u8272\u90aa", "\u543e\u65e5\u4e09\u7701\u543e\u8eab", "\u77e5\u884c\u5408\u4e00", "\u884c\u6709\u9918\u529b\uff0c\u5247\u4ee5\u5b78\u6587", "\u601d\u7121\u90aa", "\u5148\u884c\u5176\u8a00\uff0c\u800c\u5f8c\u5f9e\u4e4b", "\u76e1\u7f8e\u77e3\uff0c\u53c8\u76e1\u5584\u4e5f", "\u597d\u4ec1\u8005\uff0c\u7121\u4ee5\u5c1a\u4e4b", "\u7121\u6240\u5f9e\u4f86\uff0c\u4ea6\u7121\u6240\u53bb", "\u6240\u8b02\u4f5b\u6cd5\u8005\uff0c\u5373\u975e\u4f5b\u6cd5", "\u9053\u6cd5\u81ea\u7136", "\u5929\u4e0b\u5927\u4e8b\uff0c\u5fc5\u4f5c\u65bc\u7d30", "\u70ba\u7121\u70ba\uff0c\u4e8b\u7121\u4e8b\uff0c\u5473\u7121\u5473", "\u5468\u96d6\u820a\u90a6,\u5176\u547d\u7dad\u65b0", "\u5fb7\u4e0d\u5b64\uff0c\u5fc5\u6709\u9130", "\u4e14\u6709\u771f\u4eba\uff0c\u800c\u5f8c\u6709\u771f\u77e5"];
+        const phrases = builtPhrases && builtPhrases.length
+            ? builtPhrases
+            : ['Simplicity is the ultimate sophistication', 'Design is intelligence made visible'];
         let currentIndex = 0;
         let colorIndex = 0;
 
@@ -636,16 +648,28 @@
   // "Copy" button on every Pygments code block
   document.querySelectorAll('.highlight').forEach(block => {
     const btn = document.createElement('button');
+    btn.type = 'button';
     btn.className = 'copy-btn';
     btn.textContent = 'Copy';
     block.appendChild(btn);
     btn.addEventListener('click', () => {
-      const code = block.querySelector('pre').innerText;
-      navigator.clipboard.writeText(code).then(() => {
-        btn.textContent = 'Copied!';
-        btn.classList.add('copied');
+      const pre = block.querySelector('pre');
+      const flash = (label, copied) => {
+        btn.textContent = label;
+        btn.classList.toggle('copied', copied);
         setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-      });
+      };
+      // The Clipboard API needs a secure context; where it is missing or
+      // refused, select the code so it can be copied by hand.
+      const selectCode = () => {
+        window.getSelection().selectAllChildren(pre);
+        flash('Selected', false);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(pre.innerText).then(() => flash('Copied!', true), selectCode);
+      } else {
+        selectCode();
+      }
     });
   });
 </script>
