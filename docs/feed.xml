@@ -28,8 +28,7 @@ It says time since last charge: 4313 days 18 hours. That is 11 years, 9 months, 
       <dc:creator>Puyu Wang</dc:creator>
       <category>Recipe</category>
       <description>I cooked this at a friend's place. According to myself and my friend, it was good.</description>
-      <content:encoded>&lt;h1&gt;Garlic Butter Prawns&lt;/h1&gt;
-&lt;h2&gt;Ingredients&lt;/h2&gt;
+      <content:encoded>&lt;h2&gt;Ingredients&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;50g butter&lt;/li&gt;
 &lt;li&gt;Raw Prawns (peeled)&lt;/li&gt;
@@ -56,8 +55,7 @@ It says time since last charge: 4313 days 18 hours. That is 11 years, 9 months, 
       <dc:creator>Puyu Wang</dc:creator>
       <category>Story</category>
       <description>A short story about a deduplication officer in a world where reality can duplicate, exploring themes of memory, choice, and the nature of reality.</description>
-      <content:encoded>&lt;h1&gt;Silver Age&lt;/h1&gt;
-&lt;h2&gt;Puyu Wang&lt;/h2&gt;
+      <content:encoded>&lt;h2&gt;Puyu Wang&lt;/h2&gt;
 &lt;h3&gt;1&lt;/h3&gt;
 &lt;p&gt;In the spring 2050 a new file landed on my desk, covered with a stamp in red: DOUBLED. “DOUBLED” means the same event occurred twice. My job is to review these two versions of reality, and figure out which is real, and send them to the archive. The real one gets stamped as REAL. The other stamped as SHADOW.&lt;/p&gt;
 &lt;p&gt;My name is Zhang San, 39, a deduplication officer. My mother thinks I am a civil servant. In a way, I am. Civil servants manage reality. I create the reality for them to manage. My occupation only came into being around 2048. A young occupation like this usually does not pay well, except mine actually does. No one really wants to do this. On average you visit a psychiatrist once every three years in this job. I've only been twice, exactly average. &lt;/p&gt;
@@ -115,8 +113,7 @@ My wife asked me the same question that day. &lt;/p&gt;
       <dc:creator>Puyu Wang</dc:creator>
       <category>中文</category>
       <description>贾舜尧，一个才华横溢的年轻人，不幸离世。</description>
-      <content:encoded>&lt;h1&gt;悼念贾舜尧&lt;/h1&gt;
-&lt;p&gt;上个周日，11月10日，天气终于转好，终于能看见一点阳光，我之前看新闻声称英国在之前的11天里，阳光总计只有18分钟。这个数字是不是准确我不知道，但是我确实不记得上次看见阳光是什么时候了。这一天也是英国的纪念日: &lt;em&gt;Remembrance Sunday&lt;/em&gt;，为了纪念阵亡将士，学院宿舍附近的公交车暂停了服务，我只好步行前往开会。如果没有打开微信，这一天或许只是普通的一天，最让人意外事情，就是清晨的阳光。&lt;/p&gt;
+      <content:encoded>&lt;p&gt;上个周日，11月10日，天气终于转好，终于能看见一点阳光，我之前看新闻声称英国在之前的11天里，阳光总计只有18分钟。这个数字是不是准确我不知道，但是我确实不记得上次看见阳光是什么时候了。这一天也是英国的纪念日: &lt;em&gt;Remembrance Sunday&lt;/em&gt;，为了纪念阵亡将士，学院宿舍附近的公交车暂停了服务，我只好步行前往开会。如果没有打开微信，这一天或许只是普通的一天，最让人意外事情，就是清晨的阳光。&lt;/p&gt;
 &lt;p&gt;然而，当我打开微信，映入眼帘的却是哲学公众号工作群、闲聊群中涌现的许多消息——要知道，这些群平时几乎不怎么活跃。群里说，我们公众号的发起人之一贾舜尧永远地离开了我们，但是我们要让公众号活下去。其实，就在前一天，我已经在另一个群里看到了他失联的消息，也知道有一些朋友已经在找他，并且看到了他最后一条朋友圈:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;今生苦短，来世再见。&lt;/p&gt;
@@ -141,8 +138,7 @@ My wife asked me the same question that day. &lt;/p&gt;
       <dc:creator>Puyu Wang</dc:creator>
       <category>Blog</category>
       <description>Note for 24-07-24 updates</description>
-      <content:encoded>&lt;h1&gt;Note for 24-07-24&lt;/h1&gt;
-&lt;h2&gt;Recent thought on who I am&lt;/h2&gt;
+      <content:encoded>&lt;h2&gt;Recent thought on who I am&lt;/h2&gt;
 &lt;p&gt;Am I a Kantian? If I am, what kind of Kantian am I? I cannot claim to be knowledgeable about Kantian philosophy. 
 However, I truely believe that it is, by default, the duty of human to do good things. 
 Yet, I do not have confidence in the autonomy of individuals. 
@@ -159,8 +155,7 @@ My skepticism arises from the fact that I often find people are not truly free.&
       <dc:creator>Puyu Wang</dc:creator>
       <category>Notes</category>
       <description>A note on reading a book about Chinese Coinage</description>
-      <content:encoded>&lt;h1&gt;Chinese Coinage&lt;/h1&gt;
-&lt;p&gt;Recently I have been reading this book &lt;a href="https://book.douban.com/subject/35724195/"&gt;《中国货币史》&lt;/a&gt; to understand Chinese Coinage for my PhD work -- creating numismatic knowledge model for Chinese Coins. 
+      <content:encoded>&lt;p&gt;Recently I have been reading this book &lt;a href="https://book.douban.com/subject/35724195/"&gt;《中国货币史》&lt;/a&gt; to understand Chinese Coinage for my PhD work -- creating numismatic knowledge model for Chinese Coins. 
 I will keep some note here for reference.&lt;/p&gt;</content:encoded>
     </item>
     <item>
@@ -170,9 +165,8 @@ I will keep some note here for reference.&lt;/p&gt;</content:encoded>
       <pubDate>Sat, 20 Jul 2024 12:00:00 GMT</pubDate>
       <dc:creator>Puyu Wang</dc:creator>
       <category>Notes</category>
-      <description>A brief description of my document.</description>
-      <content:encoded>&lt;h1&gt;Reading&lt;/h1&gt;
-&lt;h2&gt;梁惠王上&lt;/h2&gt;
+      <description>Reading notes on Mencius, 梁惠王上 (King Hui of Liang), in Chinese with an English translation.</description>
+      <content:encoded>&lt;h2&gt;梁惠王上&lt;/h2&gt;
 &lt;p&gt;孟子見梁惠王。王曰：「叟不遠千里而來，亦將有以利吾國乎？」  &lt;/p&gt;
 &lt;blockquote&gt;
 
@@ -193,8 +187,7 @@ Mencius went to see king Hui of Liang. The king said, 'Venerable sir, since you 
       <dc:creator>Puyu Wang</dc:creator>
       <category>中文</category>
       <description>Life Writing课程小结</description>
-      <content:encoded>&lt;h1&gt;Life Writing 课程小结&lt;/h1&gt;
-&lt;p&gt;这个暑假，我有幸入选了岭南大学的暑期交流生课程项目；当我知道授课的老师是黄运特教授之后，我毫不犹豫地选择了Life Writing 课程。 原因有两点：一，我研究生所读的专业是音乐文献编译（英文方向），虽然和外语学院的翻译专业还是有区别的，但是这个专业也涉及大量的翻译与写作，而我也曾经参与过传记、自传这类属于Life Writing范畴的翻译与校对。我想借参与英文写作类课程之机提高我的写作水平，尤其是在叙事方面。二 ，我本人的学术目标一直是将中国古代的音乐文献翻译为英文。这一点很多人给我泼过冷水，认为翻译的目标语言最好是母语，我最好把精力放在英译中上，中国人做中译英是先天不如英文母语者的。但作为一代移民作家，黄运特的母语是中文，写作用的语言则是英文。我也听说过有很多作家，用非母语写作并获得认可的，比如Joseph Conrad、林语堂。但是我对自己翻译文稿，总是不那么满意；所以我迫切地想知道，用外语写作这件事，究竟还可行不可行，如果可以，应该如何做。  &lt;/p&gt;
+      <content:encoded>&lt;p&gt;这个暑假，我有幸入选了岭南大学的暑期交流生课程项目；当我知道授课的老师是黄运特教授之后，我毫不犹豫地选择了Life Writing 课程。 原因有两点：一，我研究生所读的专业是音乐文献编译（英文方向），虽然和外语学院的翻译专业还是有区别的，但是这个专业也涉及大量的翻译与写作，而我也曾经参与过传记、自传这类属于Life Writing范畴的翻译与校对。我想借参与英文写作类课程之机提高我的写作水平，尤其是在叙事方面。二 ，我本人的学术目标一直是将中国古代的音乐文献翻译为英文。这一点很多人给我泼过冷水，认为翻译的目标语言最好是母语，我最好把精力放在英译中上，中国人做中译英是先天不如英文母语者的。但作为一代移民作家，黄运特的母语是中文，写作用的语言则是英文。我也听说过有很多作家，用非母语写作并获得认可的，比如Joseph Conrad、林语堂。但是我对自己翻译文稿，总是不那么满意；所以我迫切地想知道，用外语写作这件事，究竟还可行不可行，如果可以，应该如何做。  &lt;/p&gt;
 &lt;p&gt;在上第一节课的时候，老师就提醒说，对于一门两周多的课程，期望不要太大了：虽然已经排满了十几节课，但课时仍很有限。第一节课的时候，老师把我们每天要读的文章、要完成的作业等等信息用word文档发了下去。我们的作业分为好多项：两篇传记文章，要求一长一短，但其中一篇需要是自传；改写一篇介绍人物的英文文章；一个Presentation；自己设计一个网页。其中，Presentation 是要介绍自己如何构思并写作长文章的。而这些作业，都要在短短的两周内完成。&lt;/p&gt;
 &lt;p&gt;老师第一周发下来的文章，主要是为了让我们看看什么样的文章是Life Writing。数量上共有六篇，可以分为两类：一类是由文言文翻译为英文的，比如陶渊明的《五柳先生传》、金圣叹的《不亦快哉三十三则》，另一类是直接用英文写成的。  &lt;/p&gt;
 &lt;p&gt;文言文文章中，我印象比较深刻的是金圣叹的《不亦快哉三十三则》，由三十三个有趣的小故事组成，每一个故事的结尾，都有一个“不亦快哉！”。英文版是林语堂翻译的，但是在第一次阅读的时候，我没有读过中文版，也并不知道译者是谁，因为老师发的文本里并没有写译者的姓名。我阅读该文的第一印象就是译者的文笔非常好，既保留了金圣叹的幽默风格，英文也非常流畅自然。老师在讲解的时候说，他比较喜欢这篇文章的风格，我们的短文章就可以参考这个风格来写。我们甚至也可以直接写一个“某某某几十几则”。这些轶事和趣闻，被老师称为“anecdote”。  &lt;/p&gt;
