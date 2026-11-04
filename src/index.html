@@ -10,9 +10,16 @@
 {% include 'theme_head.html' %}
 {% if description %}<meta name="description" content="{{ description | e }}">{% endif %}
 {% if author %}<meta name="author" content="{{ author | e }}">{% endif %}
+{# `meta_data` is not in this context, so the address is written out, the
+   same way header.html does. Keep it in step with "link" and "image" in
+   src/meta_data.json. #}
+<link rel="canonical" href="https://blog.puyuwang.org/index.html">
+<meta property="og:url" content="https://blog.puyuwang.org/index.html">
 <meta property="og:title" content="{{ title | e }}">
 {% if description %}<meta property="og:description" content="{{ description | e }}">{% endif %}
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://blog.puyuwang.org/image/default.jpg">
+<meta name="twitter:card" content="summary">
 <link href="/styles.css" rel="stylesheet">
 <link href="/pygments.css" rel="stylesheet">
 {# Feed autodiscovery; `meta_data` is not in this context, so the feed is

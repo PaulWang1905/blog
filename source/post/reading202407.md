@@ -1,12 +1,11 @@
 ---
 Title:   Reading
-Summary: A brief description of my document.
+Summary: Reading notes on Mencius, 梁惠王上 (King Hui of Liang), in Chinese with an English translation.
 Authors: Puyu Wang
 Date:    2024-07-20
 Category: Notes
 Tags: [Reading]
 ---
-# Reading 
 ## 梁惠王上
 
 孟子見梁惠王。王曰：「叟不遠千里而來，亦將有以利吾國乎？」  

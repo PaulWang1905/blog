@@ -19,6 +19,15 @@
 {% set image_is_url = image and '://' in image %}
 {% set image_src = image if image_is_url else '/' ~ image %}
 {% set image_abs = image if image_is_url else meta_data.link ~ '/' ~ image %}
+
+{# The page's own full address, matching what sitemap.xml and feed.xml list,
+   for <link rel="canonical"> and og:url. #}
+{% set page_url = meta_data.link ~ (link | urlencode) %}
+
+{# pymdownx.arithmatex wraps every \( \) and \[ \] in class="arithmatex",
+   so this is true exactly when the post has maths in it. MathJax is ~1 MB,
+   so posts without any skip it. #}
+{% set has_math = 'class="arithmatex"' in content %}
 <!DOCTYPE html>
 <html lang="{{ page_lang | e }}" data-theme="winter">
 <head>
@@ -27,10 +36,18 @@
   {% include 'theme_head.html' %}
   {% if summary %}<meta name="description" content="{{ summary | e }}">{% endif %}
   {% if author %}<meta name="author" content="{{ author | e }}">{% endif %}
+  <link rel="canonical" href="{{ page_url | e }}">
+  <meta property="og:site_name" content="{{ meta_data.title | e }}">
+  <meta property="og:url" content="{{ page_url | e }}">
   <meta property="og:title" content="{{ title | e }}">
   {% if summary %}<meta property="og:description" content="{{ summary | e }}">{% endif %}
   <meta property="og:type" content="article">
+  {% if date %}<meta property="article:published_time" content="{{ date.isoformat() }}">{% endif %}
+  {% if last_modified %}<meta property="article:modified_time" content="{{ last_modified.isoformat() }}">{% endif %}
   {% if image %}<meta property="og:image" content="{{ image_abs | e }}">{% endif %}
+  {# Link previews on X, Slack, Discord and others read this; the big card
+     only makes sense when the post has its own image. #}
+  <meta name="twitter:card" content="{{ 'summary_large_image' if image and image != meta_data.image else 'summary' }}">
   <link href="/styles.css" rel="stylesheet">
   <link href="/pygments.css" rel="stylesheet">
   {# Feed autodiscovery: what browser extensions and readers look for when
@@ -53,12 +70,14 @@
     @media (hover: none) { .copy-btn { opacity: 1; } }
     .copy-btn.copied { background: rgba(100,200,100,0.3); color: #9f9; }
   </style>
+  {% if has_math %}
   <script>
     window.MathJax = {
       tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] }
     };
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+  {% endif %}
 </head>
 
 

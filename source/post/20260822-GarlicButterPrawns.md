@@ -8,7 +8,6 @@ Category: Recipe
 Tags: [Prawn, Butter]
 ---
 
-# Garlic Butter Prawns
 
 ## Ingredients
 
