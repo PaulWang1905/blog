@@ -9,7 +9,6 @@ Tags: [LifeWriting]
 Image:  https://upload.wikimedia.org/wikipedia/commons/8/8b/Sui_Sin_Far.jpg
 Image_caption: Sui Sin Far, Image from the private collection of Diana Birchall, granddaughter of Winnifred Eaton., CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons
 ---
-# Life Writing 课程小结 
 
 这个暑假，我有幸入选了岭南大学的暑期交流生课程项目；当我知道授课的老师是黄运特教授之后，我毫不犹豫地选择了Life Writing 课程。 原因有两点：一，我研究生所读的专业是音乐文献编译（英文方向），虽然和外语学院的翻译专业还是有区别的，但是这个专业也涉及大量的翻译与写作，而我也曾经参与过传记、自传这类属于Life Writing范畴的翻译与校对。我想借参与英文写作类课程之机提高我的写作水平，尤其是在叙事方面。二 ，我本人的学术目标一直是将中国古代的音乐文献翻译为英文。这一点很多人给我泼过冷水，认为翻译的目标语言最好是母语，我最好把精力放在英译中上，中国人做中译英是先天不如英文母语者的。但作为一代移民作家，黄运特的母语是中文，写作用的语言则是英文。我也听说过有很多作家，用非母语写作并获得认可的，比如Joseph Conrad、林语堂。但是我对自己翻译文稿，总是不那么满意；所以我迫切地想知道，用外语写作这件事，究竟还可行不可行，如果可以，应该如何做。  
 
