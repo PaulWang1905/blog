@@ -208,6 +208,9 @@
          top band     moved down 7px: at the top rim the glass reaches
                       past its edge, and the browser mirrors the strip
                       right at the edge back into view: a reflection;
+         round ends   five small pieces around each end, each turned so
+                      its edge touches the curve, and moved 7px towards
+                      it: the same reflection, all the way round;
          middle       unmoved, so what is behind stays where it is;
          bottom band  moved up 7px: the same reflection at the bottom rim.
        Red, green and blue shift by slightly different amounts, so edges
@@ -233,6 +236,8 @@
 .site-top,
 .site-menu-panel {
   --band: 11px;
+  --r: 26.5px; /* the radius of the round ends: half the pill's height,
+                  which the header script measures; this is the usual */
   --glass: color-mix(in srgb, var(--color-base-100) 38%, transparent);
   --rim: rgba(255, 255, 255, 0.45);
   --rim-side: rgba(255, 255, 255, 0.55);
@@ -289,10 +294,10 @@
    reflection, as deep as its 7px shift); the middle fades in over the
    next 7px, so where the bands' shifted view meets the unmoved one there
    is a soft blend, not a hard line. */
-.site-glass i:nth-child(1) { clip-path: inset(0 0 calc(100% - var(--band) - 3px) 0); }
-.site-glass i:nth-child(2) { clip-path: inset(calc(100% - var(--band) - 3px) 0 0 0); }
+.site-glass i:nth-of-type(1) { clip-path: inset(0 0 calc(100% - var(--band) - 3px) 0); }
+.site-glass i:nth-of-type(2) { clip-path: inset(calc(100% - var(--band) - 3px) 0 0 0); }
 
-.site-glass i:nth-child(3) {
+.site-glass i:nth-of-type(3) {
   -webkit-mask-image: linear-gradient(to bottom,
     transparent calc(var(--band) - 4px), #000 calc(var(--band) + 3px),
     #000 calc(100% - var(--band) - 3px), transparent calc(100% - var(--band) + 4px));
@@ -301,9 +306,127 @@
     #000 calc(100% - var(--band) - 3px), transparent calc(100% - var(--band) + 4px));
 }
 
-.site-glass.refract i:nth-child(1) { backdrop-filter: url(#site-glass-top) blur(2px) saturate(150%) brightness(1.06); }
-.site-glass.refract i:nth-child(2) { backdrop-filter: url(#site-glass-bottom) blur(2px) saturate(150%) brightness(1.06); }
-.site-glass.refract i:nth-child(3) { backdrop-filter: url(#site-glass-mid) blur(2px) saturate(150%) brightness(1.06); }
+.site-glass.refract i:nth-of-type(1) { backdrop-filter: url(#site-glass-top) blur(2px) saturate(150%) brightness(1.06); }
+.site-glass.refract i:nth-of-type(2) { backdrop-filter: url(#site-glass-bottom) blur(2px) saturate(150%) brightness(1.06); }
+.site-glass.refract i:nth-of-type(3) { backdrop-filter: url(#site-glass-mid) blur(2px) saturate(150%) brightness(1.06); }
+
+/* The round ends, where the reflections are on (Chromium). Each end is
+   half a circle of radius --r, divided like a clock face, one piece every
+   30°. Each piece is cut to its wedge with a clip-path (Chrome ignores a
+   mask on a turned piece of glass, but keeps its clip-path), and the
+   wedges overlap by only half a degree, enough to close the hairline
+   gaps their smoothed edges would leave, but not so much that one shows
+   another's glass. (tan 15.5° = 0.2773; for 15.5° and 7.5°, sin is
+   0.2672 and 0.1305, 1 − cos is 0.0364 and 0.0086.)
+     - the bands keep 15° of each end, either side of straight up (top) or
+       straight down (bottom), and leave the rest to the pieces;
+     - each piece (<b>) sits in the middle of its end, turned by --a about
+       the centre of the end's circle, so its top edge touches the curve.
+       It takes the top band's shift, so what is seen moves 7px towards
+       that edge and the strip just inside the curve is reflected. It shows
+       only its 30° of the circle (15° either side), and only near the rim:
+       further in, the middle covers it;
+     - over the pieces, a light blur (<u>, one per end) softens the joins
+       between them, where two neighbouring reflections meet at slightly
+       different angles. The pieces' own blur is lighter, so the round
+       ends come out as soft as the straight rims;
+     - the middle fades in from the rim all round: from the top and bottom
+       along the straight part, and from the curve at each end. */
+.site-glass b,
+.site-glass u { display: none; }
+
+.site-glass.refract b {
+  display: block;
+  position: absolute;
+  top: 0;
+  width: 28px;
+  height: 22px;
+  transform-origin: 50% var(--r);
+  transform: rotate(var(--a));
+  clip-path: polygon(
+    50% var(--r),
+    calc(50% - var(--r) * 0.2672) calc(var(--r) * 0.0364),
+    calc(50% - var(--r) * 0.1305) calc(var(--r) * 0.0086),
+    50% 0,
+    calc(50% + var(--r) * 0.1305) calc(var(--r) * 0.0086),
+    calc(50% + var(--r) * 0.2672) calc(var(--r) * 0.0364));
+  backdrop-filter: url(#site-glass-top) blur(1px) saturate(150%) brightness(1.06);
+}
+
+.site-glass b.l { left: calc(var(--r) - 14px); }
+.site-glass b.r { right: calc(var(--r) - 14px); }
+
+/* The light blur over each end: a ring near the rim, fading out towards
+   straight up and straight down, where the bands take over */
+.site-glass.refract u {
+  display: block;
+  position: absolute;
+  top: 0;
+  width: calc(var(--r) + 1px);
+  height: 100%;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  backdrop-filter: blur(1.5px);
+}
+
+.site-glass u.l {
+  left: 0;
+  border-radius: var(--r) 0 0 var(--r);
+  --ring:
+    radial-gradient(circle at var(--r) 50%,
+      transparent calc(var(--r) - var(--band) - 7px), #000 calc(var(--r) - var(--band) - 3px)),
+    conic-gradient(at var(--r) 50%,
+      transparent 183deg, #000 192deg, #000 348deg, transparent 357deg);
+  -webkit-mask-image: var(--ring);
+  mask-image: var(--ring);
+}
+
+.site-glass u.r {
+  right: 0;
+  border-radius: 0 var(--r) var(--r) 0;
+  --ring:
+    radial-gradient(circle at 1px 50%,
+      transparent calc(var(--r) - var(--band) - 7px), #000 calc(var(--r) - var(--band) - 3px)),
+    conic-gradient(at 1px 50%,
+      transparent 3deg, #000 12deg, #000 168deg, transparent 177deg);
+  -webkit-mask-image: var(--ring);
+  mask-image: var(--ring);
+}
+
+.site-glass.refract i:nth-of-type(1) {
+  clip-path: polygon(
+    calc(var(--r) * (1 - 0.2773)) 0,
+    calc(100% - var(--r) * (1 - 0.2773)) 0,
+    calc(100% - var(--r) + (var(--r) - var(--band) - 3px) * 0.2773) calc(var(--band) + 3px),
+    calc(var(--r) - (var(--r) - var(--band) - 3px) * 0.2773) calc(var(--band) + 3px));
+}
+
+.site-glass.refract i:nth-of-type(2) {
+  clip-path: polygon(
+    calc(var(--r) * (1 - 0.2773)) 100%,
+    calc(100% - var(--r) * (1 - 0.2773)) 100%,
+    calc(100% - var(--r) + (var(--r) - var(--band) - 3px) * 0.2773) calc(100% - var(--band) - 3px),
+    calc(var(--r) - (var(--r) - var(--band) - 3px) * 0.2773) calc(100% - var(--band) - 3px));
+}
+
+/* The middle's mask in three parts: the round ends (each 1px wider than
+   the end, so the parts overlap and leave no hairline where they meet)
+   and the straight part between them */
+.site-glass.refract i:nth-of-type(3) {
+  --ends:
+    radial-gradient(circle at var(--r) 50%,
+      #000 calc(var(--r) - var(--band) - 3px), transparent calc(var(--r) - var(--band) + 4px))
+      left / calc(var(--r) + 1px) 100% no-repeat,
+    linear-gradient(to bottom,
+      transparent calc(var(--band) - 4px), #000 calc(var(--band) + 3px),
+      #000 calc(100% - var(--band) - 3px), transparent calc(100% - var(--band) + 4px))
+      center / calc(100% - 2 * var(--r)) 100% no-repeat,
+    radial-gradient(circle at 1px 50%,
+      #000 calc(var(--r) - var(--band) - 3px), transparent calc(var(--r) - var(--band) + 4px))
+      right / calc(var(--r) + 1px) 100% no-repeat;
+  -webkit-mask: var(--ends);
+  mask: var(--ends);
+}
 
 /* The tint and light: over the glass on the pill; on the menu panel the
    same light over a solid background (below) */

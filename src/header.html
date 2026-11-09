@@ -62,18 +62,31 @@
 </filter>
 {% endmacro %}
 
-{#- The glass itself: three layers (.site-glass in styles.css), in this order:
+{#- The glass itself: layers (.site-glass in styles.css), in this order:
       - top band: what is seen is moved down 7px, so at the top rim the glass
         reaches past its edge and the strip right at the edge is reflected,
         flipped;
       - bottom band: moved up 7px, the same reflection at the bottom rim;
-      - middle, over them, fading in from each band: what is behind, unmoved,
-        with the faint colour fringes.
-    Used by the pill only. Only plain shifts, which every
-    Chromium browser draws the same way; the script turns them on there
-    (.refract), and other browsers keep a plain frosted glass. -#}
+      - the round ends (<b>): around each end, five small pieces, one every
+        30° (--a). Each is turned so that its edge touches the curve at its
+        angle, and moved 7px towards that edge, so it reflects the strip
+        just inside the curve there, as the bands do at the straight rims;
+      - over each end, a light blur (<u>) that softens the joins between
+        the pieces;
+      - middle, over them, fading in from the rim all round: what is
+        behind, unmoved, with the faint colour fringes.
+    Used by the pill only. Only plain shifts, which every Chromium browser
+    draws the same way; the script turns them on there (.refract), and
+    other browsers keep a plain frosted glass. -#}
 {% macro glass() %}
-<span class="site-glass" aria-hidden="true"><i></i><i></i><i></i></span>
+<span class="site-glass" aria-hidden="true">
+  <i></i><i></i>
+  {%- for a in [-30, -60, -90, -120, -150, 30, 60, 90, 120, 150] %}
+  <b class="{{ 'l' if a < 0 else 'r' }}" style="--a:{{ a }}deg"></b>
+  {%- endfor %}
+  <u class="l"></u><u class="r"></u>
+  <i></i>
+</span>
 {% endmacro %}
 
 <svg class="site-glass-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
@@ -177,6 +190,13 @@
     // is Chromium's own). The rest keep a plain frosted glass.
     if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass-top)')) {
       document.querySelectorAll('.site-glass').forEach((glass) => glass.classList.add('refract'));
+      // The round ends are laid out on a circle of radius --r, half the
+      // pill's height, which depends on the fonts and the screen width
+      // (the links row makes it 1px taller on wider screens): measure it.
+      const pill = document.querySelector('.site-top');
+      new ResizeObserver(([entry]) => {
+        pill.style.setProperty('--r', `${entry.borderBoxSize[0].blockSize / 2}px`);
+      }).observe(pill);
     }
 
     // The highlight follows the pointer across the pill and the menu

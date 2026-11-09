@@ -85,7 +85,21 @@
 
 <div class="site-top">
   
-<span class="site-glass" aria-hidden="true"><i></i><i></i><i></i></span>
+<span class="site-glass" aria-hidden="true">
+  <i></i><i></i>
+  <b class="l" style="--a:-30deg"></b>
+  <b class="l" style="--a:-60deg"></b>
+  <b class="l" style="--a:-90deg"></b>
+  <b class="l" style="--a:-120deg"></b>
+  <b class="l" style="--a:-150deg"></b>
+  <b class="r" style="--a:30deg"></b>
+  <b class="r" style="--a:60deg"></b>
+  <b class="r" style="--a:90deg"></b>
+  <b class="r" style="--a:120deg"></b>
+  <b class="r" style="--a:150deg"></b>
+  <u class="l"></u><u class="r"></u>
+  <i></i>
+</span>
 
 
   <header class="site-nav" id="site-nav">
@@ -207,6 +221,13 @@
     // is Chromium's own). The rest keep a plain frosted glass.
     if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass-top)')) {
       document.querySelectorAll('.site-glass').forEach((glass) => glass.classList.add('refract'));
+      // The round ends are laid out on a circle of radius --r, half the
+      // pill's height, which depends on the fonts and the screen width
+      // (the links row makes it 1px taller on wider screens): measure it.
+      const pill = document.querySelector('.site-top');
+      new ResizeObserver(([entry]) => {
+        pill.style.setProperty('--r', `${entry.borderBoxSize[0].blockSize / 2}px`);
+      }).observe(pill);
     }
 
     // The highlight follows the pointer across the pill and the menu
