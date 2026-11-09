@@ -36,6 +36,7 @@
 
 
 
+
 <svg class="site-glass-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
   <filter id="site-glass-lens" filterUnits="userSpaceOnUse" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
     <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="soft"/>
@@ -56,6 +57,27 @@
       <feMergeNode in="rim"/>
     </feMerge>
   </filter>
+
+  <filter id="site-glass-lens-menu" filterUnits="userSpaceOnUse" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="soft"/>
+    <feImage result="bend" x="0" y="0" width="1" height="1" preserveAspectRatio="none"/>
+    <feDisplacementMap in="soft" in2="bend" scale="0" xChannelSelector="R" yChannelSelector="G" result="r0"/>
+    <feDisplacementMap in="soft" in2="bend" scale="0" xChannelSelector="R" yChannelSelector="G" result="g0"/>
+    <feDisplacementMap in="soft" in2="bend" scale="0" xChannelSelector="R" yChannelSelector="G" result="b0"/>
+    <feColorMatrix in="r0" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+    <feColorMatrix in="g0" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+    <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+    <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
+    <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1" result="seen"/>
+    <feColorMatrix in="seen" type="saturate" values="6" result="vivid"/>
+    <feImage result="light" x="0" y="0" width="1" height="1" preserveAspectRatio="none"/>
+    <feComposite in="vivid" in2="light" operator="in" result="rim"/>
+    <feMerge>
+      <feMergeNode in="seen"/>
+      <feMergeNode in="rim"/>
+    </feMerge>
+  </filter>
+
 </svg>
 
 
@@ -127,6 +149,9 @@
 
 <nav class="site-menu-panel" id="site-menu-panel" aria-label="Main">
   
+<span class="site-glass" aria-hidden="true"><i></i><b></b></span>
+
+  
 
 <a href="/index.html" >Home</a>
 
@@ -189,20 +214,19 @@
     // (pull below). Right at the rim it reaches far in; closer in, less
     // and less, falling faster than t grows at first, so the rim shows
     // what is far in, mirrored, and then what is a little further in,
-    // enlarged, until the glass is flat. The pill is a rectangle with
-    // round ends of radius r, half its height; for each point of it the
-    // script finds t and which way the rim faces there (the outward
+    // enlarged, until the glass is flat. Each piece of glass is a
+    // rectangle with round corners (the pill's are half its height, so its
+    // ends are round; the phone menu's are smaller); for each point of it
+    // the script finds t and which way the rim faces there (the outward
     // normal, nx, ny). The pull, inward along the normal, is written into
     // the map as red (across) and green (down), 128 meaning no move, and
     // the filter's scale turns the map's ±127 back into ±most px. The
     // second map is the ring of light, a thin line just inside the rim,
     // brightest where the rim faces the light (from the top, a little to
     // the left) or faces straight away from it. Both maps are drawn at
-    // twice the pill's size, so the steep rim stays smooth on any screen.
+    // twice the glass's size, so the steep rim stays smooth on any screen.
     // Chromium only (navigator.userAgentData is Chromium's own).
     const pill = document.querySelector('.site-top');
-    const glass = pill.querySelector('.site-glass');
-    const lens = document.getElementById('site-glass-lens');
     if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass-lens)')) {
       const BASE = 20;                 // px: the flat slab's thickness
       const RISE = 19;                 // px: how much the rounded rim rises over it
@@ -229,7 +253,8 @@
         return pull[k] + (pull[k + 1] - pull[k]) * (t / STEP - k);
       };
 
-      const draw = (w, h) => {
+      // The two maps for glass w × h px, its corners rounded to radius round
+      const draw = (w, h, round) => {
         const cw = w * DENSITY;
         const ch = h * DENSITY;
         const canvas = document.createElement('canvas');
@@ -238,17 +263,30 @@
         const ctx = canvas.getContext('2d');
         const bend = ctx.createImageData(cw, ch);
         const light = ctx.createImageData(cw, ch);
-        const r = h / 2;
+        const sx = w / 2 - round;   // half the straight part of the top and bottom
+        const sy = h / 2 - round;   // and of the sides
         for (let y = 0; y < ch; y += 1) {
           for (let x = 0; x < cw; x += 1) {
-            const px = (x + 0.5) / DENSITY;
-            const py = (y + 0.5) / DENSITY;
-            const dx = px - Math.min(Math.max(px, r), w - r);
-            const dy = py - r;
-            const d = Math.hypot(dx, dy) || 1;
-            const nx = dx / d;
-            const ny = dy / d;
-            const t = Math.max(0, r - d);
+            const px = (x + 0.5) / DENSITY - w / 2;   // from the middle
+            const py = (y + 0.5) / DENSITY - h / 2;
+            const qx = Math.abs(px) - sx;   // how far past the straight parts
+            const qy = Math.abs(py) - sy;
+            let t;
+            let nx = 0;
+            let ny = 0;
+            if (qx > 0 && qy > 0) {         // in a round corner
+              const d = Math.hypot(qx, qy);
+              t = round - d;
+              nx = (Math.sign(px) * qx) / d;
+              ny = (Math.sign(py) * qy) / d;
+            } else if (qx > qy) {           // nearest a side
+              t = round - qx;
+              nx = Math.sign(px);
+            } else {                        // nearest the top or bottom
+              t = round - qy;
+              ny = Math.sign(py);
+            }
+            t = Math.max(0, t);
             const inward = pullAt(t) / most;
             const i = (y * cw + x) * 4;
             bend.data[i] = 128 - Math.round(127 * nx * inward);
@@ -267,26 +305,54 @@
         return [bendUrl, canvas.toDataURL()];
       };
 
-      let size = '';
-      new ResizeObserver(([entry]) => {
-        const w = Math.round(entry.borderBoxSize[0].inlineSize);
-        const h = Math.round(entry.borderBoxSize[0].blockSize);
-        if (!w || !h || size === `${w}x${h}`) return;
-        size = `${w}x${h}`;
-        const urls = draw(w, h);
-        lens.setAttribute('width', w);
-        lens.setAttribute('height', h);
-        lens.querySelectorAll('feImage').forEach((map, k) => {
-          map.setAttribute('width', w);
-          map.setAttribute('height', h);
-          map.setAttribute('href', urls[k]);
-        });
-        lens.querySelectorAll('feDisplacementMap').forEach((step, c) => {
-          step.setAttribute('scale', (most * FRINGE[c] * 255) / 127);
-        });
-        glass.querySelector('b').style.backgroundImage = `url(${urls[1]})`;
-        glass.classList.add('refract');
-      }).observe(pill);
+      // Fit the glass in host, and its lens filter, to host's size; and
+      // again whenever that changes. Returns the fitting, to call ahead.
+      const follow = (host, lens) => {
+        const glass = host.querySelector('.site-glass');
+        let size = '';
+        const fit = (width, height) => {
+          const w = Math.round(width);
+          const h = Math.round(height);
+          if (!w || !h || size === `${w}x${h}`) return;
+          size = `${w}x${h}`;
+          const round = Math.min(parseFloat(getComputedStyle(host).borderTopLeftRadius) || 0, w / 2, h / 2);
+          const urls = draw(w, h, round);
+          lens.setAttribute('width', w);
+          lens.setAttribute('height', h);
+          lens.querySelectorAll('feImage').forEach((map, k) => {
+            map.setAttribute('width', w);
+            map.setAttribute('height', h);
+            map.setAttribute('href', urls[k]);
+          });
+          lens.querySelectorAll('feDisplacementMap').forEach((step, c) => {
+            step.setAttribute('scale', (most * FRINGE[c] * 255) / 127);
+          });
+          glass.querySelector('b').style.backgroundImage = `url(${urls[1]})`;
+          glass.classList.add('refract');
+        };
+        new ResizeObserver(([entry]) => {
+          fit(entry.borderBoxSize[0].inlineSize, entry.borderBoxSize[0].blockSize);
+        }).observe(host);
+        return fit;
+      };
+
+      follow(pill, document.getElementById('site-glass-lens'));
+      const fitMenu = follow(panel, document.getElementById('site-glass-lens-menu'));
+
+      // The phone menu is hidden until opened, so it has no size to fit
+      // to. To have it open as glass straight away, lay it out once,
+      // unseen, when the page's fonts are in (they set the links' height)
+      // and the page is idle, and fit its glass then. Phones only.
+      document.fonts.ready.then(() => requestIdleCallback(() => {
+        if (panel.classList.contains('open')) return;
+        if (getComputedStyle(header.querySelector('.site-menu')).display === 'none') return;
+        panel.style.setProperty('display', 'flex');
+        panel.style.setProperty('visibility', 'hidden');
+        const box = panel.getBoundingClientRect();
+        panel.style.removeProperty('display');
+        panel.style.removeProperty('visibility');
+        fitMenu(box.width, box.height);
+      }, { timeout: 3000 }));
     }
 
     // The highlight follows the pointer across the pill and the menu

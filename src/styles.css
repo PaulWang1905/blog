@@ -196,10 +196,10 @@
 
    The pill (.site-top, holding the glass and the header) stays at the top
    as the page scrolls under it, and on phones a menu panel
-   (.site-menu-panel) opens under it. The panel has the same tint, bevel
-   and touch but is solid, with no glass: the glass cost too much to draw
-   on phones. The pill's liquid glass is clearer than frosted glass, and
-   built in layers:
+   (.site-menu-panel) opens under it, of the same liquid glass, tint and
+   touch where the lens is on; elsewhere it is solid, with the bevel, as
+   frosted glass cost too much to draw on phones. The liquid glass is
+   clearer than frosted glass, and built in layers:
      - the glass (.site-glass): the lens, what is behind seen through the
        glass, with a light blur and a touch more saturation and
        brightness; in Chromium browsers also bent as a thick slab of glass
@@ -229,6 +229,7 @@
 .site-top,
 .site-menu-panel {
   --glass: color-mix(in srgb, var(--color-base-100) 38%, transparent);
+  --milk: color-mix(in srgb, var(--color-base-100) 60%, transparent);
   --rim: rgba(255, 255, 255, 0.45);
   --rim-side: rgba(255, 255, 255, 0.55);
   --bevel: rgba(255, 255, 255, 0.4);
@@ -292,6 +293,10 @@
   backdrop-filter: url(#site-glass-lens) saturate(150%) brightness(1.06);
 }
 
+.site-menu-panel .site-glass.refract i {
+  backdrop-filter: url(#site-glass-lens-menu) saturate(150%) brightness(1.06);
+}
+
 .site-glass b {
   display: none;
   background: center / 100% 100% no-repeat;
@@ -324,9 +329,14 @@
    write-up (its glass is 60% white), and the lens and its lit rim give
    the depth, so the bevel's lines and glows go. The hairline outline and
    the shadow beneath stay; the border stays too, unseen, so nothing
-   moves. */
-.site-glass.refract ~ .site-nav {
-  --glass: color-mix(in srgb, var(--color-base-100) 60%, transparent);
+   moves. The same on the phone menu, whose tint is its ::before (below). */
+.site-glass.refract ~ .site-nav,
+.site-menu-panel:has(> .site-glass.refract)::before {
+  background: var(--milk);
+}
+
+.site-glass.refract ~ .site-nav,
+.site-menu-panel:has(> .site-glass.refract) {
   border-color: transparent;
   box-shadow:
     0 0 0 0.5px var(--outline),
@@ -468,8 +478,17 @@
 
 /* The phone menu panel, opening under the pill (12px from the top, plus
    the pill's 52px, plus an 8px gap), lined up with it. Shown only on
-   phones, and only while open. Solid, so the page does not show through
-   the links. */
+   phones, and only while open. Liquid glass like the pill where the lens
+   is on (Chromium browsers), as blurred, a little milkier, as its links
+   sit over the page's text: its glass behind
+   everything in it, covering its border too; over the glass its tint
+   (::before) and the pointer highlight (::after); then the links; the
+   panel itself clear. The highlight blends normally here, a little
+   softer: blended as on the pill (soft-light), it would cut the panel off
+   from the page behind, and its glass would show nothing. (On the pill
+   the highlight is inside the header, which has no glass in it.)
+   Elsewhere the panel is solid, so the page does not show through the
+   links, and its glass is not shown. */
 .site-menu-panel {
   position: fixed;
   z-index: 50;
@@ -482,7 +501,31 @@
   border-radius: 22px;
   background: var(--color-base-100);
   transform-origin: top right;
+  --milk: color-mix(in srgb, var(--color-base-100) 78%, transparent);   /* milkier than the pill, for the links */
 }
+
+.site-menu-panel .site-glass { inset: -1px; z-index: -2; }
+.site-menu-panel .site-glass:not(.refract) { display: none; }
+
+.site-menu-panel:has(> .site-glass.refract) {
+  background: transparent;
+  --shine: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .site-menu-panel:has(> .site-glass.refract) {
+  --shine: rgba(255, 255, 255, 0.1);
+}
+
+.site-menu-panel:has(> .site-glass.refract)::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.site-menu-panel:has(> .site-glass.refract)::after { mix-blend-mode: normal; }
 
 .site-menu-panel a { padding: 12px 14px; font-size: 16px; }
 
