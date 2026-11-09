@@ -23,8 +23,9 @@
  *   ultramarine #2c4b9e (Blog)    cypress #3a6d44 (Notes)    cobble blue #8ea2d4 (Story)
  *   terrace orange #dd8b36 (Recipe)   rust #b04a2c (中文)
  *   gaslight #ecbf45 for small accents; the footer in the rust
- * The light theme is lamplit cream #f3ecdb with night-blue ink #16224a;
- * the dark theme is the night sky itself, #0e1633. Every text/colour
+ * The light theme is a white page with night-blue ink #16224a, and
+ * moonlit blue-grey #eef1f6 sheets for reading; the dark theme is the
+ * night sky itself, #0e1633. Every text/colour
  * pair passes WCAG AA (4.5:1) for small text.
  *
  * `paper` is the light theme and the default; `dark` is what the header's
@@ -35,9 +36,9 @@
   default: true;
   prefersdark: false;
   color-scheme: light;
-  --color-base-100: #f3ecdb;
-  --color-base-200: #e9e0ca;
-  --color-base-300: #dccfb2;
+  --color-base-100: #ffffff;
+  --color-base-200: #eef1f6;
+  --color-base-300: #dde3ec;
   --color-base-content: #16224a;
   --color-primary: #2c4b9e;
   --color-primary-content: #f3ecdb;
@@ -165,9 +166,9 @@
 }
 
 /* The sheet behind a post's main text (template.html, as bg-sheet): a
- * lighter, warm white laid on the cream page; in dark mode, one step up
- * from the night. */
-:root { --sheet: #fcf9f2; }
+ * moonlit blue-grey sheet laid on the white page; in dark mode, one step
+ * up from the night. */
+:root { --sheet: #eef1f6; }
 [data-theme="dark"] { --sheet: #16214a; }
 
 @theme inline {
@@ -193,18 +194,53 @@
 /* ============================================================
    Site header (header.html, every page)
 
-   A pill of frosted glass that stays at the top as the page
-   scrolls under it. The only glass on the site; the phone
-   dropdown under it is solid. The frosting is drawn on ::before
-   so the pill's own contents stay crisp above it.
-   Nothing in it animates: it is the same on every page, and the
-   view-transition rules at the end of this file keep it still
-   while the rest of the page crossfades.
+   A pill of liquid glass that stays at the top as the page scrolls
+   under it. Clearer than frosted glass, and built in layers:
+     - the glass: a light tint, a little blur, a touch more saturation and
+       brightness, so what passes beneath stays visible but soft;
+     - refraction: the middle is nearly clear; within a thin rim the
+       page beneath bends inwards, as through thick glass, following the
+       outline round the ends, with faint colour fringes where red, green
+       and blue bend by different amounts; the whole pane ripples a
+       little, like liquid; and all round the rim and right across the
+       round ends, what is seen is heavily frosted, as where the glass
+       is thickest.
+       An SVG filter (#site-glass in header.html) does both. Only
+       Chromium browsers can use an SVG filter on the backdrop, so the
+       header script turns it on there (.refract) and other browsers
+       keep plain glass;
+     - light: a bevel, as on a thick rounded slab: a crisp highlight
+       line along the top, softer lines down the sides and along the
+       bottom, soft glows just inside the top and bottom, a
+       hairline outline so the glass edge reads clearly on a white page,
+       a light shadow beneath (kept faint, so it never greys the page
+       under the pill), and a highlight (::after) that follows the
+       pointer and brightens while it is over the pill;
+     - touch: the links and buttons swell a little on hover and squash
+       when pressed, then spring back past their size and settle
+       (--spring). The pill itself never moves or resizes, so the page
+       never jumps.
+   The glass has to be on the header itself: on a layer inside it,
+   Chrome would blur only what is inside the header.
+   The phone dropdown under it is solid. Nothing in it animates on
+   its own: it is the same on every page, and the view-transition
+   rules at the end of this file keep it still while the rest of
+   the page crossfades.
    ============================================================ */
 .site-nav {
-  --glass: color-mix(in srgb, var(--color-base-100) 62%, transparent);
-  --glass-edge: rgba(255, 255, 255, 0.8);
-  --glass-hi: rgba(255, 255, 255, 0.55);
+  --glass: color-mix(in srgb, var(--color-base-100) 38%, transparent);
+  --rim: rgba(255, 255, 255, 0.95);
+  --rim-side: rgba(255, 255, 255, 0.55);
+  --rim-low: rgba(255, 255, 255, 0.45);
+  --bevel: rgba(255, 255, 255, 0.85);
+  --bevel-low: rgba(255, 255, 255, 0.4);
+  --glow: rgba(255, 255, 255, 0.28);
+  --edge-line: rgba(255, 255, 255, 0.45);
+  --outline: rgba(22, 34, 74, 0.14);
+  --shine: rgba(255, 255, 255, 0.7);
+  --mx: 18%;
+  --my: 0%;
+  --spring: cubic-bezier(0.3, 1.6, 0.5, 1);
   position: sticky;
   top: 12px;
   z-index: 50;
@@ -215,27 +251,59 @@
   padding: 6px 6px 6px 16px;
   border-radius: 999px;
   color: var(--color-base-content);
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 50%),
+    var(--glass);
+  -webkit-backdrop-filter: blur(8px) saturate(140%) brightness(1.05);
+  backdrop-filter: blur(8px) saturate(140%) brightness(1.05);
+  border: 1px solid var(--edge-line);
+  box-shadow:
+    inset 0 1px 0 var(--rim),
+    inset 1px 0 0 var(--rim-side),
+    inset -1px 0 0 var(--rim-side),
+    inset 0 -1px 0 var(--rim-low),
+    inset 0 7px 9px -7px var(--bevel),
+    inset 0 -7px 9px -7px var(--bevel-low),
+    inset 0 0 12px var(--glow),
+    0 0 0 0.5px var(--outline),
+    0 1px 2px rgba(16, 27, 63, 0.06),
+    0 6px 18px -8px rgba(16, 27, 63, 0.16);
 }
 
-[data-theme="dark"] .site-nav {
-  --glass-edge: rgba(255, 255, 255, 0.13);
-  --glass-hi: rgba(255, 255, 255, 0.08);
+/* Chromium: the page beneath bends at the rim */
+.site-nav.refract {
+  backdrop-filter: url(#site-glass) blur(2px) saturate(150%) brightness(1.06);
 }
 
-.site-nav::before {
-  background: var(--glass);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid var(--glass-edge);
-  box-shadow: inset 0 1px 0 var(--glass-hi), 0 14px 34px -22px rgba(0, 0, 0, 0.5);
-}
-
-.site-nav::before {
+/* The highlight that follows the pointer; behind the links, above the glass */
+.site-nav::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(220px 90px at var(--mx) var(--my), var(--shine), transparent 70%);
+  mix-blend-mode: soft-light;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.site-nav:hover::after { opacity: 1; }
+
+[data-theme="dark"] .site-nav {
+  --rim: rgba(255, 255, 255, 0.35);
+  --rim-side: rgba(255, 255, 255, 0.14);
+  --rim-low: rgba(255, 255, 255, 0.12);
+  --bevel: rgba(255, 255, 255, 0.16);
+  --bevel-low: rgba(255, 255, 255, 0.06);
+  --glow: rgba(255, 255, 255, 0.07);
+  --edge-line: rgba(255, 255, 255, 0.16);
+  --outline: rgba(0, 0, 0, 0.35);
+  --shine: rgba(255, 255, 255, 0.35);
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 55%),
+    var(--glass);
 }
 
 .site-brand {
@@ -273,6 +341,30 @@
   border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
+}
+
+/* Touch: swell on hover, squash when pressed, spring back */
+.site-links a,
+.site-icon {
+  transition: transform 0.5s var(--spring), background-color 0.2s ease, color 0.2s ease;
+}
+
+.site-links a:hover,
+.site-icon:hover { transform: scale(1.06); }
+
+.site-links a:active,
+.site-icon:active {
+  transform: scale(0.92);
+  transition-duration: 0.12s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-links a,
+  .site-icon { transition: background-color 0.2s ease, color 0.2s ease; }
+  .site-links a:hover,
+  .site-links a:active,
+  .site-icon:hover,
+  .site-icon:active { transform: none; }
 }
 
 .site-links a:hover,
@@ -328,9 +420,8 @@
 /* ============================================================
    Site footer (footer.html, every page)
 
-   Two parts. First the aphorisms: the whole list as a bar of
-   segments, one line at a time; the current segment fills, then
-   the next line rolls in. Then the clay block that closes every
+   Two parts. First the aphorisms: one line at a time, in a random
+   order; a thin timer line fills, then the next line rolls in. Then the clay block that closes every
    page, with the name set as wide as the column: 100cqi is the
    block's inner width, and the name is 8.5em wide in Archivo at
    this width and weight, so the line fills the column at any
@@ -347,44 +438,33 @@
 }
 
 .site-aph-head { display: flex; align-items: center; gap: 18px; font-size: 13px; font-weight: 700; }
-.site-aph-head .count { min-width: 4.6em; margin-left: auto; text-align: right; font-variant-numeric: tabular-nums; }
 
-.site-aph-bar {
+/* The timer: one thin line that fills over the seconds until the next line */
+.site-aph-timer {
+  position: relative;
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(var(--n), 1fr);
-  gap: 4px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.site-aph-bar button { position: relative; display: block; width: 100%; height: 20px; cursor: pointer; }
-
-.site-aph-bar button::before,
-.site-aph-bar i {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
   height: 3px;
-  margin-top: -1.5px;
   border-radius: 3px;
+  background: color-mix(in srgb, currentColor 22%, transparent);
 }
 
-.site-aph-bar button::before { background: color-mix(in srgb, currentColor 22%, transparent); }
-.site-aph-bar button:hover::before { background: color-mix(in srgb, currentColor 50%, transparent); }
-.site-aph-bar i { background: var(--gaslight); transform: scaleX(0); transform-origin: left; }
-.site-aph-bar .done i { transform: scaleX(1); background: currentColor; }
-.site-aph-bar .cur i { animation: site-aph-fill 6s linear forwards; }
+.site-aph-timer i {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--gaslight);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.site-aph-timer.run i { animation: site-aph-fill 6s linear forwards; }
 
 /* Stopped while it is off screen (.idle, set by the script), while the
    pointer or keyboard focus is on it, and by the pause button */
-.site-aph.idle .site-aph-bar .cur i,
-.site-aph.paused .site-aph-bar .cur i,
-.site-aph:hover .site-aph-bar .cur i,
-.site-aph:has(:focus-visible) .site-aph-bar .cur i {
+.site-aph.idle .site-aph-timer i,
+.site-aph.paused .site-aph-timer i,
+.site-aph:hover .site-aph-timer i,
+.site-aph:has(:focus-visible) .site-aph-timer i {
   animation-play-state: paused;
 }
 
@@ -429,6 +509,10 @@
 .site-aph-ctrl button:hover { background: currentColor; }
 .site-aph-ctrl button:hover svg { fill: var(--color-neutral); }
 .site-aph-ctrl svg { width: 18px; height: 18px; fill: currentColor; }
+/* Back, with nothing to go back to yet */
+.site-aph-ctrl button:disabled { opacity: 0.35; cursor: default; }
+.site-aph-ctrl button:disabled:hover { background: none; }
+.site-aph-ctrl button:disabled:hover svg { fill: currentColor; }
 .site-aph:not(.paused) .play,
 .site-aph.paused .pause { display: none; }
 .site-aph :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
@@ -492,7 +576,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-aph-bar .cur i { animation: none; transform: scaleX(1); }
+  .site-aph-timer { display: none; }
   .site-aph-text span { transition: none; }
 }
 

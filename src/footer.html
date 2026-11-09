@@ -1,9 +1,9 @@
 {# Site footer, included by every page template.
 
    Two parts (.site-aph and .site-foot-main in styles.css):
-   - the aphorisms (meta_data.json's phrases): the whole list as a bar of
-     segments, one line at a time. Each page starts on a random line, and
-     the list only moves once it is on screen.
+   - the aphorisms (meta_data.json's phrases): one line at a time, in a
+     random order, with a thin line that fills until the next one (see the
+     script). It only moves once it is on screen.
    - the clay block: links and social accounts, then the name set as wide
      as the column.
 
@@ -16,13 +16,8 @@
   <section class="site-aph" aria-roledescription="carousel" aria-label="Aphorisms">
     <div class="site-aph-head">
       <span class="label">Aphorisms</span>
-      {# One segment per line in the list; shown once the script runs #}
-      <ol class="site-aph-bar" style="--n: {{ foot_phrases | length }}" hidden>
-        {% for phrase in foot_phrases %}
-        <li><button type="button" aria-label="Aphorism {{ loop.index }} of {{ foot_phrases | length }}"><i></i></button></li>
-        {% endfor %}
-      </ol>
-      <span class="count">01 / {{ '%02d' | format(foot_phrases | length) }}</span>
+      {# Fills over the seconds until the next line; shown once the script runs #}
+      <span class="site-aph-timer" hidden><i></i></span>
     </div>
     <div class="site-aph-body">
       <p class="site-aph-text" lang="zh-Hant" aria-live="off"><span>{{ foot_phrases[0] | e }}</span></p>
@@ -84,60 +79,92 @@
     const year = document.getElementById('footer-year');
     if (year) year.textContent = new Date().getFullYear();
 
-    // ----- Aphorisms. The current segment fills (a CSS animation); when it
-    // is full, the next line rolls in. Hovering, keyboard focus, the pause
-    // button and being off screen all stop the fill, so nothing moves
-    // unseen. With reduced motion the fill never runs, and the lines change
-    // only when asked.
+    // ----- Aphorisms, in a random order. Each turn draws a line at random
+    // from the ones not yet shown on this visit, like dealing from a
+    // shuffled deck: nothing repeats until every line has had its turn, and
+    // then the deck is shuffled again (never starting with the line on
+    // screen). The timer line fills (a CSS animation); when it is full, the
+    // next line rolls in. Back and forward step through the lines shown so
+    // far, like a browser's history.
+    //
+    // Hovering, keyboard focus, the pause button and being off screen all
+    // stop the timer, so nothing moves unseen. With reduced motion there is
+    // no timer, and the lines change only when asked.
     const band = document.querySelector('.site-aph');
     const phrases = {{ foot_phrases | tojson }};
     const n = phrases.length;
     if (!band || n < 2) return;
 
-    const bar = band.querySelector('.site-aph-bar');
     const text = band.querySelector('.site-aph-text');
-    const count = band.querySelector('.count');
-    const segs = [...bar.querySelectorAll('button')];
+    const timer = band.querySelector('.site-aph-timer');
+    const prev = band.querySelector('[data-step="-1"]');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    bar.hidden = false;
+    timer.hidden = reduce;
     band.querySelector('.site-aph-ctrl').hidden = false;
 
-    let at = 0;
+    let deck = [];             // lines not yet shown in this round
+    const history = [];        // every line shown, in order
+    let h = -1;                // where we are in that history
     let shown = text.firstElementChild;
 
-    const go = (k, { manual = false, roll = !reduce } = {}) => {
-      const dir = k < at ? -1 : 1;
-      at = (k + n) % n;
-      segs.forEach((s, j) => {
-        s.classList.toggle('done', j < at);
-        s.classList.toggle('cur', j === at);
-        if (j === at) s.setAttribute('aria-current', 'true');
-        else s.removeAttribute('aria-current');
-      });
-      count.textContent = String(at + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0');
+    // The next line from the deck, chosen at random
+    const deal = () => {
+      if (!deck.length) deck = [...Array(n).keys()].filter((k) => k !== history[h]);
+      return deck.splice(Math.floor(Math.random() * deck.length), 1)[0];
+    };
+
+    // Start the timer over, for the full few seconds
+    const restart = () => {
+      timer.classList.remove('run');
+      void timer.offsetWidth;
+      timer.classList.add('run');
+    };
+
+    const show = (k, { dir = 1, manual = false, roll = !reduce } = {}) => {
+      prev.disabled = h <= 0;
       // Screen readers hear the line when the visitor changed it, not on
       // every automatic turn
       text.setAttribute('aria-live', manual ? 'polite' : 'off');
 
       const line = document.createElement('span');
-      line.textContent = phrases[at];
+      line.textContent = phrases[k];
       if (!roll) {
         text.replaceChildren(line);
       } else {
         line.className = dir > 0 ? 'below' : 'above';
         text.append(line);
-        void line.offsetWidth;          // start from below, so the roll animates
+        void line.offsetWidth;          // start from below (or above), so the roll animates
         line.className = '';
         shown.className = dir > 0 ? 'above' : 'below';
         const old = shown;
         setTimeout(() => old.remove(), 700);
       }
       shown = line;
+      restart();
     };
 
-    // A different line to start from on each page
+    // Forward: on through the history if the visitor went back, else a new
+    // random line
+    const forward = (manual) => {
+      if (h < history.length - 1) {
+        h += 1;
+      } else {
+        history.push(deal());
+        h = history.length - 1;
+      }
+      show(history[h], { dir: 1, manual });
+    };
+    const back = () => {
+      if (h <= 0) return;
+      h -= 1;
+      show(history[h], { dir: -1, manual: true });
+    };
+
+    // A random line to start each page with
     band.classList.add('idle');
-    go(Math.floor(Math.random() * n), { roll: false });
+    history.push(deal());
+    h = 0;
+    show(history[0], { roll: false });
 
     // Only move while it is on screen
     if ('IntersectionObserver' in window) {
@@ -148,17 +175,10 @@
       band.classList.remove('idle');
     }
 
-    bar.addEventListener('animationend', (e) => {
-      if (e.target.parentElement.classList.contains('cur')) go(at + 1);
-    });
-    bar.addEventListener('click', (e) => {
-      const seg = e.target.closest('button');
-      if (seg) go(segs.indexOf(seg), { manual: true });
-    });
-    band.querySelectorAll('[data-step]').forEach((b) => {
-      b.addEventListener('click', () => go(at + Number(b.dataset.step), { manual: true }));
-    });
-    text.addEventListener('click', () => go(at + 1, { manual: true }));
+    timer.addEventListener('animationend', () => forward(false));
+    prev.addEventListener('click', back);
+    band.querySelector('[data-step="1"]').addEventListener('click', () => forward(true));
+    text.addEventListener('click', () => forward(true));
     band.querySelector('[data-pause]').addEventListener('click', (e) => {
       const paused = band.classList.toggle('paused');
       e.currentTarget.setAttribute('aria-label', paused ? 'Play' : 'Pause');

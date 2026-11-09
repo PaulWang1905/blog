@@ -45,7 +45,37 @@
 
 
 
-<header class="site-nav" id="site-nav">
+<header class="site-nav" id="site-nav"><svg class="site-glass-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <filter id="site-glass" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feImage id="site-glass-lens" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="lens"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect width='1' height='1' fill='%23808080'/%3E%3C/svg%3E"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.034" numOctaves="2" seed="7" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="2.5" result="soft"/>
+      <feComponentTransfer in="soft" result="ripple">
+        <feFuncR type="linear" slope="0.4" intercept="0.3"/>
+        <feFuncG type="linear" slope="0.4" intercept="0.3"/>
+        <feFuncA type="linear" slope="0" intercept="1"/>
+      </feComponentTransfer>
+      <feComposite in="lens" in2="ripple" operator="arithmetic" k2="1" k3="1" k4="-0.5" result="map"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="24" xChannelSelector="R" yChannelSelector="G" result="bentR"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="25.5" xChannelSelector="R" yChannelSelector="G" result="bentG"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="27" xChannelSelector="R" yChannelSelector="G" result="bentB"/>
+      <feColorMatrix in="bentR" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+      <feColorMatrix in="bentG" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+      <feColorMatrix in="bentB" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+      <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
+      <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1" result="bent"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="1" seed="3" result="grainRaw"/>
+      <feColorMatrix in="grainRaw" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0 1" result="grain"/>
+      <feColorMatrix in="lens" type="matrix" values="0 0 1 0 0  0 0 1 0 0  0 0 1 0 0  0 0 0 0 1" result="rim"/>
+      <feComposite in="grain" in2="rim" operator="arithmetic" k1="1" k3="-0.5" k4="0.5" result="scatter"/>
+      <feDisplacementMap in="bent" in2="scatter" scale="36" xChannelSelector="R" yChannelSelector="G" result="scattered"/>
+      <feGaussianBlur in="scattered" stdDeviation="10" edgeMode="duplicate" result="frosted"/>
+      <feColorMatrix in="lens" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 1 0 0" result="rimMask"/>
+      <feComposite in="frosted" in2="rimMask" operator="in" result="frostedRim"/>
+      <feComposite in="frostedRim" in2="bent" operator="over"/>
+    </filter>
+  </svg>
 
   <a href="/index.html" class="site-brand" aria-label="Puyu's Blog — home">
     <span class="site-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
@@ -131,6 +161,90 @@
       // not show. Re-read the choice whenever that happens.
       window.addEventListener('pageshow', (event) => {
         if (event.persisted) apply(saved() || (systemDark.matches ? 'dark' : 'light'));
+      });
+
+      // Liquid glass: the refraction needs an SVG filter on the backdrop,
+      // which only Chromium browsers draw (navigator.userAgentData is
+      // Chromium's own). The rest keep the plain glass.
+      if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass)')) {
+        // The lens map, drawn for the pill as it is now: for each pixel,
+        // how far it sits inside the outline and which way is outwards.
+        // Red and green: within the rim (BEZEL px), what is seen is pulled
+        // inwards, most at the very edge and easing to nothing; red is the
+        // pull across, green the pull down. Blue: how frosted each pixel
+        // should be, near the rim all the way round (FROST px deep) and
+        // right across the round ends, where the glass is thickest (END px
+        // further in from each end). Redrawn whenever the pill changes size.
+        const lens = header.querySelector('#site-glass-lens');
+        const BEZEL = 14;
+        const FROST = 26;
+        const END = 22;
+        const drawLens = () => {
+          const w = Math.round(header.offsetWidth);
+          const h = Math.round(header.offsetHeight);
+          if (!w || !h) return;
+          const r = Math.min(h / 2, parseFloat(getComputedStyle(header).borderTopLeftRadius) || h / 2);
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          const img = ctx.createImageData(w, h);
+          const px = img.data;
+          const straightX = w / 2 - r;
+          const straightY = h / 2 - r;
+          for (let y = 0; y < h; y += 1) {
+            for (let x = 0; x < w; x += 1) {
+              const cx = x + 0.5 - w / 2;
+              const cy = y + 0.5 - h / 2;
+              const qx = Math.abs(cx) - straightX;
+              const qy = Math.abs(cy) - straightY;
+              let inside;          // distance in from the outline
+              let nx = 0;          // the outward direction
+              let ny = 0;
+              if (qx > 0 && qy > 0) {
+                const len = Math.hypot(qx, qy);
+                inside = r - len;
+                nx = qx / len;
+                ny = qy / len;
+              } else if (qx > qy) {
+                inside = r - qx;
+                nx = 1;
+              } else {
+                inside = r - qy;
+                ny = 1;
+              }
+              nx *= Math.sign(cx) || 1;
+              ny *= Math.sign(cy) || 1;
+              const k = Math.min(1, Math.max(0, 1 - inside / BEZEL)) ** 2;
+              const i = (y * w + x) * 4;
+              px[i] = 128 - nx * k * 127;
+              px[i + 1] = 128 - ny * k * 127;
+              const nearRim = Math.min(1, Math.max(0, 1 - inside / FROST));
+              const nearEnd = Math.min(1, Math.max(0, 1 - (w / 2 - Math.abs(cx)) / (r + END)));
+              px[i + 2] = 255 * Math.max(nearRim, nearEnd);
+              px[i + 3] = 255;
+            }
+          }
+          ctx.putImageData(img, 0, 0);
+          lens.setAttribute('href', canvas.toDataURL());
+          header.classList.add('refract');
+        };
+        let queued = false;
+        new ResizeObserver(() => {
+          if (queued) return;
+          queued = true;
+          requestAnimationFrame(() => { queued = false; drawLens(); });
+        }).observe(header);
+      }
+      // ... and its highlight follows the pointer across the pill
+      header.addEventListener('pointermove', (e) => {
+        const r = header.getBoundingClientRect();
+        header.style.setProperty('--mx', `${e.clientX - r.left}px`);
+        header.style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+      header.addEventListener('pointerleave', () => {
+        header.style.removeProperty('--mx');
+        header.style.removeProperty('--my');
       });
 
       // Phone menu: open and close the dropdown; Escape or a click
@@ -351,42 +465,7 @@
     <div class="site-aph-head">
       <span class="label">Aphorisms</span>
       
-      <ol class="site-aph-bar" style="--n: 16" hidden>
-        
-        <li><button type="button" aria-label="Aphorism 1 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 2 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 3 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 4 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 5 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 6 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 7 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 8 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 9 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 10 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 11 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 12 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 13 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 14 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 15 of 16"><i></i></button></li>
-        
-        <li><button type="button" aria-label="Aphorism 16 of 16"><i></i></button></li>
-        
-      </ol>
-      <span class="count">01 / 16</span>
+      <span class="site-aph-timer" hidden><i></i></span>
     </div>
     <div class="site-aph-body">
       <p class="site-aph-text" lang="zh-Hant" aria-live="off"><span>天之蒼蒼，其正色邪</span></p>
@@ -448,60 +527,92 @@
     const year = document.getElementById('footer-year');
     if (year) year.textContent = new Date().getFullYear();
 
-    // ----- Aphorisms. The current segment fills (a CSS animation); when it
-    // is full, the next line rolls in. Hovering, keyboard focus, the pause
-    // button and being off screen all stop the fill, so nothing moves
-    // unseen. With reduced motion the fill never runs, and the lines change
-    // only when asked.
+    // ----- Aphorisms, in a random order. Each turn draws a line at random
+    // from the ones not yet shown on this visit, like dealing from a
+    // shuffled deck: nothing repeats until every line has had its turn, and
+    // then the deck is shuffled again (never starting with the line on
+    // screen). The timer line fills (a CSS animation); when it is full, the
+    // next line rolls in. Back and forward step through the lines shown so
+    // far, like a browser's history.
+    //
+    // Hovering, keyboard focus, the pause button and being off screen all
+    // stop the timer, so nothing moves unseen. With reduced motion there is
+    // no timer, and the lines change only when asked.
     const band = document.querySelector('.site-aph');
     const phrases = ["\u5929\u4e4b\u84bc\u84bc\uff0c\u5176\u6b63\u8272\u90aa", "\u543e\u65e5\u4e09\u7701\u543e\u8eab", "\u77e5\u884c\u5408\u4e00", "\u884c\u6709\u9918\u529b\uff0c\u5247\u4ee5\u5b78\u6587", "\u601d\u7121\u90aa", "\u5148\u884c\u5176\u8a00\uff0c\u800c\u5f8c\u5f9e\u4e4b", "\u76e1\u7f8e\u77e3\uff0c\u53c8\u76e1\u5584\u4e5f", "\u597d\u4ec1\u8005\uff0c\u7121\u4ee5\u5c1a\u4e4b", "\u7121\u6240\u5f9e\u4f86\uff0c\u4ea6\u7121\u6240\u53bb", "\u6240\u8b02\u4f5b\u6cd5\u8005\uff0c\u5373\u975e\u4f5b\u6cd5", "\u9053\u6cd5\u81ea\u7136", "\u5929\u4e0b\u5927\u4e8b\uff0c\u5fc5\u4f5c\u65bc\u7d30", "\u70ba\u7121\u70ba\uff0c\u4e8b\u7121\u4e8b\uff0c\u5473\u7121\u5473", "\u5468\u96d6\u820a\u90a6,\u5176\u547d\u7dad\u65b0", "\u5fb7\u4e0d\u5b64\uff0c\u5fc5\u6709\u9130", "\u4e14\u6709\u771f\u4eba\uff0c\u800c\u5f8c\u6709\u771f\u77e5"];
     const n = phrases.length;
     if (!band || n < 2) return;
 
-    const bar = band.querySelector('.site-aph-bar');
     const text = band.querySelector('.site-aph-text');
-    const count = band.querySelector('.count');
-    const segs = [...bar.querySelectorAll('button')];
+    const timer = band.querySelector('.site-aph-timer');
+    const prev = band.querySelector('[data-step="-1"]');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    bar.hidden = false;
+    timer.hidden = reduce;
     band.querySelector('.site-aph-ctrl').hidden = false;
 
-    let at = 0;
+    let deck = [];             // lines not yet shown in this round
+    const history = [];        // every line shown, in order
+    let h = -1;                // where we are in that history
     let shown = text.firstElementChild;
 
-    const go = (k, { manual = false, roll = !reduce } = {}) => {
-      const dir = k < at ? -1 : 1;
-      at = (k + n) % n;
-      segs.forEach((s, j) => {
-        s.classList.toggle('done', j < at);
-        s.classList.toggle('cur', j === at);
-        if (j === at) s.setAttribute('aria-current', 'true');
-        else s.removeAttribute('aria-current');
-      });
-      count.textContent = String(at + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0');
+    // The next line from the deck, chosen at random
+    const deal = () => {
+      if (!deck.length) deck = [...Array(n).keys()].filter((k) => k !== history[h]);
+      return deck.splice(Math.floor(Math.random() * deck.length), 1)[0];
+    };
+
+    // Start the timer over, for the full few seconds
+    const restart = () => {
+      timer.classList.remove('run');
+      void timer.offsetWidth;
+      timer.classList.add('run');
+    };
+
+    const show = (k, { dir = 1, manual = false, roll = !reduce } = {}) => {
+      prev.disabled = h <= 0;
       // Screen readers hear the line when the visitor changed it, not on
       // every automatic turn
       text.setAttribute('aria-live', manual ? 'polite' : 'off');
 
       const line = document.createElement('span');
-      line.textContent = phrases[at];
+      line.textContent = phrases[k];
       if (!roll) {
         text.replaceChildren(line);
       } else {
         line.className = dir > 0 ? 'below' : 'above';
         text.append(line);
-        void line.offsetWidth;          // start from below, so the roll animates
+        void line.offsetWidth;          // start from below (or above), so the roll animates
         line.className = '';
         shown.className = dir > 0 ? 'above' : 'below';
         const old = shown;
         setTimeout(() => old.remove(), 700);
       }
       shown = line;
+      restart();
     };
 
-    // A different line to start from on each page
+    // Forward: on through the history if the visitor went back, else a new
+    // random line
+    const forward = (manual) => {
+      if (h < history.length - 1) {
+        h += 1;
+      } else {
+        history.push(deal());
+        h = history.length - 1;
+      }
+      show(history[h], { dir: 1, manual });
+    };
+    const back = () => {
+      if (h <= 0) return;
+      h -= 1;
+      show(history[h], { dir: -1, manual: true });
+    };
+
+    // A random line to start each page with
     band.classList.add('idle');
-    go(Math.floor(Math.random() * n), { roll: false });
+    history.push(deal());
+    h = 0;
+    show(history[0], { roll: false });
 
     // Only move while it is on screen
     if ('IntersectionObserver' in window) {
@@ -512,17 +623,10 @@
       band.classList.remove('idle');
     }
 
-    bar.addEventListener('animationend', (e) => {
-      if (e.target.parentElement.classList.contains('cur')) go(at + 1);
-    });
-    bar.addEventListener('click', (e) => {
-      const seg = e.target.closest('button');
-      if (seg) go(segs.indexOf(seg), { manual: true });
-    });
-    band.querySelectorAll('[data-step]').forEach((b) => {
-      b.addEventListener('click', () => go(at + Number(b.dataset.step), { manual: true }));
-    });
-    text.addEventListener('click', () => go(at + 1, { manual: true }));
+    timer.addEventListener('animationend', () => forward(false));
+    prev.addEventListener('click', back);
+    band.querySelector('[data-step="1"]').addEventListener('click', () => forward(true));
+    text.addEventListener('click', () => forward(true));
     band.querySelector('[data-pause]').addEventListener('click', (e) => {
       const paused = band.classList.toggle('paused');
       e.currentTarget.setAttribute('aria-label', paused ? 'Play' : 'Pause');

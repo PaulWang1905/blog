@@ -25,16 +25,20 @@
 <link rel="alternate" type="application/ld+json" title="{{ meta_data.title | e }} — post metadata" href="/posts_metadata.jsonld">
 <title>The table — {{ meta_data.title | e }}</title>
 <style>
-  /* The table itself: the deep night between the buildings, with a little
-     grain so it reads as a surface. No category has this colour, so every
-     card shows up on it. It stays night in dark mode too; only the header
-     and footer follow the theme. */
-  html:has(> body.tbl) { background-color: #101b3f; }   /* what shows when the page is pulled past its ends */
+  /* The table itself, with a little grain so it reads as a surface. It
+     follows the theme: moonlit blue-grey in light mode, the deep night
+     between the buildings in dark mode. No category has either colour, so
+     every card shows up on it. */
+  body.tbl { --table: #eef1f6; --table-ink: #16224a; --table-card: #ffffff; }
+  [data-theme="dark"] body.tbl { --table: #101b3f; --table-ink: #f3ecdb; --table-card: #f3ecdb; }
+  /* what shows when the page is pulled past its ends */
+  html:has(> body.tbl) { background-color: #eef1f6; }
+  html[data-theme="dark"]:has(> body.tbl) { background-color: #101b3f; }
   body.tbl {
     display: flow-root;           /* keeps the header's top margin inside the table */
-    background-color: #101b3f;
+    background-color: var(--table);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
-    color: #f3ecdb;
+    color: var(--table-ink);
   }
   .tbl-main { padding: 0 var(--edge); }
 
@@ -52,7 +56,7 @@
   .tbl-deck .label { position: absolute; top: -30px; left: 4px; font-size: 13px; font-weight: 600; opacity: .85; }
   .tbl-deck .c {
     position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between;
-    padding: 22px; border-radius: 22px; background: #f3ecdb; color: var(--cat-on);
+    padding: 22px; border-radius: 22px; background: var(--table-card); color: var(--cat-on);
     box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .5);
     transition: transform .55s cubic-bezier(.2, .8, .2, 1), opacity .55s;
   }
@@ -62,7 +66,7 @@
   .tbl-deck .top .k { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; opacity: .7; font-variant-numeric: tabular-nums; }
   .tbl-deck .top .p { font-size: 30px; font-weight: 900; line-height: 1.25; }
   .tbl-deck .gone { transform: translate(120%, -30%) rotate(24deg) !important; opacity: 0; }
-  .tbl-deck:focus-visible { outline: 3px solid #f3ecdb; outline-offset: 8px; border-radius: 22px; }
+  .tbl-deck:focus-visible { outline: 3px solid var(--table-ink); outline-offset: 8px; border-radius: 22px; }
 
   /* The posts, dealt onto the table */
   .tbl-cards { display: grid; grid-template-columns: repeat(12, 1fr); gap: 34px 18px; align-items: start; list-style: none; margin: 0; padding: 0; }
@@ -77,7 +81,7 @@
     z-index: 5; transform: translateY(calc(var(--y) - 10px)) rotate(0deg) scale(1.03);
     box-shadow: 0 30px 50px -22px rgba(0, 0, 0, .6); outline: none;
   }
-  .tbl-card:focus-visible { box-shadow: 0 0 0 3px #f3ecdb, 0 30px 50px -22px rgba(0, 0, 0, .6); }
+  .tbl-card:focus-visible { box-shadow: 0 0 0 3px var(--table-ink), 0 30px 50px -22px rgba(0, 0, 0, .6); }
   .tbl-card .meta { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 600; opacity: .85; }
   .tbl-card h2 { margin-top: 34px; font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; font-stretch: 85%; line-height: 1; letter-spacing: -.02em; }
   .tbl-card h2:lang(zh) { font-weight: 900; font-stretch: 100%; letter-spacing: 0; }
@@ -116,7 +120,7 @@
       <div class="tbl-deck" id="tbl-deck" role="button" tabindex="0" aria-label="Draw the next aphorism">
         <span class="label">Aphorisms · click to draw</span>
         <div class="c top">
-          <span class="k"><span>Aphorism</span><span>1 / {{ phrases | length }}</span></span>
+          <span class="k"><span>Aphorism</span></span>
           <span class="p" lang="zh-Hant" aria-live="polite">{{ phrases[0] | e }}</span>
         </div>
         <div class="c"></div>
@@ -155,32 +159,42 @@
 
 <script>
   // The deck: the top card carries the current aphorism; drawing throws it
-  // off the table and turns up the next.
+  // off the table and turns up another, at random. Like the footer, it
+  // deals from a shuffled deck: no line comes round again until every line
+  // has been drawn, and the first card is random too.
   (() => {
     const deck = document.getElementById('tbl-deck');
     if (!deck) return;
     const phrases = {{ (phrases or []) | tojson }};
+    const n = phrases.length;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let at = 0;
+    let left = [];      // lines not yet drawn in this round
+    let at = -1;        // the line on the top card
     let busy = false;
 
+    const deal = () => {
+      if (!left.length) left = [...Array(n).keys()].filter((k) => k !== at);
+      return left.splice(Math.floor(Math.random() * left.length), 1)[0];
+    };
     const turnUp = () => {
       const top = deck.querySelector('.top');
       const fresh = top.cloneNode(true);
       fresh.classList.remove('gone');
-      fresh.querySelector('.k span:last-child').textContent = (at + 1) + ' / ' + phrases.length;
       fresh.querySelector('.p').textContent = phrases[at];
       top.replaceWith(fresh);
       busy = false;
     };
     const draw = () => {
-      if (busy || phrases.length < 2) return;
+      if (busy || n < 2) return;
       busy = true;
-      at = (at + 1) % phrases.length;
+      at = deal();
       if (reduce) { turnUp(); return; }
       deck.querySelector('.top').classList.add('gone');
       setTimeout(turnUp, 380);
     };
+
+    // A random first card, turned up without the throw
+    if (n) { at = deal(); turnUp(); }
     deck.addEventListener('click', draw);
     deck.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); draw(); }
