@@ -63,8 +63,30 @@ def build_feed_page(site):
     print(f"Feed page written to {path} ({len(posts)} items)")
 
 
+# --- Post-build: the table ----------------------------------------------
+# docs/table.html deals every post out as a card and turns the aphorisms
+# into a deck to draw from: the playful counterpart to the home page's
+# index. Built here for the same reason as the feed page: it needs the
+# posts, which `simple_pages` does not pass.
+TABLE_PAGE_TEMPLATE = "table_template.html"
+TABLE_PAGE_OUTPUT = "table.html"
+
+
+def build_table_page(site):
+    """Render docs/table.html, every post as a card on a table."""
+    rendered = site.template(TABLE_PAGE_TEMPLATE).render(
+        meta_data=site.meta_data,
+        phrases=site.meta_data["phrases"],
+        posts=site.posts,
+    )
+    path = site.config.output_dir / TABLE_PAGE_OUTPUT
+    path.write_text(rendered, encoding="utf-8")
+    print(f"Table page written to {path} ({len(site.posts)} cards)")
+
+
 if __name__ == "__main__":
     site = Site(config)
     site.build()
     if config.feed:
         build_feed_page(site)
+    build_table_page(site)

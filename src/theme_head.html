@@ -7,6 +7,18 @@
     let theme = null;
     try { theme = localStorage.getItem('theme'); } catch (e) {}
     if (!theme) theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'winter';
+    document.documentElement.dataset.theme = theme === 'dark' ? 'dark' : 'paper';
   })();
 </script>
+{# Type (font-sans, font-display and font-text in styles.css), from Google
+   Fonts: the stylesheet comes from fonts.googleapis.com and the font
+   files from fonts.gstatic.com, hence the two preconnects.
+     Archivo      headlines, titles, menus and labels. It has a width axis,
+                  so the same family sets wide headlines and narrow titles.
+     Inter        the main text: post bodies, summaries, anything read as
+                  running text. With its italic, for emphasis in posts.
+     Noto Sans SC Chinese. Google serves it in small unicode-range slices,
+                  so a page downloads only the characters it uses. #}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+SC:wght@400;700;900&display=swap">

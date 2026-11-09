@@ -1,0 +1,30 @@
+{# Macros shared by the page templates. Import with
+     {% import 'macros.html' as m %}
+
+   Like the templates, anything that comes from front matter is escaped by
+   the caller: oxie renders with autoescape off. #}
+
+{# A category's colour, as CSS custom properties for a style attribute:
+   --c is the colour, --on the text colour that reads on it.
+
+     <li style="{{ m.cat_style(post.category) }}">
+
+   The colours themselves are the --cat-* tokens in styles.css; this only
+   says which category gets which. Add a row here (and a token there) when
+   you start a new category. Until you do, it gets one of the four spare
+   colours, picked from the length of its name, so it always gets the
+   same one. #}
+{% macro cat_style(category) -%}
+{%- set slugs = {'Blog': 'blog', 'Notes': 'notes', 'Story': 'story', 'Recipe': 'recipe', '中文': 'zh'} -%}
+{%- set slug = slugs.get(category) or 'spare-' ~ ((category | default('', true) | length) % 4 + 1) -%}
+--c:var(--cat-{{ slug }});--on:var(--cat-{{ slug }}-on)
+{%- endmacro %}
+
+{# ` lang="zh"` when a title starts with a Chinese character, for the
+   tighter Chinese type in styles.css (:lang(zh)). The home page has no
+   per-post Language, so this goes by the first character: 悼念贾舜尧 is
+   Chinese, LifeWriting 课程小结 is set as English. ⺀ (U+2E80) is where the
+   CJK blocks begin. #}
+{% macro zh_lang(text) -%}
+{%- if text and text[:1] >= '⺀' %} lang="zh"{% endif -%}
+{%- endmacro %}

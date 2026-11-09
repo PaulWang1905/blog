@@ -7,8 +7,9 @@ Category: Story
 Tags: [Story]
 ---
 
+# Silver Age
 
-## Puyu Wang
+## Story by Puyu Wang
 
 ### 1
 

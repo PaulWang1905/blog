@@ -1,0 +1,192 @@
+{# The table (docs/table.html): every post dealt out as a card, and the
+   aphorisms as a deck to draw from. The playful counterpart to the home
+   page's index: same posts, same category colours, no order to keep.
+
+   Rendered by build_table_page() in build.py after Site.build(), like
+   feed.html, because it needs the posts as well as meta_data and phrases.
+
+   Context: meta_data, phrases, posts (newest first). #}
+{% import 'macros.html' as m %}
+{#- How each card lands, in turn: columns it spans (of 12), tilt in
+   degrees, drop in px. Each run of three adds up to a row of 12. -#}
+{% set deal = [(6, -2.5, 0), (3, 4, 40), (3, -3, 12),
+               (4, 2.5, -8), (4, -4, 10), (4, 3, -4),
+               (3, -3, 8), (5, 2, 2), (4, -2, 12)] %}
+<!DOCTYPE html>
+<html lang="en" data-theme="paper">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% include 'theme_head.html' %}
+<meta name="description" content="Every post on {{ meta_data.title | e }}, dealt out as cards.">
+<link rel="canonical" href="{{ meta_data.link | e }}/table.html">
+<link href="/styles.css" rel="stylesheet">
+<link rel="alternate" type="application/rss+xml" title="{{ meta_data.title | e }}" href="/feed.xml">
+<link rel="alternate" type="application/ld+json" title="{{ meta_data.title | e }} — post metadata" href="/posts_metadata.jsonld">
+<title>The table — {{ meta_data.title | e }}</title>
+<style>
+  /* The table itself: the deep night between the buildings, with a little
+     grain so it reads as a surface. No category has this colour, so every
+     card shows up on it. It stays night in dark mode too; only the header
+     and footer follow the theme. */
+  html:has(> body.tbl) { background-color: #101b3f; }   /* what shows when the page is pulled past its ends */
+  body.tbl {
+    display: flow-root;           /* keeps the header's top margin inside the table */
+    background-color: #101b3f;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
+    color: #f3ecdb;
+  }
+  .tbl-main { padding: 0 var(--edge); }
+
+  .tbl-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; align-items: end; padding: clamp(56px, 7vw, 88px) 0 70px; }
+  .tbl-hero h1 { font-size: clamp(56px, 9vw, 140px); font-weight: 900; font-stretch: 112%; line-height: .86; letter-spacing: -.045em; }
+  .tbl-sticker {
+    display: inline-block; margin-top: 24px; padding: 10px 18px; border-radius: 14px;
+    background: var(--gaslight); color: var(--cat-on); font-size: clamp(17px, 1.8vw, 22px); font-weight: 800;
+    transform: rotate(-3deg); box-shadow: 0 10px 0 -2px rgba(0, 0, 0, .18);
+  }
+  .tbl-intro { margin-top: 24px; max-width: 40ch; font-family: var(--font-text); font-size: 18px; line-height: 1.45; opacity: .9; }
+
+  /* The aphorisms as a deck: click, or Enter, to draw the next card */
+  .tbl-deck { justify-self: end; position: relative; width: min(340px, 100%); height: 210px; margin-top: 30px; cursor: pointer; }
+  .tbl-deck .label { position: absolute; top: -30px; left: 4px; font-size: 13px; font-weight: 600; opacity: .85; }
+  .tbl-deck .c {
+    position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between;
+    padding: 22px; border-radius: 22px; background: #f3ecdb; color: var(--cat-on);
+    box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .5);
+    transition: transform .55s cubic-bezier(.2, .8, .2, 1), opacity .55s;
+  }
+  .tbl-deck .c:nth-of-type(2) { transform: rotate(4deg) translate(10px, 6px); background: var(--cat-recipe); }
+  .tbl-deck .c:nth-of-type(3) { transform: rotate(-5deg) translate(-8px, 8px); background: var(--gaslight); }
+  .tbl-deck .top { z-index: 3; transform: rotate(-1.5deg); }
+  .tbl-deck .top .k { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; opacity: .7; font-variant-numeric: tabular-nums; }
+  .tbl-deck .top .p { font-size: 30px; font-weight: 900; line-height: 1.25; }
+  .tbl-deck .gone { transform: translate(120%, -30%) rotate(24deg) !important; opacity: 0; }
+  .tbl-deck:focus-visible { outline: 3px solid #f3ecdb; outline-offset: 8px; border-radius: 22px; }
+
+  /* The posts, dealt onto the table */
+  .tbl-cards { display: grid; grid-template-columns: repeat(12, 1fr); gap: 34px 18px; align-items: start; list-style: none; margin: 0; padding: 0; }
+  .tbl-cards li { grid-column: span var(--span); }
+  .tbl-card {
+    position: relative; display: flex; flex-direction: column; justify-content: space-between; min-height: 200px;
+    padding: 22px 22px 20px; border-radius: 22px; background: var(--c); color: var(--on);
+    transform: translateY(var(--y)) rotate(var(--r)); box-shadow: 0 16px 34px -18px rgba(0, 0, 0, .55);
+    transition: transform .3s cubic-bezier(.2, .8, .2, 1), box-shadow .3s;
+  }
+  .tbl-card:hover, .tbl-card:focus-visible {
+    z-index: 5; transform: translateY(calc(var(--y) - 10px)) rotate(0deg) scale(1.03);
+    box-shadow: 0 30px 50px -22px rgba(0, 0, 0, .6); outline: none;
+  }
+  .tbl-card:focus-visible { box-shadow: 0 0 0 3px #f3ecdb, 0 30px 50px -22px rgba(0, 0, 0, .6); }
+  .tbl-card .meta { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; font-weight: 600; opacity: .85; }
+  .tbl-card h2 { margin-top: 34px; font-size: clamp(24px, 2.4vw, 34px); font-weight: 800; font-stretch: 85%; line-height: 1; letter-spacing: -.02em; }
+  .tbl-card h2:lang(zh) { font-weight: 900; font-stretch: 100%; letter-spacing: 0; }
+  .tbl-card p { margin-top: 10px; font-family: var(--font-text); font-size: 16px; line-height: 1.4; }
+  .tbl-card.big h2 { font-size: clamp(36px, 4.2vw, 64px); }
+  .tbl-card.big p { max-width: 36ch; font-size: 19px; }
+  .tbl-card .new {
+    position: absolute; top: -14px; right: 22px; padding: 6px 12px; border-radius: 999px;
+    background: var(--gaslight); color: var(--cat-on); font-size: 13px; font-weight: 800; transform: rotate(6deg);
+  }
+
+  @media (max-width: 860px) {
+    .tbl-hero { grid-template-columns: 1fr; }
+    .tbl-deck { justify-self: start; margin-top: 48px; }
+    .tbl-cards { grid-template-columns: 1fr; }
+    .tbl-cards li { grid-column: auto; }
+    .tbl-card { --y: 0px !important; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tbl-card, .tbl-deck .c { transition: none; } }
+</style>
+</head>
+<body class="tbl">
+
+  {% set nav_active = 'table' %}
+  {% include 'header.html' %}
+
+  <main class="tbl-main">
+
+    <section class="tbl-hero">
+      <div>
+        <h1>The table</h1>
+        <span class="tbl-sticker">{{ posts | length }} posts, {{ phrases | length }} aphorisms</span>
+        <p class="tbl-intro">Every post, dealt out as cards. Pick one up, or draw an aphorism from the deck.</p>
+      </div>
+      {% if phrases %}
+      <div class="tbl-deck" id="tbl-deck" role="button" tabindex="0" aria-label="Draw the next aphorism">
+        <span class="label">Aphorisms · click to draw</span>
+        <div class="c top">
+          <span class="k"><span>Aphorism</span><span>1 / {{ phrases | length }}</span></span>
+          <span class="p" lang="zh-Hant" aria-live="polite">{{ phrases[0] | e }}</span>
+        </div>
+        <div class="c"></div>
+        <div class="c"></div>
+      </div>
+      {% endif %}
+    </section>
+
+    <ol class="tbl-cards" aria-label="Posts, newest first">
+      {% for post in posts %}
+      {% set span, tilt, drop = deal[loop.index0 % (deal | length)] %}
+      {#- Cards land in rows of three. When the last row is short (one or
+          two cards), they share its width instead of leaving a gap. -#}
+      {% set short = loop.length % 3 %}
+      {% if short and loop.index0 >= loop.length - short %}{% set span = 12 // short %}{% endif %}
+      <li style="--span: {{ span }}">
+        <a href="{{ post.link | urlencode }}" class="tbl-card{% if loop.first %} big{% endif %}"
+           style="{{ m.cat_style(post.category) }};--r:{{ tilt }}deg;--y:{{ drop }}px">
+          {% if loop.first %}<span class="new">Latest</span>{% endif %}
+          <span class="meta">
+            <span{{ m.zh_lang(post.category) }}>{{ post.category | e }}</span>
+            <time datetime="{{ post.date.isoformat() }}">{{ post.date.strftime('%d %b %Y') }}</time>
+          </span>
+          <span>
+            <h2{{ m.zh_lang(post.title) }}>{{ post.title | e }}</h2>
+            {% if post.summary %}<p>{{ post.summary | e }}</p>{% endif %}
+          </span>
+        </a>
+      </li>
+      {% endfor %}
+    </ol>
+
+  </main>
+
+  {% include 'footer.html' %}
+
+<script>
+  // The deck: the top card carries the current aphorism; drawing throws it
+  // off the table and turns up the next.
+  (() => {
+    const deck = document.getElementById('tbl-deck');
+    if (!deck) return;
+    const phrases = {{ (phrases or []) | tojson }};
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let at = 0;
+    let busy = false;
+
+    const turnUp = () => {
+      const top = deck.querySelector('.top');
+      const fresh = top.cloneNode(true);
+      fresh.classList.remove('gone');
+      fresh.querySelector('.k span:last-child').textContent = (at + 1) + ' / ' + phrases.length;
+      fresh.querySelector('.p').textContent = phrases[at];
+      top.replaceWith(fresh);
+      busy = false;
+    };
+    const draw = () => {
+      if (busy || phrases.length < 2) return;
+      busy = true;
+      at = (at + 1) % phrases.length;
+      if (reduce) { turnUp(); return; }
+      deck.querySelector('.top').classList.add('gone');
+      setTimeout(turnUp, 380);
+    };
+    deck.addEventListener('click', draw);
+    deck.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); draw(); }
+    });
+  })();
+</script>
+
+</body>
+</html>
