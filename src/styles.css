@@ -194,46 +194,48 @@
 /* ============================================================
    Site header (header.html, every page)
 
-   A pill of liquid glass that stays at the top as the page scrolls
-   under it. Clearer than frosted glass, and built in layers:
+   Two pieces of liquid glass: the pill (.site-nav) that stays at the
+   top as the page scrolls under it, and, on phones, the menu panel
+   (.site-menu-panel) that opens under it. Clearer than frosted glass,
+   and built in layers:
      - the glass: a light tint, a little blur, a touch more saturation and
        brightness, so what passes beneath stays visible but soft;
      - refraction, only as real glass does it: the middle is nearly
        clear and undistorted; within a thin rim the page beneath bends
        smoothly inwards, as through a rounded glass edge, following the
-       outline round the ends, with faint colour fringes where red,
+       outline round the corners, with faint colour fringes where red,
        green and blue bend by different amounts; and all round the rim
-       and right across the round ends, what is seen is frosted into a
-       smooth haze, as where the glass is thickest.
-       An SVG filter (#site-glass in header.html) does both. Only
-       Chromium browsers can use an SVG filter on the backdrop, so the
-       header script turns it on there (.refract) and other browsers
-       keep plain glass;
-     - light: a bevel, as on a thick rounded slab: a crisp highlight
-       line along the top, softer lines down the sides and along the
-       bottom, soft glows just inside the top and bottom, a
-       hairline outline so the glass edge reads clearly on a white page,
-       a light shadow beneath (kept faint, so it never greys the page
-       under the pill), and a highlight (::after) that follows the
-       pointer and brightens while it is over the pill;
+       (and, on the pill, right across the round ends) what is seen is
+       frosted into a smooth haze, as where the glass is thickest.
+       An SVG filter per piece (#site-glass, #site-glass-menu in
+       header.html) does this. Only Chromium browsers can use an SVG
+       filter on the backdrop, so the header script turns it on there
+       (.refract) and other browsers keep plain glass;
+     - light: a bevel, as on a thick rounded slab: soft lines along the
+       top and bottom and down the sides, and soft glows just inside the
+       top and bottom edges alike (kept soft at the top too, so the bend
+       and frost there are not washed out in white), a hairline
+       outline so the glass edge reads clearly on a white page, a light
+       shadow beneath (kept faint, so it never greys the page under the
+       glass), and a highlight (::after) that follows the pointer while
+       it is over the glass, and is not there otherwise;
      - touch: the links and buttons swell a little on hover and squash
        when pressed, then spring back past their size and settle
        (--spring). The pill itself never moves or resizes, so the page
        never jumps.
-   The glass has to be on the header itself: on a layer inside it,
-   Chrome would blur only what is inside the header.
-   The phone dropdown under it is solid. Nothing in it animates on
-   its own: it is the same on every page, and the view-transition
-   rules at the end of this file keep it still while the rest of
-   the page crossfades.
+   The glass has to be on each piece itself: on a layer inside it,
+   Chrome would blur only what is inside that piece. For the same
+   reason the menu panel sits outside the header in the markup.
+   The pill never animates on its own: it is the same on every page,
+   and the view-transition rules at the end of this file keep it still
+   while the rest of the page crossfades. The menu panel springs open.
    ============================================================ */
-.site-nav {
+.site-nav,
+.site-menu-panel {
   --glass: color-mix(in srgb, var(--color-base-100) 38%, transparent);
-  --rim: rgba(255, 255, 255, 0.95);
+  --rim: rgba(255, 255, 255, 0.45);
   --rim-side: rgba(255, 255, 255, 0.55);
-  --rim-low: rgba(255, 255, 255, 0.45);
-  --bevel: rgba(255, 255, 255, 0.85);
-  --bevel-low: rgba(255, 255, 255, 0.4);
+  --bevel: rgba(255, 255, 255, 0.4);
   --glow: rgba(255, 255, 255, 0.28);
   --edge-line: rgba(255, 255, 255, 0.45);
   --outline: rgba(22, 34, 74, 0.14);
@@ -241,6 +243,25 @@
   --mx: 18%;
   --my: 0%;
   --spring: cubic-bezier(0.3, 1.6, 0.5, 1);
+  color: var(--color-base-content);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(8px) saturate(140%) brightness(1.05);
+  backdrop-filter: blur(8px) saturate(140%) brightness(1.05);
+  border: 1px solid var(--edge-line);
+  box-shadow:
+    inset 0 1px 0 var(--rim),
+    inset 1px 0 0 var(--rim-side),
+    inset -1px 0 0 var(--rim-side),
+    inset 0 -1px 0 var(--rim),
+    inset 0 7px 9px -7px var(--bevel),
+    inset 0 -7px 9px -7px var(--bevel),
+    inset 0 0 12px var(--glow),
+    0 0 0 0.5px var(--outline),
+    0 1px 2px rgba(16, 27, 63, 0.06),
+    0 6px 18px -8px rgba(16, 27, 63, 0.16);
+}
+
+.site-nav {
   position: sticky;
   top: 12px;
   z-index: 50;
@@ -250,24 +271,6 @@
   gap: 4px;
   padding: 6px 6px 6px 16px;
   border-radius: 999px;
-  color: var(--color-base-content);
-  background:
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 50%),
-    var(--glass);
-  -webkit-backdrop-filter: blur(8px) saturate(140%) brightness(1.05);
-  backdrop-filter: blur(8px) saturate(140%) brightness(1.05);
-  border: 1px solid var(--edge-line);
-  box-shadow:
-    inset 0 1px 0 var(--rim),
-    inset 1px 0 0 var(--rim-side),
-    inset -1px 0 0 var(--rim-side),
-    inset 0 -1px 0 var(--rim-low),
-    inset 0 7px 9px -7px var(--bevel),
-    inset 0 -7px 9px -7px var(--bevel-low),
-    inset 0 0 12px var(--glow),
-    0 0 0 0.5px var(--outline),
-    0 1px 2px rgba(16, 27, 63, 0.06),
-    0 6px 18px -8px rgba(16, 27, 63, 0.16);
 }
 
 /* Chromium: the page beneath bends at the rim */
@@ -275,8 +278,12 @@
   backdrop-filter: url(#site-glass) blur(2px) saturate(150%) brightness(1.06);
 }
 
-/* The highlight that follows the pointer; behind the links, above the glass */
-.site-nav::after {
+/* The highlight that follows the pointer; behind the links, above the glass.
+   Only while a pointer is over the glass, on devices that have one: at rest
+   it sat at the top edge and lit the top rim more than the bottom (over a
+   coloured page the top went pale), and phones have no pointer to move it. */
+.site-nav::after,
+.site-menu-panel::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -285,25 +292,24 @@
   pointer-events: none;
   background: radial-gradient(220px 90px at var(--mx) var(--my), var(--shine), transparent 70%);
   mix-blend-mode: soft-light;
-  opacity: 0.6;
+  opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.site-nav:hover::after { opacity: 1; }
+@media (hover: hover) {
+  .site-nav:hover::after,
+  .site-menu-panel:hover::after { opacity: 1; }
+}
 
-[data-theme="dark"] .site-nav {
-  --rim: rgba(255, 255, 255, 0.35);
+[data-theme="dark"] .site-nav,
+[data-theme="dark"] .site-menu-panel {
+  --rim: rgba(255, 255, 255, 0.12);
   --rim-side: rgba(255, 255, 255, 0.14);
-  --rim-low: rgba(255, 255, 255, 0.12);
-  --bevel: rgba(255, 255, 255, 0.16);
-  --bevel-low: rgba(255, 255, 255, 0.06);
+  --bevel: rgba(255, 255, 255, 0.06);
   --glow: rgba(255, 255, 255, 0.07);
   --edge-line: rgba(255, 255, 255, 0.16);
   --outline: rgba(0, 0, 0, 0.35);
   --shine: rgba(255, 255, 255, 0.35);
-  background:
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 55%),
-    var(--glass);
 }
 
 .site-brand {
@@ -333,7 +339,8 @@
   gap: 2px;
 }
 
-.site-links a {
+.site-links a,
+.site-menu-panel a {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -345,14 +352,17 @@
 
 /* Touch: swell on hover, squash when pressed, spring back */
 .site-links a,
+.site-menu-panel a,
 .site-icon {
   transition: transform 0.5s var(--spring), background-color 0.2s ease, color 0.2s ease;
 }
 
 .site-links a:hover,
+.site-menu-panel a:hover,
 .site-icon:hover { transform: scale(1.06); }
 
 .site-links a:active,
+.site-menu-panel a:active,
 .site-icon:active {
   transform: scale(0.92);
   transition-duration: 0.12s;
@@ -360,19 +370,24 @@
 
 @media (prefers-reduced-motion: reduce) {
   .site-links a,
+  .site-menu-panel a,
   .site-icon { transition: background-color 0.2s ease, color 0.2s ease; }
   .site-links a:hover,
   .site-links a:active,
+  .site-menu-panel a:hover,
+  .site-menu-panel a:active,
   .site-icon:hover,
   .site-icon:active { transform: none; }
 }
 
 .site-links a:hover,
+.site-menu-panel a:hover,
 .site-icon:hover {
   background: color-mix(in srgb, var(--color-base-content) 9%, transparent);
 }
 
-.site-links a[aria-current="page"] {
+.site-links a[aria-current="page"],
+.site-menu-panel a[aria-current="page"] {
   background: var(--color-base-content);
   color: var(--color-base-100);
 }
@@ -390,31 +405,49 @@
 .site-icon svg { width: 18px; height: 18px; }
 .site-menu { display: none; }
 
-.site-nav :focus-visible {
+.site-nav :focus-visible,
+.site-menu-panel :focus-visible {
   outline: 2px solid var(--color-base-content);
   outline-offset: 2px;
 }
 
+/* The phone menu panel: glass of its own, the same as the pill's,
+   opening under it (12px from the top, plus the pill's 52px, plus an 8px
+   gap), lined up with it. Shown only on phones, and only while open. */
+.site-menu-panel {
+  position: fixed;
+  z-index: 50;
+  top: calc(12px + 52px + 8px);
+  left: max(10px, calc(var(--edge) - 14px));
+  right: max(10px, calc(var(--edge) - 14px));
+  display: none;
+  flex-direction: column;
+  padding: 8px;
+  border-radius: 22px;
+  transform-origin: top right;
+}
+
+.site-menu-panel.refract {
+  backdrop-filter: url(#site-glass-menu) blur(2px) saturate(150%) brightness(1.06);
+}
+
+.site-menu-panel a { padding: 12px 14px; font-size: 16px; }
+
+@keyframes site-menu-open {
+  from { opacity: 0; transform: translateY(-8px) scale(0.96); }
+}
+
 @media (max-width: 760px) {
-  .site-links {
-    display: none;
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    padding: 8px;
-    border-radius: 22px;
-    /* Solid, not glass: inside the pill, Chrome blurs only the pill
-       behind it, not the page, so the big headline showed through sharp
-       and fought the links */
-    background: var(--color-base-100);
-    border: 1px solid color-mix(in srgb, var(--color-base-content) 12%, transparent);
-    box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.55);
-  }
-  .site-links a { padding: 12px 14px; font-size: 16px; }
-  .site-nav.open .site-links { display: flex; }
+  .site-links { display: none; }
   .site-menu { display: grid; }
+  .site-menu-panel.open {
+    display: flex;
+    animation: site-menu-open 0.45s var(--spring) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-menu-panel.open { animation: none; }
 }
 
 /* ============================================================
