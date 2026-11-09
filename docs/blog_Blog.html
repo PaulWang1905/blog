@@ -43,54 +43,60 @@
 
 
 
-<header class="site-nav" id="site-nav">
-
-  <svg class="site-glass-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-    
-<filter id="site-glass" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-  <feImage id="site-glass-lens" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="lens"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect width='1' height='1' fill='%23808080'/%3E%3C/svg%3E"/>
-  <feDisplacementMap in="SourceGraphic" in2="lens" scale="14" xChannelSelector="R" yChannelSelector="G" result="bentR"/>
-  <feDisplacementMap in="SourceGraphic" in2="lens" scale="14.8" xChannelSelector="R" yChannelSelector="G" result="bentG"/>
-  <feDisplacementMap in="SourceGraphic" in2="lens" scale="15.6" xChannelSelector="R" yChannelSelector="G" result="bentB"/>
-  <feColorMatrix in="bentR" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
-  <feColorMatrix in="bentG" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
-  <feColorMatrix in="bentB" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+<svg class="site-glass-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  
+<filter id="site-glass-top" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+  <feOffset in="SourceGraphic" dy="7" result="r0"/>
+  <feOffset in="SourceGraphic" dy="7.4" result="g0"/>
+  <feOffset in="SourceGraphic" dy="7.8" result="b0"/>
+  <feColorMatrix in="r0" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+  <feColorMatrix in="g0" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+  <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
   <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
-  <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1" result="bent"/>
-  <feGaussianBlur in="bent" stdDeviation="9" edgeMode="duplicate" result="frosted"/>
-  <feColorMatrix in="lens" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 1 0 0" result="rimMask"/>
-  <feComposite in="frosted" in2="rimMask" operator="in" result="frostedRim"/>
-  <feComposite in="frostedRim" in2="bent" operator="over"/>
+  <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1"/>
 </filter>
 
-    
-<filter id="site-glass-menu" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-  <feImage id="site-glass-menu-lens" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="lens"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect width='1' height='1' fill='%23808080'/%3E%3C/svg%3E"/>
-  <feDisplacementMap in="SourceGraphic" in2="lens" scale="14" xChannelSelector="R" yChannelSelector="G" result="bentR"/>
-  <feDisplacementMap in="SourceGraphic" in2="lens" scale="14.8" xChannelSelector="R" yChannelSelector="G" result="bentG"/>
-  <feDisplacementMap in="SourceGraphic" in2="lens" scale="15.6" xChannelSelector="R" yChannelSelector="G" result="bentB"/>
-  <feColorMatrix in="bentR" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
-  <feColorMatrix in="bentG" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
-  <feColorMatrix in="bentB" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+  
+<filter id="site-glass-mid" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+  <feOffset in="SourceGraphic" dy="0" result="r0"/>
+  <feOffset in="SourceGraphic" dy="-0.4" result="g0"/>
+  <feOffset in="SourceGraphic" dy="-0.8" result="b0"/>
+  <feColorMatrix in="r0" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+  <feColorMatrix in="g0" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+  <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
   <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
-  <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1" result="bent"/>
-  <feGaussianBlur in="bent" stdDeviation="9" edgeMode="duplicate" result="frosted"/>
-  <feColorMatrix in="lens" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 1 0 0" result="rimMask"/>
-  <feComposite in="frosted" in2="rimMask" operator="in" result="frostedRim"/>
-  <feComposite in="frostedRim" in2="bent" operator="over"/>
+  <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1"/>
 </filter>
 
-  </svg>
+  
+<filter id="site-glass-bottom" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+  <feOffset in="SourceGraphic" dy="-7" result="r0"/>
+  <feOffset in="SourceGraphic" dy="-7.4" result="g0"/>
+  <feOffset in="SourceGraphic" dy="-7.8" result="b0"/>
+  <feColorMatrix in="r0" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+  <feColorMatrix in="g0" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+  <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+  <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
+  <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1"/>
+</filter>
 
-  <a href="/index.html" class="site-brand" aria-label="Puyu's Blog — home">
-    <span class="site-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-    Puyu's Blog
-  </a>
+</svg>
 
-  <nav class="site-links" aria-label="Main">
-    
+
+<div class="site-top">
+  
+<span class="site-glass" aria-hidden="true"><i></i><i></i><i></i></span>
+
+
+  <header class="site-nav" id="site-nav">
+
+    <a href="/index.html" class="site-brand" aria-label="Puyu's Blog — home">
+      <span class="site-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      Puyu's Blog
+    </a>
+
+    <nav class="site-links" aria-label="Main">
+      
 
 <a href="/index.html" >Home</a>
 
@@ -106,43 +112,47 @@
      ><path d="M6 3h7v7"/><path d="M13 3 4.5 11.5"/><path d="M11 13H3V5"/></svg></a>
 
 
-  </nav>
+    </nav>
 
-  <!-- RSS: the readable subscribe page, which hands over the /feed.xml
-       address that every page also announces in its <head> -->
-  <a href="/feed.html" class="site-icon" aria-label="Subscribe by RSS" title="Subscribe by RSS">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-      <path d="M3 2.5a1 1 0 0 1 1-1A10.5 10.5 0 0 1 14.5 12a1 1 0 1 1-2 0A8.5 8.5 0 0 0 4 3.5a1 1 0 0 1-1-1z"/>
-      <path d="M3 7.25a1 1 0 0 1 1-1A5.75 5.75 0 0 1 9.75 12a1 1 0 1 1-2 0A3.75 3.75 0 0 0 4 8.25a1 1 0 0 1-1-1z"/>
-      <circle cx="4.4" cy="11.6" r="1.6"/>
-    </svg>
-  </a>
+    <!-- RSS: the readable subscribe page, which hands over the /feed.xml
+         address that every page also announces in its <head> -->
+    <a href="/feed.html" class="site-icon" aria-label="Subscribe by RSS" title="Subscribe by RSS">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M3 2.5a1 1 0 0 1 1-1A10.5 10.5 0 0 1 14.5 12a1 1 0 1 1-2 0A8.5 8.5 0 0 0 4 3.5a1 1 0 0 1-1-1z"/>
+        <path d="M3 7.25a1 1 0 0 1 1-1A5.75 5.75 0 0 1 9.75 12a1 1 0 1 1-2 0A3.75 3.75 0 0 0 4 8.25a1 1 0 0 1-1-1z"/>
+        <circle cx="4.4" cy="11.6" r="1.6"/>
+      </svg>
+    </a>
 
-  <!-- Light/dark: flips the page's data-theme via daisyUI's theme-controller.
-       theme_head.html picks the starting theme; the script below keeps it. -->
-  <label class="site-icon swap" title="Dark mode">
-    <input type="checkbox" class="theme-controller" value="dark" aria-label="Dark mode" />
-    <svg class="swap-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>
-    </svg>
-    <svg class="swap-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
-      <path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor"/>
-    </svg>
-  </label>
+    <!-- Light/dark: flips the page's data-theme via daisyUI's theme-controller.
+         theme_head.html picks the starting theme; the script below keeps it. -->
+    <label class="site-icon swap" title="Dark mode">
+      <input type="checkbox" class="theme-controller" value="dark" aria-label="Dark mode" />
+      <svg class="swap-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/>
+      </svg>
+      <svg class="swap-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <path d="M12 3.5a8.5 8.5 0 0 0 0 17z" fill="currentColor"/>
+      </svg>
+    </label>
 
-  <!-- Phone: opens the menu panel under the pill -->
-  <button type="button" class="site-icon site-menu" aria-label="Menu" aria-expanded="false" aria-controls="site-menu-panel">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-    </svg>
-  </button>
+    <!-- Phone: opens the menu panel under the pill -->
+    <button type="button" class="site-icon site-menu" aria-label="Menu" aria-expanded="false" aria-controls="site-menu-panel">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </button>
 
-</header>
+  </header>
+</div>
 
 
 <nav class="site-menu-panel" id="site-menu-panel" aria-label="Main">
+  
+<span class="site-glass" aria-hidden="true"><i></i><i></i><i></i></span>
+
   
 
 <a href="/index.html" >Home</a>
@@ -195,102 +205,11 @@
       if (event.persisted) apply(saved() || (systemDark.matches ? 'dark' : 'light'));
     });
 
-    // Liquid glass: the refraction needs an SVG filter on the backdrop,
-    // which only Chromium browsers draw (navigator.userAgentData is
-    // Chromium's own). The rest keep the plain glass.
-    //
-    // The lens map, drawn for a piece of glass as it is now: for each pixel,
-    // how far it sits inside the outline and which way is outwards.
-    // Red and green: within the rim (BEZEL px), what is seen is pulled
-    // inwards, most at the very edge and easing to nothing; red is the pull
-    // across, green the pull down. Blue: how frosted each pixel should be,
-    // near the rim all the way round (FROST px deep), and, on the pill,
-    // right across the round ends, where the glass is thickest (END px
-    // further in from each end). Redrawn whenever the glass changes size.
-    const BEZEL = 16;
-    const FROST = 26;
-    const END = 22;
-    const drawLens = (glass, image, roundEnds) => {
-      const w = glass.offsetWidth;
-      const h = glass.offsetHeight;
-      if (!w || !h) return;
-      const r = Math.min(w / 2, h / 2, parseFloat(getComputedStyle(glass).borderTopLeftRadius) || 0);
-      // Drawn at the screen's pixel density, so the bend stays smooth on
-      // high-density (Retina) screens.
-      const dpr = window.devicePixelRatio || 1;
-      const pw = Math.round(w * dpr);
-      const ph = Math.round(h * dpr);
-      const canvas = document.createElement('canvas');
-      canvas.width = pw;
-      canvas.height = ph;
-      const ctx = canvas.getContext('2d');
-      const img = ctx.createImageData(pw, ph);
-      const px = img.data;
-      const straightX = w / 2 - r;
-      const straightY = h / 2 - r;
-      for (let y = 0; y < ph; y += 1) {
-        for (let x = 0; x < pw; x += 1) {
-          const cx = (x + 0.5) / dpr - w / 2;
-          const cy = (y + 0.5) / dpr - h / 2;
-          const qx = Math.abs(cx) - straightX;
-          const qy = Math.abs(cy) - straightY;
-          let inside;          // distance in from the outline
-          let nx = 0;          // the outward direction
-          let ny = 0;
-          if (qx > 0 && qy > 0) {
-            const len = Math.hypot(qx, qy);
-            inside = r - len;
-            nx = qx / len;
-            ny = qy / len;
-          } else if (qx > qy) {
-            inside = r - qx;
-            nx = 1;
-          } else {
-            inside = r - qy;
-            ny = 1;
-          }
-          nx *= Math.sign(cx) || 1;
-          ny *= Math.sign(cy) || 1;
-          const k = Math.min(1, Math.max(0, 1 - inside / BEZEL)) ** 2;
-          const i = (y * pw + x) * 4;
-          px[i] = 128 - nx * k * 127;
-          px[i + 1] = 128 - ny * k * 127;
-          const nearRim = Math.min(1, Math.max(0, 1 - inside / FROST));
-          const nearEnd = roundEnds
-            ? Math.min(1, Math.max(0, 1 - (w / 2 - Math.abs(cx)) / (r + END)))
-            : 0;
-          px[i + 2] = 255 * Math.max(nearRim, nearEnd);
-          px[i + 3] = 255;
-        }
-      }
-      ctx.putImageData(img, 0, 0);
-      image.setAttribute('href', canvas.toDataURL());
-      glass.classList.add('refract');
-    };
-    // Redraw a piece of glass's lens whenever it changes size, at most once
-    // a frame. The phone menu has no size while closed, so it is drawn as
-    // it opens.
-    const watch = (glass, image, roundEnds) => {
-      let queued = false;
-      new ResizeObserver(() => {
-        if (queued) return;
-        queued = true;
-        requestAnimationFrame(() => { queued = false; drawLens(glass, image, roundEnds); });
-      }).observe(glass);
-    };
-    if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass)')) {
-      const pieces = [
-        [header, document.getElementById('site-glass-lens'), true],
-        [panel, document.getElementById('site-glass-menu-lens'), false],
-      ];
-      pieces.forEach((piece) => watch(...piece));
-      // ... and when the screen's pixel density changes (zooming, or moving
-      // the window to another screen)
-      const onDensity = () => {
-        pieces.forEach((piece) => drawLens(...piece));
-        matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`).addEventListener('change', onDensity, { once: true });
-      };
-      matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`).addEventListener('change', onDensity, { once: true });
+    // Liquid glass: the echoes at the rims come from SVG filters on the
+    // backdrop, which only Chromium browsers draw (navigator.userAgentData
+    // is Chromium's own). The rest keep a plain frosted glass.
+    if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass-top)')) {
+      document.querySelectorAll('.site-glass').forEach((glass) => glass.classList.add('refract'));
     }
 
     // The highlight follows the pointer across each piece of glass
