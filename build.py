@@ -3,6 +3,9 @@
 Run with:  python build.py
 Requires:  pip install -r requirements.txt  &&  npm install
 """
+import hashlib
+import re
+
 from oxie import Site, SiteConfig
 
 config = SiteConfig(
@@ -84,9 +87,35 @@ def build_table_page(site):
     print(f"Table page written to {path} ({len(site.posts)} cards)")
 
 
+# --- Post-build: a version on the stylesheet ----------------------------
+# Every page links /styles.css. Browsers keep a copy of it for a while
+# (GitHub Pages allows 10 minutes), so just after a deploy a visitor can
+# get a new page with the old stylesheet, and see it broken: the header's
+# glass, for one, needs the stylesheet it was built with. Putting the
+# stylesheet's own fingerprint in the link (/styles.css?v=1a2b3c4d5e) gives
+# every new stylesheet a new address, so each page loads the stylesheet it
+# was built with. Runs last, once styles.css and every page are written.
+STYLESHEET_LINK = re.compile(r'href="/styles\.css(?:\?v=[0-9a-f]+)?"')
+
+
+def version_stylesheet(site):
+    """Point every page in docs/ at this build's styles.css, by fingerprint."""
+    out = site.config.output_dir
+    version = hashlib.sha256((out / "styles.css").read_bytes()).hexdigest()[:10]
+    pages = 0
+    for page in out.rglob("*.html"):
+        text = page.read_text(encoding="utf-8")
+        linked = STYLESHEET_LINK.sub(f'href="/styles.css?v={version}"', text)
+        if linked != text:
+            page.write_text(linked, encoding="utf-8")
+            pages += 1
+    print(f"Stylesheet linked as styles.css?v={version} in {pages} pages")
+
+
 if __name__ == "__main__":
     site = Site(config)
     site.build()
     if config.feed:
         build_feed_page(site)
     build_table_page(site)
+    version_stylesheet(site)
