@@ -198,13 +198,13 @@
    under it. Clearer than frosted glass, and built in layers:
      - the glass: a light tint, a little blur, a touch more saturation and
        brightness, so what passes beneath stays visible but soft;
-     - refraction: the middle is nearly clear; within a thin rim the
-       page beneath bends inwards, as through thick glass, following the
-       outline round the ends, with faint colour fringes where red, green
-       and blue bend by different amounts; the whole pane ripples a
-       little, like liquid; and all round the rim and right across the
-       round ends, what is seen is heavily frosted, as where the glass
-       is thickest.
+     - refraction, only as real glass does it: the middle is nearly
+       clear and undistorted; within a thin rim the page beneath bends
+       smoothly inwards, as through a rounded glass edge, following the
+       outline round the ends, with faint colour fringes where red,
+       green and blue bend by different amounts; and all round the rim
+       and right across the round ends, what is seen is frosted into a
+       smooth haze, as where the glass is thickest.
        An SVG filter (#site-glass in header.html) does both. Only
        Chromium browsers can use an SVG filter on the backdrop, so the
        header script turns it on there (.refract) and other browsers

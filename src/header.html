@@ -35,49 +35,34 @@
 <header class="site-nav" id="site-nav">
 
   {#- The liquid glass (.site-nav.refract in styles.css), as one SVG filter
-      on what is seen through the pill:
-        - the bend: a displacement map shifts what is seen. 128 (the middle)
-          means not at all. It adds the lens (#site-glass-lens, drawn by the
-          script below for the pill's exact size: within a thin rim, what is
-          seen is pulled inwards, most at the very edge, following the real
-          outline round the ends) and the ripple (soft noise, squeezed close
-          to 128, so the whole pane wobbles a little, like liquid). Each is
-          centred on 128, so adding them takes off the extra middle
-          (k4 = -0.5);
+      on what is seen through the pill. Only what real glass does: the
+      middle is left undistorted.
+        - the bend: the lens image (#site-glass-lens, drawn by the script
+          below for the pill's exact size) says how far to shift what is
+          seen; 128 means not at all. Within the rim, what is seen is pulled
+          smoothly inwards, most at the very edge, following the real
+          outline round the ends, as through a rounded glass edge;
         - dispersion: red, green and blue are bent by slightly different
-          amounts (24, 25.5, 27) and put back together, so the edges of
+          amounts (14, 14.8, 15.6) and put back together, so the edges of
           shapes near the rim pick up faint colour fringes, as light does
           in real glass;
-        - the frost, laid over the rim only: what is seen there is scattered
-          by fine grain and blurred again, then masked by the lens image's
-          blue channel, strong near the rim and right across the round ends,
-          so the edge reads as thick frosted glass around a clear middle. -#}
+        - the frost, laid over the rim only: what is seen there is blurred
+          again into a smooth haze, masked by the lens image's blue channel,
+          strong near the rim and right across the round ends, so the edge
+          reads as thick frosted glass around a clear middle. -#}
   <svg class="site-glass-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
     <filter id="site-glass" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
       <feImage id="site-glass-lens" x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="lens"
         href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect width='1' height='1' fill='%23808080'/%3E%3C/svg%3E"/>
-      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.034" numOctaves="2" seed="7" result="noise"/>
-      <feGaussianBlur in="noise" stdDeviation="2.5" result="soft"/>
-      <feComponentTransfer in="soft" result="ripple">
-        <feFuncR type="linear" slope="0.4" intercept="0.3"/>
-        <feFuncG type="linear" slope="0.4" intercept="0.3"/>
-        <feFuncA type="linear" slope="0" intercept="1"/>
-      </feComponentTransfer>
-      <feComposite in="lens" in2="ripple" operator="arithmetic" k2="1" k3="1" k4="-0.5" result="map"/>
-      <feDisplacementMap in="SourceGraphic" in2="map" scale="24" xChannelSelector="R" yChannelSelector="G" result="bentR"/>
-      <feDisplacementMap in="SourceGraphic" in2="map" scale="25.5" xChannelSelector="R" yChannelSelector="G" result="bentG"/>
-      <feDisplacementMap in="SourceGraphic" in2="map" scale="27" xChannelSelector="R" yChannelSelector="G" result="bentB"/>
+      <feDisplacementMap in="SourceGraphic" in2="lens" scale="14" xChannelSelector="R" yChannelSelector="G" result="bentR"/>
+      <feDisplacementMap in="SourceGraphic" in2="lens" scale="14.8" xChannelSelector="R" yChannelSelector="G" result="bentG"/>
+      <feDisplacementMap in="SourceGraphic" in2="lens" scale="15.6" xChannelSelector="R" yChannelSelector="G" result="bentB"/>
       <feColorMatrix in="bentR" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
       <feColorMatrix in="bentG" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
       <feColorMatrix in="bentB" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
       <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
       <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1" result="bent"/>
-      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="1" seed="3" result="grainRaw"/>
-      <feColorMatrix in="grainRaw" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0 1" result="grain"/>
-      <feColorMatrix in="lens" type="matrix" values="0 0 1 0 0  0 0 1 0 0  0 0 1 0 0  0 0 0 0 1" result="rim"/>
-      <feComposite in="grain" in2="rim" operator="arithmetic" k1="1" k3="-0.5" k4="0.5" result="scatter"/>
-      <feDisplacementMap in="bent" in2="scatter" scale="36" xChannelSelector="R" yChannelSelector="G" result="scattered"/>
-      <feGaussianBlur in="scattered" stdDeviation="10" edgeMode="duplicate" result="frosted"/>
+      <feGaussianBlur in="bent" stdDeviation="9" edgeMode="duplicate" result="frosted"/>
       <feColorMatrix in="lens" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 1 0 0" result="rimMask"/>
       <feComposite in="frosted" in2="rimMask" operator="in" result="frostedRim"/>
       <feComposite in="frostedRim" in2="bent" operator="over"/>
@@ -174,7 +159,7 @@
         // right across the round ends, where the glass is thickest (END px
         // further in from each end). Redrawn whenever the pill changes size.
         const lens = header.querySelector('#site-glass-lens');
-        const BEZEL = 14;
+        const BEZEL = 16;
         const FROST = 26;
         const END = 22;
         const drawLens = () => {
