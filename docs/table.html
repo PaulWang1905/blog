@@ -118,65 +118,32 @@
 
 
 
-
-
 <svg class="site-glass-defs" width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-  
-<filter id="site-glass-top" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-  <feOffset in="SourceGraphic" dy="7" result="r0"/>
-  <feOffset in="SourceGraphic" dy="7.4" result="g0"/>
-  <feOffset in="SourceGraphic" dy="7.8" result="b0"/>
-  <feColorMatrix in="r0" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
-  <feColorMatrix in="g0" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
-  <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
-  <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
-  <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1"/>
-</filter>
-
-  
-<filter id="site-glass-mid" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-  <feOffset in="SourceGraphic" dy="0" result="r0"/>
-  <feOffset in="SourceGraphic" dy="-0.4" result="g0"/>
-  <feOffset in="SourceGraphic" dy="-0.8" result="b0"/>
-  <feColorMatrix in="r0" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
-  <feColorMatrix in="g0" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
-  <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
-  <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
-  <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1"/>
-</filter>
-
-  
-<filter id="site-glass-bottom" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
-  <feOffset in="SourceGraphic" dy="-7" result="r0"/>
-  <feOffset in="SourceGraphic" dy="-7.4" result="g0"/>
-  <feOffset in="SourceGraphic" dy="-7.8" result="b0"/>
-  <feColorMatrix in="r0" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
-  <feColorMatrix in="g0" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
-  <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
-  <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
-  <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1"/>
-</filter>
-
+  <filter id="site-glass-lens" filterUnits="userSpaceOnUse" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="soft"/>
+    <feImage result="bend" x="0" y="0" width="1" height="1" preserveAspectRatio="none"/>
+    <feDisplacementMap in="soft" in2="bend" scale="0" xChannelSelector="R" yChannelSelector="G" result="r0"/>
+    <feDisplacementMap in="soft" in2="bend" scale="0" xChannelSelector="R" yChannelSelector="G" result="g0"/>
+    <feDisplacementMap in="soft" in2="bend" scale="0" xChannelSelector="R" yChannelSelector="G" result="b0"/>
+    <feColorMatrix in="r0" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="r"/>
+    <feColorMatrix in="g0" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="g"/>
+    <feColorMatrix in="b0" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="b"/>
+    <feComposite in="r" in2="g" operator="arithmetic" k2="1" k3="1" result="rg"/>
+    <feComposite in="rg" in2="b" operator="arithmetic" k2="1" k3="1" result="seen"/>
+    <feColorMatrix in="seen" type="saturate" values="6" result="vivid"/>
+    <feImage result="light" x="0" y="0" width="1" height="1" preserveAspectRatio="none"/>
+    <feComposite in="vivid" in2="light" operator="in" result="rim"/>
+    <feMerge>
+      <feMergeNode in="seen"/>
+      <feMergeNode in="rim"/>
+    </feMerge>
+  </filter>
 </svg>
 
 
 <div class="site-top">
   
-<span class="site-glass" aria-hidden="true">
-  <i></i><i></i>
-  <b class="l" style="--a:-30deg"></b>
-  <b class="l" style="--a:-60deg"></b>
-  <b class="l" style="--a:-90deg"></b>
-  <b class="l" style="--a:-120deg"></b>
-  <b class="l" style="--a:-150deg"></b>
-  <b class="r" style="--a:30deg"></b>
-  <b class="r" style="--a:60deg"></b>
-  <b class="r" style="--a:90deg"></b>
-  <b class="r" style="--a:120deg"></b>
-  <b class="r" style="--a:150deg"></b>
-  <u class="l"></u><u class="r"></u>
-  <i></i>
-</span>
+<span class="site-glass" aria-hidden="true"><i></i><b></b></span>
 
 
   <header class="site-nav" id="site-nav">
@@ -293,17 +260,114 @@
       if (event.persisted) apply(saved() || (systemDark.matches ? 'dark' : 'light'));
     });
 
-    // Liquid glass: the reflections at the rims come from SVG filters on the
-    // backdrop, which only Chromium browsers draw (navigator.userAgentData
-    // is Chromium's own). The rest keep a plain frosted glass.
-    if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass-top)')) {
-      document.querySelectorAll('.site-glass').forEach((glass) => glass.classList.add('refract'));
-      // The round ends are laid out on a circle of radius --r, half the
-      // pill's height, which depends on the fonts and the screen width
-      // (the links row makes it 1px taller on wider screens): measure it.
-      const pill = document.querySelector('.site-top');
+    // Liquid glass (see the notes on glass() above). The glass is a flat
+    // slab BASE px thick, its rim rounded over the outer BEZEL px: rising
+    // RISE px more in a squircle, steep at the very edge and flattening
+    // out inward. Looking straight down at a point t px in from the rim,
+    // the line of sight meets the surface at a slant (the steeper the
+    // surface, the more), bends there by Snell's law, and reaches what is
+    // behind the glass further in, by the slab's depth there times the
+    // tangent of the bend. That pull is worked out once for every depth
+    // (pull below). Right at the rim it reaches far in; closer in, less
+    // and less, falling faster than t grows at first, so the rim shows
+    // what is far in, mirrored, and then what is a little further in,
+    // enlarged, until the glass is flat. The pill is a rectangle with
+    // round ends of radius r, half its height; for each point of it the
+    // script finds t and which way the rim faces there (the outward
+    // normal, nx, ny). The pull, inward along the normal, is written into
+    // the map as red (across) and green (down), 128 meaning no move, and
+    // the filter's scale turns the map's ±127 back into ±most px. The
+    // second map is the ring of light, a thin line just inside the rim,
+    // brightest where the rim faces the light (from the top, a little to
+    // the left) or faces straight away from it. Both maps are drawn at
+    // twice the pill's size, so the steep rim stays smooth on any screen.
+    // Chromium only (navigator.userAgentData is Chromium's own).
+    const pill = document.querySelector('.site-top');
+    const glass = pill.querySelector('.site-glass');
+    const lens = document.getElementById('site-glass-lens');
+    if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass-lens)')) {
+      const BASE = 20;                 // px: the flat slab's thickness
+      const RISE = 19;                 // px: how much the rounded rim rises over it
+      const BEZEL = 24;                // px in from the rim, where the glass is flat
+      const INDEX = 1.5;               // how strongly glass bends light
+      const FRINGE = [1, 1.04, 1.08];  // red, green and blue bend this much
+      const LIGHT = [-0.5, -0.866];    // the light's direction: from the top, a little left
+      const DENSITY = 2;               // map pixels per CSS pixel
+
+      const STEP = 0.05;
+      const pull = new Float32Array(Math.ceil(BEZEL / STEP) + 1);
+      pull.forEach((_, k) => {
+        const u = Math.min(1, (k * STEP) / BEZEL);
+        const g = 1 - (1 - u) ** 4;    // the rim's height is RISE * g^¼
+        const slope = u === 0 ? Infinity : (RISE / BEZEL) * g ** -0.75 * (1 - u) ** 3;
+        const meet = Math.atan(slope);                 // the slant the line of sight meets
+        const onward = Math.asin(Math.sin(meet) / INDEX);  // and goes on at, in the glass
+        pull[k] = (BASE + RISE * g ** 0.25) * Math.tan(meet - onward);
+      });
+      const most = Math.max(...pull);
+      const pullAt = (t) => {
+        if (t >= BEZEL) return 0;
+        const k = Math.floor(t / STEP);
+        return pull[k] + (pull[k + 1] - pull[k]) * (t / STEP - k);
+      };
+
+      const draw = (w, h) => {
+        const cw = w * DENSITY;
+        const ch = h * DENSITY;
+        const canvas = document.createElement('canvas');
+        canvas.width = cw;
+        canvas.height = ch;
+        const ctx = canvas.getContext('2d');
+        const bend = ctx.createImageData(cw, ch);
+        const light = ctx.createImageData(cw, ch);
+        const r = h / 2;
+        for (let y = 0; y < ch; y += 1) {
+          for (let x = 0; x < cw; x += 1) {
+            const px = (x + 0.5) / DENSITY;
+            const py = (y + 0.5) / DENSITY;
+            const dx = px - Math.min(Math.max(px, r), w - r);
+            const dy = py - r;
+            const d = Math.hypot(dx, dy) || 1;
+            const nx = dx / d;
+            const ny = dy / d;
+            const t = Math.max(0, r - d);
+            const inward = pullAt(t) / most;
+            const i = (y * cw + x) * 4;
+            bend.data[i] = 128 - Math.round(127 * nx * inward);
+            bend.data[i + 1] = 128 - Math.round(127 * ny * inward);
+            bend.data[i + 2] = 128;
+            bend.data[i + 3] = 255;
+            const facing = (nx * LIGHT[0] + ny * LIGHT[1]) ** 2;
+            const ring = Math.max(0, 1 - (t - 1.2) ** 2);   // a line about 2px wide
+            light.data[i] = light.data[i + 1] = light.data[i + 2] = 255;
+            light.data[i + 3] = Math.round(255 * facing * ring);
+          }
+        }
+        ctx.putImageData(bend, 0, 0);
+        const bendUrl = canvas.toDataURL();
+        ctx.putImageData(light, 0, 0);
+        return [bendUrl, canvas.toDataURL()];
+      };
+
+      let size = '';
       new ResizeObserver(([entry]) => {
-        pill.style.setProperty('--r', `${entry.borderBoxSize[0].blockSize / 2}px`);
+        const w = Math.round(entry.borderBoxSize[0].inlineSize);
+        const h = Math.round(entry.borderBoxSize[0].blockSize);
+        if (!w || !h || size === `${w}x${h}`) return;
+        size = `${w}x${h}`;
+        const urls = draw(w, h);
+        lens.setAttribute('width', w);
+        lens.setAttribute('height', h);
+        lens.querySelectorAll('feImage').forEach((map, k) => {
+          map.setAttribute('width', w);
+          map.setAttribute('height', h);
+          map.setAttribute('href', urls[k]);
+        });
+        lens.querySelectorAll('feDisplacementMap').forEach((step, c) => {
+          step.setAttribute('scale', (most * FRINGE[c] * 255) / 127);
+        });
+        glass.querySelector('b').style.backgroundImage = `url(${urls[1]})`;
+        glass.classList.add('refract');
       }).observe(pill);
     }
 
