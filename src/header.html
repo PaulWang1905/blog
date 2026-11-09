@@ -9,11 +9,11 @@
    section — 'home', 'blog', 'table' or 'about'. Anything else (or unset)
    simply leaves nothing highlighted.
 
-   Two pieces of liquid glass (.site-top and .site-menu-panel in
-   styles.css): the pill that stays at the top while the page scrolls
-   under it, and, on phones, the menu that opens under it. The pill never
-   animates: it is the same on every page, and the view-transition rules
-   keep it still between pages.
+   The pill (.site-top in styles.css) is liquid glass and stays at the top
+   while the page scrolls under it. On phones a menu (.site-menu-panel)
+   opens under it: solid, with no glass, as that cost too much to draw on
+   phones. The pill never animates: it is the same on every page, and the
+   view-transition rules keep it still between pages.
 
    Enabling readings_note_template.html or photography_template.html in
    build.py? Add one row to `nav_links` below. #}
@@ -48,7 +48,7 @@
     dy + 2 × spread) and put back together, so edges pick up faint colour
     fringes, as light does in real glass. Where the shift reaches past the
     edge of the glass, the browser mirrors what is just inside the edge
-    back into view: the echo, like a reflection in the rim. -#}
+    back into view, flipped: a reflection in the rim. -#}
 {% macro glass_shift(id, dy, spread) %}
 <filter id="{{ id }}" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
   <feOffset in="SourceGraphic" dy="{{ dy }}" result="r0"/>
@@ -63,14 +63,13 @@
 {% endmacro %}
 
 {#- The glass itself: three layers (.site-glass in styles.css), in this order:
-      - middle, over the whole shape: what is behind, unmoved, with the faint
-        colour fringes;
-      - top band, fading into the middle: what is seen is moved down, so near
-        the top rim the glass reaches past its edge and echoes what is inside
-        it, flipped;
-      - bottom band, fading into the middle: what is seen is moved up, so the
-        bottom rim echoes what is inside it the same way.
-    Shared by the pill and the phone menu. Only plain shifts, which every
+      - top band: what is seen is moved down 7px, so at the top rim the glass
+        reaches past its edge and the strip right at the edge is reflected,
+        flipped;
+      - bottom band: moved up 7px, the same reflection at the bottom rim;
+      - middle, over them, fading in from each band: what is behind, unmoved,
+        with the faint colour fringes.
+    Used by the pill only. Only plain shifts, which every
     Chromium browser draws the same way; the script turns them on there
     (.refract), and other browsers keep a plain frosted glass. -#}
 {% macro glass() %}
@@ -134,9 +133,8 @@
   </header>
 </div>
 
-{# The phone menu: the same glass, opening under the pill #}
+{# The phone menu, opening under the pill: solid, no glass #}
 <nav class="site-menu-panel" id="site-menu-panel" aria-label="Main">
-  {{ glass() }}
   {{ nav_items() }}
 </nav>
 
@@ -174,14 +172,14 @@
       if (event.persisted) apply(saved() || (systemDark.matches ? 'dark' : 'light'));
     });
 
-    // Liquid glass: the echoes at the rims come from SVG filters on the
+    // Liquid glass: the reflections at the rims come from SVG filters on the
     // backdrop, which only Chromium browsers draw (navigator.userAgentData
     // is Chromium's own). The rest keep a plain frosted glass.
     if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass-top)')) {
       document.querySelectorAll('.site-glass').forEach((glass) => glass.classList.add('refract'));
     }
 
-    // The highlight follows the pointer across each piece of glass
+    // The highlight follows the pointer across the pill and the menu
     [header, panel].forEach((glass) => {
       glass.addEventListener('pointermove', (e) => {
         const r = glass.getBoundingClientRect();

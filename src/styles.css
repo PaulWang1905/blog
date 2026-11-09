@@ -194,21 +194,22 @@
 /* ============================================================
    Site header (header.html, every page)
 
-   Two pieces of liquid glass: the pill (.site-top, holding the glass and
-   the header) that stays at the top as the page scrolls under it, and,
-   on phones, the menu panel (.site-menu-panel) that opens under it.
-   Clearer than frosted glass, and built in layers:
-     - the glass (.site-glass): three layers over the whole shape: the
-       middle one, and over it a top and a bottom band (--band deep) that
-       fade into it.
+   The pill (.site-top, holding the glass and the header) stays at the top
+   as the page scrolls under it, and on phones a menu panel
+   (.site-menu-panel) opens under it. The panel has the same tint, bevel
+   and touch but is solid, with no glass: the glass cost too much to draw
+   on phones. The pill's liquid glass is clearer than frosted glass, and
+   built in layers:
+     - the glass (.site-glass): three layers: a top and a bottom band,
+       and over them the middle, fading in from each.
        Each has a light blur and a touch more saturation and brightness,
        and in Chromium browsers a shift of what is seen (the SVG filters
        in header.html):
-         top band     moved down: near the top rim the glass reaches past
-                      its edge, and the browser mirrors what is just inside
-                      the edge back into view, an echo like a reflection;
+         top band     moved down 7px: at the top rim the glass reaches
+                      past its edge, and the browser mirrors the strip
+                      right at the edge back into view: a reflection;
          middle       unmoved, so what is behind stays where it is;
-         bottom band  moved up: the same echo at the bottom rim.
+         bottom band  moved up 7px: the same reflection at the bottom rim.
        Red, green and blue shift by slightly different amounts, so edges
        pick up faint colour fringes, as in real glass. Only plain shifts,
        which every Chromium browser draws the same way; the header script
@@ -282,28 +283,32 @@
   backdrop-filter: blur(8px) saturate(140%) brightness(1.05);
 }
 
-/* The middle layer covers the whole shape; the top and bottom bands lie
-   over it, solid for their first 7px (the echo, as deep as their 7px
-   shift) and then fading into it across 7px, so where their shifted view
-   meets the unmoved one there is a soft blend, not a hard line */
-.site-glass i:nth-child(2) {
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--band) - 4px), transparent calc(var(--band) + 3px));
-  mask-image: linear-gradient(to bottom, #000 calc(var(--band) - 4px), transparent calc(var(--band) + 3px));
-}
+/* Order: the top and bottom bands first, the middle last, over them. So
+   each layer reads the page itself, not another layer's glass, and all
+   three keep the same tone. Each band is solid for its first 7px (the
+   reflection, as deep as its 7px shift); the middle fades in over the
+   next 7px, so where the bands' shifted view meets the unmoved one there
+   is a soft blend, not a hard line. */
+.site-glass i:nth-child(1) { clip-path: inset(0 0 calc(100% - var(--band) - 3px) 0); }
+.site-glass i:nth-child(2) { clip-path: inset(calc(100% - var(--band) - 3px) 0 0 0); }
 
 .site-glass i:nth-child(3) {
-  -webkit-mask-image: linear-gradient(to top, #000 calc(var(--band) - 4px), transparent calc(var(--band) + 3px));
-  mask-image: linear-gradient(to top, #000 calc(var(--band) - 4px), transparent calc(var(--band) + 3px));
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent calc(var(--band) - 4px), #000 calc(var(--band) + 3px),
+    #000 calc(100% - var(--band) - 3px), transparent calc(100% - var(--band) + 4px));
+  mask-image: linear-gradient(to bottom,
+    transparent calc(var(--band) - 4px), #000 calc(var(--band) + 3px),
+    #000 calc(100% - var(--band) - 3px), transparent calc(100% - var(--band) + 4px));
 }
 
-.site-glass.refract i:nth-child(1) { backdrop-filter: url(#site-glass-mid) blur(2px) saturate(150%) brightness(1.06); }
-.site-glass.refract i:nth-child(2) { backdrop-filter: url(#site-glass-top) blur(2px) saturate(150%) brightness(1.06); }
-.site-glass.refract i:nth-child(3) { backdrop-filter: url(#site-glass-bottom) blur(2px) saturate(150%) brightness(1.06); }
+.site-glass.refract i:nth-child(1) { backdrop-filter: url(#site-glass-top) blur(2px) saturate(150%) brightness(1.06); }
+.site-glass.refract i:nth-child(2) { backdrop-filter: url(#site-glass-bottom) blur(2px) saturate(150%) brightness(1.06); }
+.site-glass.refract i:nth-child(3) { backdrop-filter: url(#site-glass-mid) blur(2px) saturate(150%) brightness(1.06); }
 
-/* The tint and light, over the glass: on the header itself for the pill,
-   on a layer over the glass for the menu panel */
+/* The tint and light: over the glass on the pill; on the menu panel the
+   same light over a solid background (below) */
 .site-nav,
-.site-menu-panel::before {
+.site-menu-panel {
   background: var(--glass);
   border: 1px solid var(--edge-line);
   box-shadow:
@@ -451,10 +456,10 @@
   outline-offset: 2px;
 }
 
-/* The phone menu panel: the same glass as the pill, opening under it
-   (12px from the top, plus the pill's 52px, plus an 8px gap), lined up
-   with it. Shown only on phones, and only while open. Its glass sits
-   under its tint layer (::before), and both under its links. */
+/* The phone menu panel, opening under the pill (12px from the top, plus
+   the pill's 52px, plus an 8px gap), lined up with it. Shown only on
+   phones, and only while open. Solid, so the page does not show through
+   the links. */
 .site-menu-panel {
   position: fixed;
   z-index: 50;
@@ -465,24 +470,13 @@
   flex-direction: column;
   padding: 8px;
   border-radius: 22px;
+  background: var(--color-base-100);
   transform-origin: top right;
-}
-
-.site-menu-panel > .site-glass { z-index: -2; }
-
-.site-menu-panel::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  pointer-events: none;
 }
 
 .site-menu-panel a { padding: 12px 14px; font-size: 16px; }
 
-/* A spring of size only, no fade: while the panel was see-through, its
-   glass could not see the page and flashed */
+/* A spring of size only, no fade */
 @keyframes site-menu-open {
   from { transform: translateY(-8px) scale(0.96); }
 }

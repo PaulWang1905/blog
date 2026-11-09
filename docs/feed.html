@@ -150,9 +150,6 @@
 
 <nav class="site-menu-panel" id="site-menu-panel" aria-label="Main">
   
-<span class="site-glass" aria-hidden="true"><i></i><i></i><i></i></span>
-
-  
 
 <a href="/index.html" >Home</a>
 
@@ -204,14 +201,14 @@
       if (event.persisted) apply(saved() || (systemDark.matches ? 'dark' : 'light'));
     });
 
-    // Liquid glass: the echoes at the rims come from SVG filters on the
+    // Liquid glass: the reflections at the rims come from SVG filters on the
     // backdrop, which only Chromium browsers draw (navigator.userAgentData
     // is Chromium's own). The rest keep a plain frosted glass.
     if (navigator.userAgentData && CSS.supports('backdrop-filter', 'url(#site-glass-top)')) {
       document.querySelectorAll('.site-glass').forEach((glass) => glass.classList.add('refract'));
     }
 
-    // The highlight follows the pointer across each piece of glass
+    // The highlight follows the pointer across the pill and the menu
     [header, panel].forEach((glass) => {
       glass.addEventListener('pointermove', (e) => {
         const r = glass.getBoundingClientRect();
