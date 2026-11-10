@@ -1,9 +1,9 @@
 ---
 Title: I bought a Windows Phone in 2026
-Summary: I bought a Windows Phone in 2026. Am I being nostalgia? Maybe.
+Summary: I bought a Windows Phone in 2026. Am I being nostalgic? Maybe.
 Authors: Puyu Wang
 Date: 2026-09-17 00:00:00+01:00
-Last_modified: 2026-11-02 23:11:00+00:00
+Last_modified: 2026-11-10 22:30:00+00:00
 Category: Blog
 Tags:
   - WindowsPhone
